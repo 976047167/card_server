@@ -8,9 +8,13 @@ export default class FieldBase {
 
     }
     public shuffle() {
-        const i = this.cards.length -1;
-        while (i+1) {
-
+        let i = this.cards.length - 1;
+        while (i) {
+            const a = this.cards[i];
+            const j = this.battle.getRandom(0, i - 1);
+            this.cards[i] = this.cards[j];
+            this.cards[j] = a;
+            i--;
         }
     }
 }

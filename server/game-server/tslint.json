@@ -12,7 +12,8 @@
                 "ban-keywords",
                 "allow-snake-case"
             ]
-        }
+        },
+        "max-classes-per-file" : true
     },
     "rulesDirectory": []
 }
