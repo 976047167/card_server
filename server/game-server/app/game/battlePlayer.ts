@@ -1,4 +1,5 @@
 import Battle from "./battle";
+import BattleDeck from "./battleDeck";
 import BuffBase from "./buffBase";
 import CardBase from "./cardBase";
 import FieldBase from "./fieldBase";
@@ -18,6 +19,14 @@ export enum CARD_FIELD {
     HAND = 0x2,
     GRAVE = 0x4,
     REMOVED = 0x8,
+}
+export enum ATTRIBUTE {
+    STR,
+    AGI,
+    SPI,
+    STA,
+    INT,
+    PER,
 }
 export default class BattlePlayer {
     public get uid(): string {
@@ -42,12 +51,13 @@ export default class BattlePlayer {
         return 1;
     }
     private playerInfo: IPlayerInfo;
-    private deck: FieldBase;
+    private deck: BattleDeck;
     private removed: FieldBase;
     private grave: FieldBase;
     private hand: FieldBase;
-    private buffList: BuffBase[] = [];
+    private buffList: BuffBase[];
     private battle: Battle;
+    private _baseAttribute;
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
@@ -58,10 +68,18 @@ export default class BattlePlayer {
         return this.playerInfo;
     }
     private initFiled() {
-        //
+        this.deck = new BattleDeck(this.battle);
+        this.hand = new FieldBase(this.battle);
+        this.grave = new FieldBase(this.battle);
+        this.removed = new FieldBase(this.battle);
     }
-    private initAttribute(info) {
-
+    private initAttribute(info: IPlayerInfo) {
+        this._baseAttribute[ATTRIBUTE.STR] = info.gameData.strength;
+        this._baseAttribute[ATTRIBUTE.AGI] = info.gameData.agile;
+        this._baseAttribute[ATTRIBUTE.INT] = info.gameData.intellect;
+        this._baseAttribute[ATTRIBUTE.SPI] = info.gameData.spirit;
+        this._baseAttribute[ATTRIBUTE.PER] = info.gameData.perception;
+        this._baseAttribute[ATTRIBUTE.STA] = info.gameData.stamina;
     }
     private shuffle(field: CARD_FIELD) {
         const fields = this.getCardFiled(field);
@@ -84,5 +102,12 @@ export default class BattlePlayer {
             result.push(this.removed);
         }
         return result;
+    }
+
+    private getDamage(damage: number, source: BattlePlayer) {
+        // trigger
+        while (damage) {
+            const card: CardBase = this.deck.getTopCard();
+        }
     }
 }

@@ -18,6 +18,11 @@ export default class Battle {
 
     public getRandom(min= 0, max = 1, integer = true) {
         const r = this.random.rnd();
+        if (!integer) {
+            return min + (max - min) * r;
+        } else {
+            return Math.floor(min + (max + 1 - min) * r);
+        }
     }
 
 }

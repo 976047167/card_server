@@ -1,3 +1,4 @@
-export default class CardBase{
-
+export default class CardBase {
+    public name: string;
+    public
 }
