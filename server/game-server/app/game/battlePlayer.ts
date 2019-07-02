@@ -1,8 +1,7 @@
 import Battle from "./battle";
-import BattleDeck from "./battleDeck";
 import BuffBase from "./buffBase";
-import CardBase from "./cardBase";
-import FieldBase from "./fieldBase";
+import BattleDeck from "./field/battleDeck";
+import FieldBase, { CARD_FIELD } from "./field/fieldBase";
 export interface IPlayerInfo {
     uid: string;
     gameData: {
@@ -14,12 +13,6 @@ export interface IPlayerInfo {
         spirit: number,
     };
 }
-export enum CARD_FIELD {
-    DECK = 0x1,
-    HAND = 0x2,
-    GRAVE = 0x4,
-    REMOVED = 0x8,
-}
 export enum ATTRIBUTE {
     STR,
     AGI,
@@ -27,6 +20,10 @@ export enum ATTRIBUTE {
     STA,
     INT,
     PER,
+}
+export interface IArgsUseHandCard {
+    cardId;
+    targetUid: string;
 }
 export default class BattlePlayer {
     public get uid(): string {
@@ -67,6 +64,27 @@ export default class BattlePlayer {
     public getInfo(): IPlayerInfo {
         return this.playerInfo;
     }
+    public getCardFiled(field: CARD_FIELD) {
+        const result: FieldBase[] = [];
+        if (field & CARD_FIELD.DECK) {
+            result.push(this.deck);
+        }
+        if (field & CARD_FIELD.HAND) {
+            result.push(this.hand);
+        }
+        if (field & CARD_FIELD.GRAVE) {
+            result.push(this.grave);
+        }
+        if (field & CARD_FIELD.REMOVED) {
+            result.push(this.removed);
+        }
+        return result;
+    }
+
+    public useHandCard(args: IArgsUseHandCard) {
+        const handCards = this.getCardFiled(CARD_FIELD.HAND)[0];
+
+    }
     private initFiled() {
         this.deck = new BattleDeck(this.battle);
         this.hand = new FieldBase(this.battle);
@@ -86,28 +104,5 @@ export default class BattlePlayer {
         fields.forEach((f: FieldBase) => {
             f.shuffle();
         });
-    }
-    private getCardFiled(field: CARD_FIELD) {
-        const result: FieldBase[] = [];
-        if (field & CARD_FIELD.DECK) {
-            result.push(this.deck);
-        }
-        if (field & CARD_FIELD.HAND) {
-            result.push(this.hand);
-        }
-        if (field & CARD_FIELD.GRAVE) {
-            result.push(this.grave);
-        }
-        if (field & CARD_FIELD.REMOVED) {
-            result.push(this.removed);
-        }
-        return result;
-    }
-
-    private getDamage(damage: number, source: BattlePlayer) {
-        // trigger
-        while (damage) {
-            const card: CardBase = this.deck.getTopCard();
-        }
     }
 }
