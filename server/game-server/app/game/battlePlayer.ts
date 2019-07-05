@@ -85,6 +85,12 @@ export default class BattlePlayer {
         const handCards = this.getCardFiled(CARD_FIELD.HAND)[0];
 
     }
+    public shuffle(field: CARD_FIELD) {
+        const fields = this.getCardFiled(field);
+        fields.forEach((f: FieldBase) => {
+            f.shuffle();
+        });
+    }
     private initFiled() {
         this.deck = new BattleDeck(this.battle);
         this.hand = new FieldBase(this.battle);
@@ -98,11 +104,5 @@ export default class BattlePlayer {
         this._baseAttribute[ATTRIBUTE.SPI] = info.gameData.spirit;
         this._baseAttribute[ATTRIBUTE.PER] = info.gameData.perception;
         this._baseAttribute[ATTRIBUTE.STA] = info.gameData.stamina;
-    }
-    private shuffle(field: CARD_FIELD) {
-        const fields = this.getCardFiled(field);
-        fields.forEach((f: FieldBase) => {
-            f.shuffle();
-        });
     }
 }

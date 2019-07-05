@@ -25,5 +25,8 @@ export default class CardBase {
         this.battle = battle;
         this._bId = battle.registerCard(this);
     }
+    public get bId() {
+        return this._bId;
+    }
 
 }
