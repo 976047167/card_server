@@ -22,7 +22,7 @@ export enum ATTRIBUTE {
     PER,
 }
 export interface IArgsUseHandCard {
-    cardId;
+    cardBId: number;
     targetUid: string;
 }
 export default class BattlePlayer {
@@ -47,13 +47,13 @@ export default class BattlePlayer {
     public get spirit(): number {
         return 1;
     }
+    public readonly battle: Battle;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
     private grave: FieldBase;
     private hand: FieldBase;
     private buffList: BuffBase[];
-    private battle: Battle;
     private _baseAttribute;
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
@@ -83,7 +83,10 @@ export default class BattlePlayer {
 
     public useHandCard(args: IArgsUseHandCard) {
         const handCards = this.getCardFiled(CARD_FIELD.HAND)[0];
-
+        const card = this.battle.getCardByBId(args.cardBId);
+        if (card.field !== handCards) { return; }
+        const grave = this.getCardFiled(CARD_FIELD.GRAVE)[0];
+        handCards.moveCardsTo([card], grave);
     }
     public shuffle(field: CARD_FIELD) {
         const fields = this.getCardFiled(field);
@@ -92,10 +95,10 @@ export default class BattlePlayer {
         });
     }
     private initFiled() {
-        this.deck = new BattleDeck(this.battle);
-        this.hand = new FieldBase(this.battle);
-        this.grave = new FieldBase(this.battle);
-        this.removed = new FieldBase(this.battle);
+        this.deck = new BattleDeck(this);
+        this.hand = new FieldBase(this);
+        this.grave = new FieldBase(this);
+        this.removed = new FieldBase(this);
     }
     private initAttribute(info: IPlayerInfo) {
         this._baseAttribute[ATTRIBUTE.STR] = info.gameData.strength;

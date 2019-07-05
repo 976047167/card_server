@@ -48,5 +48,8 @@ export default class Battle {
         this.cardMap[this._bid] = card;
         return this._bid;
     }
+    public getCardByBId(bId: number) {
+        return this.cardMap[bId];
+    }
 
 }

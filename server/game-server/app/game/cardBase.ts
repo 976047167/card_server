@@ -1,5 +1,7 @@
+import { filter } from "bluebird";
 import Battle from "./battle";
 import BattlePlayer from "./battlePlayer";
+import FieldBase from "./field/fieldBase";
 
 export enum CARD_TYPE {
 
@@ -14,19 +16,24 @@ export default class CardBase {
     public get value(): number {
         return this._type;
     }
+    public get field() {
+        return this._field;
+    }
+    public readonly owner: BattlePlayer;
+    public readonly battle: Battle;
+    public readonly bId: number;
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
-    protected battle: Battle;
-    protected _bId: number;
-    protected owner: BattlePlayer;
+    protected _field: FieldBase;
     protected controller: BattlePlayer;
-    constructor(battle: Battle) {
-        this.battle = battle;
-        this._bId = battle.registerCard(this);
+    constructor(owner: BattlePlayer) {
+        this.owner = owner;
+        this.battle = owner.battle;
+        this.bId = this.battle.registerCard(this);
     }
-    public get bId() {
-        return this._bId;
+    public setFiled(field?: FieldBase) {
+        this._field = field;
     }
 
 }

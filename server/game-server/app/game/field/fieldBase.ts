@@ -1,4 +1,5 @@
 import Battle from "../battle";
+import BattlePlayer from "../battlePlayer";
 import CardBase from "../cardBase";
 
 export enum CARD_FIELD {
@@ -9,10 +10,12 @@ export enum CARD_FIELD {
 }
 export default class FieldBase {
     public name: string;
-    protected battle: Battle;
+    public readonly battle: Battle;
+    public readonly owner: BattlePlayer;
     protected cards: CardBase[];
-    constructor(battle: Battle) {
-        this.battle = battle;
+    constructor(owner: BattlePlayer) {
+        this.battle = owner.battle;
+        this.owner = this.owner;
     }
     public shuffle() {
         let i = this.cards.length - 1;
@@ -32,14 +35,18 @@ export default class FieldBase {
                 console.log("card is not in the filed!", card.name, this.name);
                 return;
             }
+            card.setFiled();
             this.cards.splice(cardindex, 1);
             reslut.push(card);
         });
         target.addCards(reslut, index);
     }
-    public addCards(card: CardBase[], index?: number) {
+    public addCards(cards: CardBase[], index?: number) {
         if (!index) { index = this.cards.length - 1; }
-        this.cards.splice(index, 0, ...card);
+        cards.forEach((card) => {
+            card.setFiled(this);
+        });
+        this.cards.splice(index, 0, ...cards);
     }
     public getCardByIndex(index: number) {
         if (this.cards[index]) { return this.cards[index]; }
