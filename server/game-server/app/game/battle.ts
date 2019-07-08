@@ -1,7 +1,7 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import BattlePlayer, { IPlayerInfo } from "./battlePlayer";
-import CardBase from "./cardBase";
+import CardBase from "./card/cardBase";
 
 export default class Battle {
     public get currentController(): BattlePlayer {

@@ -11,6 +11,6 @@ export default class BattleTrigger {
         this.battle = battle;
     }
     public registerTrigger(point: TriggerPoint, level: TriggerLevel) {
-
+        //
     }
 }

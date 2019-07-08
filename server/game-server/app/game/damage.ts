@@ -17,8 +17,8 @@ export default class Damage {
     }
 
     public deal() {
-        const target_deck =  this.target.getCardFiled(CARD_FIELD.DECK)[0];
-        const target_grave =  this.target.getCardFiled(CARD_FIELD.GRAVE)[0];
+        const target_deck =  this.target.getCardFileds(CARD_FIELD.DECK)[0];
+        const target_grave =  this.target.getCardFileds(CARD_FIELD.GRAVE)[0];
         while (this.damageNum) {
             const card = target_deck.getCardByIndex(0);
             target_deck.moveCardsTo([card], target_grave);

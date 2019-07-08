@@ -1,17 +1,19 @@
 import Battle from "../battle";
 import BattlePlayer from "../battlePlayer";
-import CardBase from "../cardBase";
+import CardBase from "../card/cardBase";
 
 export enum CARD_FIELD {
     DECK = 0x1,
     HAND = 0x2,
     GRAVE = 0x4,
     REMOVED = 0x8,
+    DEALING = 0x10,
 }
 export default class FieldBase {
     public name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
+
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
         this.battle = owner.battle;
