@@ -5,6 +5,12 @@ import FieldBase, { CARD_FIELD } from "../field/fieldBase";
 export enum CARD_TYPE {
 
 }
+export interface ICardInfo {
+    cardId: string;
+    exp: number;
+    level: number;
+    arg?: any;
+}
 export default class CardBase {
     public get name(): string {
         return this._name;
@@ -29,22 +35,22 @@ export default class CardBase {
     protected _value: number;
     protected _field: FieldBase;
     protected _controller: BattlePlayer;
-    constructor(owner: BattlePlayer, field: FieldBase) {
+    constructor(info: ICardInfo, owner: BattlePlayer, field: FieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
         this._controller = this.owner;
         this.bId = this.battle.registerCard(this);
         this._field = field;
-        this.initInfo();
+        this.initInfo(info);
     }
     public setFiled(field?: FieldBase) {
         this._field = field;
     }
-    public deal() {
+    public deal(target: BattlePlayer) {
         const dealingFiled = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
         this.setFiled(dealingFiled);
     }
-    protected initInfo() {
+    protected initInfo(info) {
         //
     }
 }

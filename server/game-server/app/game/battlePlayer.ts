@@ -4,7 +4,7 @@ import BattleDeck from "./field/battleDeck";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
 export interface IPlayerInfo {
     uid: string;
-    gameData: {
+    attribute: {
         strength: number,
         agile: number,
         stamina: number,
@@ -90,6 +90,8 @@ export default class BattlePlayer {
         const card = this.battle.getCardByBId(args.cardBId);
         if (card.field !== handCards) { return; }
         const grave = this.getCardFileds(CARD_FIELD.GRAVE)[0];
+        const target = this.battle.getPlayer(args.targetUid);
+        card.deal(target);
         handCards.moveCardsTo([card], grave);
     }
     public shuffle(field: CARD_FIELD) {
@@ -106,11 +108,11 @@ export default class BattlePlayer {
         this.dealing = new FieldBase(this);
     }
     private initAttribute(info: IPlayerInfo) {
-        this._baseAttribute[ATTRIBUTE.STR] = info.gameData.strength;
-        this._baseAttribute[ATTRIBUTE.AGI] = info.gameData.agile;
-        this._baseAttribute[ATTRIBUTE.INT] = info.gameData.intellect;
-        this._baseAttribute[ATTRIBUTE.SPI] = info.gameData.spirit;
-        this._baseAttribute[ATTRIBUTE.PER] = info.gameData.perception;
-        this._baseAttribute[ATTRIBUTE.STA] = info.gameData.stamina;
+        this._baseAttribute[ATTRIBUTE.STR] = info.attribute.strength;
+        this._baseAttribute[ATTRIBUTE.AGI] = info.attribute.agile;
+        this._baseAttribute[ATTRIBUTE.INT] = info.attribute.intellect;
+        this._baseAttribute[ATTRIBUTE.SPI] = info.attribute.spirit;
+        this._baseAttribute[ATTRIBUTE.PER] = info.attribute.perception;
+        this._baseAttribute[ATTRIBUTE.STA] = info.attribute.stamina;
     }
 }
