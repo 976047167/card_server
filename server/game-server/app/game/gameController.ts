@@ -1,5 +1,4 @@
 import Battle from "./battle";
-import { IArgsUseHandCard } from "./battlePlayer";
 export interface IUserCommand {
     uid: string;
     battleId: string;
@@ -38,20 +37,7 @@ export default class GameController {
         if (!battle) {return; }
         const player = battle.getPlayer(command.uid);
         if (!player) {return; }
-        switch (command.commandId) {
-            case COMMAND_ID.USE_HAND_CARD:
-                this.useHandCard(command);
-                break;
-            default:
-                break;
-        }
-    }
-    private useHandCard(command: IUserCommand) {
-        const args = command.args as IArgsUseHandCard;
-        if (!args) {return; }
-        const battle =  this.getBattle(command.battleId);
-        const player = battle.getPlayer(command.uid);
-        player.useHandCard(args);
+        battle.command(command);
     }
 
 }

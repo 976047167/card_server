@@ -92,9 +92,7 @@ export default class BattlePlayer {
         const handCards = this.getCardFileds(CARD_FIELD.HAND)[0];
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-        const grave = this.getCardFileds(CARD_FIELD.GRAVE)[0];
         card.deal(args);
-        handCards.moveCardsTo([card], grave);
     }
     public shuffle(field: CARD_FIELD) {
         const fields = this.getCardFileds(field);

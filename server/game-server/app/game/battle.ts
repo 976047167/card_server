@@ -1,9 +1,10 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
-import BattlePlayer, { IPlayerInfo } from "./battlePlayer";
+import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
 import BuffBase from "./buffBase";
 import CardBase from "./card/cardBase";
 import FieldBase from "./field/fieldBase";
+import { COMMAND_ID, IUserCommand } from "./gameController";
 export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
 export default class Battle {
     public get currentController(): BattlePlayer {
@@ -56,6 +57,21 @@ export default class Battle {
         if (obj instanceof type) {
             return obj;
         }
+    }
+    public command(cmd: IUserCommand) {
+        switch (cmd.commandId) {
+            case COMMAND_ID.USE_HAND_CARD:
+                this.useHandCard(cmd);
+                break;
+            default:
+                break;
+        }
+    }
+    private useHandCard(cmd: IUserCommand) {
+        const args = cmd.args as IArgsUseHandCard;
+        if (!args) {return; }
+        const player = this.getPlayer(cmd.uid);
+        player.useHandCard(args);
     }
 
 }

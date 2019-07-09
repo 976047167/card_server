@@ -48,9 +48,19 @@ export default class CardBase {
     }
     public deal(args: IArgsUseHandCard) {
         const dealingFiled = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
-        this.setFiled(dealingFiled);
+        this.field.moveCardsTo([this], dealingFiled);
+        this.effect(args);
+        this.dealDone();
+    }
+
+    protected effect(args: IArgsUseHandCard) {
+        //
     }
     protected initInfo(info: ICardInfo) {
         //
+    }
+    protected dealDone() {
+        const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
+        this.field.moveCardsTo([this], grave);
     }
 }
