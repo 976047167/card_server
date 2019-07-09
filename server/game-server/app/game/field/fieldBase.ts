@@ -13,11 +13,12 @@ export default class FieldBase {
     public name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
-
+    public readonly bid: number;
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
         this.battle = owner.battle;
         this.owner = this.owner;
+        this.bid = this.battle.registerBid(this);
     }
     public shuffle() {
         let i = this.cards.length - 1;

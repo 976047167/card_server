@@ -1,8 +1,10 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import BattlePlayer, { IPlayerInfo } from "./battlePlayer";
+import BuffBase from "./buffBase";
 import CardBase from "./card/cardBase";
-
+import FieldBase from "./field/fieldBase";
+export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
 export default class Battle {
     public get currentController(): BattlePlayer {
         return this._currentController;
@@ -11,7 +13,7 @@ export default class Battle {
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
-    private cardMap: {[bId: string]: CardBase}; // 一个card的bid对应map，方便检索卡片
+    private bidMap: {[bId: string]: BattleObject}; // 场景里所有物体都有对应的bid，用于检索所有对象
     private _bid: number = 0; // 自增用的id
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
@@ -43,13 +45,14 @@ export default class Battle {
         }
         return player;
     }
-    public registerCard(card: CardBase) {
+    public registerBid(card: BattleObject) {
         this._bid++;
-        this.cardMap[this._bid] = card;
+        this.bidMap[this._bid] = card;
         return this._bid;
     }
-    public getCardByBId(bId: number) {
-        return this.cardMap[bId];
+    public getObjectByBId<T extends BattleObject>(bId: number): T {
+        const obj =  this.bidMap[bId] as T;
+        return obj;
     }
 
 }

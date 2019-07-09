@@ -1,5 +1,5 @@
 import Battle from "../battle";
-import BattlePlayer from "../battlePlayer";
+import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
 
 export enum CARD_TYPE {
@@ -39,18 +39,18 @@ export default class CardBase {
         this.owner = owner;
         this.battle = owner.battle;
         this._controller = this.owner;
-        this.bId = this.battle.registerCard(this);
+        this.bId = this.battle.registerBid(this);
         this._field = field;
         this.initInfo(info);
     }
     public setFiled(field?: FieldBase) {
         this._field = field;
     }
-    public deal(target: BattlePlayer) {
+    public deal(args: IArgsUseHandCard) {
         const dealingFiled = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
         this.setFiled(dealingFiled);
     }
-    protected initInfo(info) {
+    protected initInfo(info: ICardInfo) {
         //
     }
 }

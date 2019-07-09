@@ -1,5 +1,6 @@
 import Battle from "./battle";
 import BuffBase from "./buffBase";
+import CardBase from "./card/cardBase";
 import BattleDeck from "./field/battleDeck";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
 export interface IPlayerInfo {
@@ -23,7 +24,7 @@ export enum ATTRIBUTE {
 }
 export interface IArgsUseHandCard {
     cardBId: number;
-    targetUid: string;
+    targetBid: number;
 }
 export default class BattlePlayer {
     public get uid(): string {
@@ -48,6 +49,7 @@ export default class BattlePlayer {
         return 1;
     }
     public readonly battle: Battle;
+    public readonly bid: number;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
@@ -61,6 +63,7 @@ export default class BattlePlayer {
         this.playerInfo = info;
         this.initFiled();
         this.initAttribute(info);
+        this.bid = this.battle.registerBid(this);
     }
     public getInfo(): IPlayerInfo {
         return this.playerInfo;
@@ -87,11 +90,13 @@ export default class BattlePlayer {
 
     public useHandCard(args: IArgsUseHandCard) {
         const handCards = this.getCardFileds(CARD_FIELD.HAND)[0];
-        const card = this.battle.getCardByBId(args.cardBId);
+        const card = this.battle.getObjectByBId<CardBase>(args.cardBId);
+        if (card instanceof CardBase === false) {
+            return;
+        }
         if (card.field !== handCards) { return; }
         const grave = this.getCardFileds(CARD_FIELD.GRAVE)[0];
-        const target = this.battle.getPlayer(args.targetUid);
-        card.deal(target);
+        card.deal(args);
         handCards.moveCardsTo([card], grave);
     }
     public shuffle(field: CARD_FIELD) {

@@ -1,4 +1,4 @@
-import BattlePlayer from "../battlePlayer";
+import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
 import Damage from "../damage";
 import CardBase from "./cardBase";
 
@@ -9,9 +9,10 @@ export default class Card00001 extends CardBase {
 
     }
 
-    public deal(target: BattlePlayer) {
-        super.deal(target);
+    public deal(args: IArgsUseHandCard) {
+        super.deal(args);
         const damageNum = this.controller.strength;
+        const target = this.battle.getObjectByBId<BattlePlayer>(args.targetBid);
         const damage = new Damage(this.controller, target, damageNum);
         damage.deal();
     }
