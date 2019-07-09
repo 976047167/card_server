@@ -90,10 +90,7 @@ export default class BattlePlayer {
 
     public useHandCard(args: IArgsUseHandCard) {
         const handCards = this.getCardFileds(CARD_FIELD.HAND)[0];
-        const card = this.battle.getObjectByBId<CardBase>(args.cardBId);
-        if (card instanceof CardBase === false) {
-            return;
-        }
+        const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
         const grave = this.getCardFileds(CARD_FIELD.GRAVE)[0];
         card.deal(args);

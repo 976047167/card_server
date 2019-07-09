@@ -50,9 +50,12 @@ export default class Battle {
         this.bidMap[this._bid] = card;
         return this._bid;
     }
-    public getObjectByBId<T extends BattleObject>(bId: number): T {
-        const obj =  this.bidMap[bId] as T;
-        return obj;
+    public getObjectByBId<T extends BattleObject>(bId: number, type?: new (...args: any[]) => T): T {
+        const obj =  this.bidMap[bId] ;
+        if (!type) { return obj as T; }
+        if (obj instanceof type) {
+            return obj;
+        }
     }
 
 }
