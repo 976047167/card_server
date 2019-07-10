@@ -19,10 +19,21 @@ export default class Damage {
     public deal() {
         const target_deck =  this.target.getCardFileds(CARD_FIELD.DECK)[0];
         const target_grave =  this.target.getCardFileds(CARD_FIELD.GRAVE)[0];
+        const target_removed = this.target.getCardFileds(CARD_FIELD.REMOVED)[0];
+        let softDamage = 0;
         while (this.damageNum) {
             const card = target_deck.getCardByIndex(0);
-            target_deck.moveCardsTo([card], target_grave);
-            this.damageNum -= card.value;
+            if (!card) {
+                break;
+            }
+            const value = card.value;
+            if (softDamage > this.target.tenacious ) {
+                target_deck.moveCardsTo([card], target_grave);
+            } else {
+                target_deck.moveCardsTo([card], target_removed);
+            }
+            softDamage += value;
+            this.damageNum -= value;
             if (this.damageNum < 0) {this.damageNum = 0; }
         }
     }

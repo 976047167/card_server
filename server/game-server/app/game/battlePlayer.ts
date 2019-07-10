@@ -27,29 +27,51 @@ export interface IArgsUseHandCard {
     targetBid: number;
 }
 export default class BattlePlayer {
-    public get uid(): string {
-        return this.playerInfo.uid;
-    }
+    /**力量
+     *
+     */
     public get strength(): number {
         return 1;
     }
+    /**
+     * 敏捷
+     */
     public get agile(): number {
         return 1;
     }
+    /**耐力
+     *
+     */
     public get stamina(): number {
         return 1;
     }
+    /**感知
+     *
+     */
     public get perception(): number {
         return 1;
     }
+    /**智力
+     *
+     */
     public get intellect(): number {
         return 1;
     }
+    /**意志
+     *
+     */
     public get spirit(): number {
         return 1;
     }
+    public get immunity(): number {
+        return this.stamina + this.spirit;
+    }
+    public get tenacious(): number {
+        return this.stamina + this.spirit;
+    }
     public readonly battle: Battle;
     public readonly bid: number;
+    public readonly uid: string;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
@@ -61,6 +83,7 @@ export default class BattlePlayer {
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
+        this.uid = this.playerInfo.uid;
         this.initFiled();
         this.initAttribute(info);
         this.bid = this.battle.registerBid(this);
@@ -115,4 +138,5 @@ export default class BattlePlayer {
         this._baseAttribute[ATTRIBUTE.PER] = info.attribute.perception;
         this._baseAttribute[ATTRIBUTE.STA] = info.attribute.stamina;
     }
+
 }

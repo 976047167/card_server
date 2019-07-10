@@ -71,6 +71,7 @@ export default class Battle {
         const args = cmd.args as IArgsUseHandCard;
         if (!args) {return; }
         const player = this.getPlayer(cmd.uid);
+        if (player !== this.currentController) {return; }
         player.useHandCard(args);
     }
 
