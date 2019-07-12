@@ -74,5 +74,23 @@ export default class Battle {
         if (player !== this.currentController) {return; }
         player.useHandCard(args);
     }
+    /**
+     * 计算先攻顺序队列
+     * @return currentController;
+     */
+    private calNextController() {
+        const max_progress = Math.max(...this.players.map((p) => {
+            p.strikeProgress += p.initiative;
+            return p.strikeProgress;
+        }));
+        const act_players = this.players.filter((p) => p.strikeProgress === max_progress);
+        if (act_players.length !== 1) {
+            act_players.sort((a, b) => {
+                return  b.perception - a.perception;
+            });
+        }
+        this._currentController = act_players[0];
+        return this._currentController;
+    }
 
 }

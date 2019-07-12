@@ -11,7 +11,7 @@ export enum COMMAND_ID {
 }
 export default class GameController {
     public static getInstance() {
-        if (!this._instance) { this._instance = new GameController(); }
+        if (!this._instance) { this._instance = new this(); }
         return this._instance;
     }
     private static _instance: GameController;
