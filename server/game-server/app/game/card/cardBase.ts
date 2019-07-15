@@ -83,6 +83,7 @@ export default class CardBase {
     }
     protected afterEffect(args) {
         const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
-        this.field.moveCardsTo([this], grave);
+        const dealing = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
+        dealing.moveCardsTo([this], grave);
     }
 }

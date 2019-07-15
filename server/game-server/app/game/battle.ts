@@ -1,7 +1,7 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import BuffBase from "./buffBase";
+import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import FieldBase from "./field/fieldBase";
 import GameController, { COMMAND_ID, IUserCommand } from "./gameController";

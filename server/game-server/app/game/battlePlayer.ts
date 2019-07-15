@@ -1,5 +1,5 @@
 import Battle from "./battle";
-import BuffBase from "./buffBase";
+import BuffBase from "./buff/buffBase";
 import CardBase, { TIME_POINT } from "./card/cardBase";
 import BattleDeck from "./field/battleDeck";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
