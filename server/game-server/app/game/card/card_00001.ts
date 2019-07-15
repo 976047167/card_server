@@ -6,7 +6,7 @@ import CardBase, { TIME_POINT } from "./cardBase";
 export default class Card00001 extends CardBase {
     protected constructor(info, owner, field) {
         super(info, owner, field);
-        this.registerEffect(TIME_POINT.HAND, this.effect );
+        this.registerEffect(TIME_POINT.HAND, this.effect);
     }
 
     private effect(args: IArgsUseHandCard) {
@@ -14,6 +14,5 @@ export default class Card00001 extends CardBase {
         const target = this.battle.getObjectByBId(args.targetBid, BattlePlayer);
         const damage = new Damage(this.controller, target, damageNum);
         damage.deal();
-        this.dealDone();
     }
 }

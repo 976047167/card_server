@@ -35,8 +35,12 @@ export default class Damage {
                 target_deck.moveCardsTo([card], target_removed);
             }
             softDamage += value;
-            this.damageNum -= value;
-            if (this.damageNum < 0) {this.damageNum = 0; }
+            this.reduce(value);
         }
+    }
+    public reduce(value?: number) {
+        if (value !== 0 && !value) {value = this.damageNum; }
+        this.damageNum -= value;
+        if (this.damageNum < 0) {this.damageNum = 0; }
     }
 }

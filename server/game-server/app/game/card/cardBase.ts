@@ -54,20 +54,35 @@ export default class CardBase {
     public trrigerEffect(timePoint: TIME_POINT, args?) {
         const effect = this._effectMap[timePoint];
         if (!effect) { return; }
-        const dealingFiled = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
-        this.field.moveCardsTo([this], dealingFiled);
         effect(args);
-
     }
 
     protected initInfo(info: ICardInfo) {
         //
     }
-    protected dealDone() {
+    /**
+     * 注册效果，在相应时点触发
+     * @param timePoint 注册的时点
+     * @param effect 卡片的基本效果
+     * @param before 触发效果前将卡片送入执行区执行条件进行检查，返回false则不执行效果
+     * @param after 卡片触发结束后处理，通常是送入墓地
+     */
+    protected registerEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
+        this._effectMap[timePoint] = (args) => {
+            const check = before(args);
+            if (check) {
+                effect(args);
+            }
+            after(args);
+        };
+    }
+    protected beforeEffect(args) {
+        const dealingField = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
+        this.field.moveCardsTo([this], dealingField);
+        return true;
+    }
+    protected afterEffect(args) {
         const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
         this.field.moveCardsTo([this], grave);
-    }
-    protected registerEffect(timePoint: TIME_POINT, effect) {
-        this._effectMap[timePoint] = (...args: any[]) => effect(...args);
     }
 }
