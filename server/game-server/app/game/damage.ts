@@ -1,4 +1,5 @@
 import BattlePlayer from "./battlePlayer";
+import { TIME_POINT } from "./card/cardBase";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
 
 export enum DAMAGE_TYPE {
@@ -27,8 +28,9 @@ export default class Damage {
                 break;
             }
             const value = card.value;
-            if (softDamage > this.target.tenacious ) {
+            if (softDamage < this.target.tenacious ) {
                 target_deck.moveCardsTo([card], target_grave);
+                card.trrigerEffect(TIME_POINT.COUNTER, this);
             } else {
                 target_deck.moveCardsTo([card], target_removed);
             }

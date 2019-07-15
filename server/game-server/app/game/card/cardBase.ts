@@ -11,6 +11,10 @@ export interface ICardInfo {
     level: number;
     arg?: any;
 }
+export enum TIME_POINT {
+    HAND = 0,
+    COUNTER,
+}
 export default class CardBase {
     public get name(): string {
         return this._name;
@@ -35,6 +39,7 @@ export default class CardBase {
     protected _value: number;
     protected _field: FieldBase;
     protected _controller: BattlePlayer;
+    private _effectMap: {[tiempoint: number]: any};
     constructor(info: ICardInfo, owner: BattlePlayer, field: FieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
@@ -46,21 +51,23 @@ export default class CardBase {
     public setFiled(field?: FieldBase) {
         this._field = field;
     }
-    public deal(args: IArgsUseHandCard) {
+    public trrigerEffect(timePoint: TIME_POINT, args?) {
+        const effect = this._effectMap[timePoint];
+        if (!effect) { return; }
         const dealingFiled = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
         this.field.moveCardsTo([this], dealingFiled);
-        this.effect(args);
-        this.dealDone();
+        effect(args);
+
     }
 
-    protected effect(args: IArgsUseHandCard) {
-        //
-    }
     protected initInfo(info: ICardInfo) {
         //
     }
     protected dealDone() {
         const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
         this.field.moveCardsTo([this], grave);
+    }
+    protected registerEffect(timePoint: TIME_POINT, effect) {
+        this._effectMap[timePoint] = (...args: any[]) => effect(...args);
     }
 }
