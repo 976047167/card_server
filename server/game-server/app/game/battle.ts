@@ -4,7 +4,7 @@ import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
 import BuffBase from "./buffBase";
 import CardBase from "./card/cardBase";
 import FieldBase from "./field/fieldBase";
-import { COMMAND_ID, IUserCommand } from "./gameController";
+import GameController, { COMMAND_ID, IUserCommand } from "./gameController";
 export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
 export default class Battle {
     public get currentController(): BattlePlayer {
@@ -16,6 +16,7 @@ export default class Battle {
     private _currentController: BattlePlayer;
     private bidMap: {[bId: string]: BattleObject}; // 场景里所有物体都有对应的bid，用于检索所有对象
     private _bid: number = 0; // 自增用的id
+    private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
     }
@@ -26,7 +27,15 @@ export default class Battle {
         this.players = players;
     }
     public start() {
-        //
+        this.newTurn();
+    }
+    public newTurn() {
+        this._currentController = this.calNextController();
+        // push
+    }
+    public turnEnd() {
+        this.currentController.endStike();
+        this.newTurn();
     }
 
     public getRandom(min= 0, max = 1, integer = true) {
@@ -80,7 +89,9 @@ export default class Battle {
      */
     private calNextController() {
         const max_progress = Math.max(...this.players.map((p) => {
-            p.strikeProgress += p.initiative;
+            if (!this._sameStrike) {
+                p.doStrike();
+            }
             return p.strikeProgress;
         }));
         const act_players = this.players.filter((p) => p.strikeProgress === max_progress);
@@ -88,6 +99,9 @@ export default class Battle {
             act_players.sort((a, b) => {
                 return  b.perception - a.perception;
             });
+            this._sameStrike = true;
+        } else {
+            this._sameStrike = false;
         }
         this._currentController = act_players[0];
         return this._currentController;

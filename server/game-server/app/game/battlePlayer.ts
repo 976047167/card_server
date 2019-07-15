@@ -14,7 +14,7 @@ export interface IPlayerInfo {
         spirit: number,
     };
 }
-export enum ATTRIBUTE {
+export enum BASE_ATTRIBUTE {
     STR,
     AGI,
     SPI,
@@ -81,10 +81,15 @@ export default class BattlePlayer {
     public get initiative(): number {
         return this.perception + this.agile;
     }
+    /**当前先攻的进度
+     */
+    public get strikeProgress(): number {
+        return this._strikeProgress;
+    }
     public readonly battle: Battle;
     public readonly bid: number;
     public readonly uid: string;
-    public strikeProgress: number = 0; // 当前先攻的进度
+    public _strikeProgress: number = 0;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
@@ -137,6 +142,19 @@ export default class BattlePlayer {
             f.shuffle();
         });
     }
+    /**
+     * 先攻进度
+     */
+    public doStrike() {
+        this._strikeProgress += this.initiative;
+    }
+    /**
+     * 行动完成后清空进度值
+     */
+    public endStike() {
+        this._strikeProgress = 0;
+    }
+
     private initFiled() {
         this.deck = new BattleDeck(this);
         this.hand = new FieldBase(this);
@@ -145,12 +163,11 @@ export default class BattlePlayer {
         this.dealing = new FieldBase(this);
     }
     private initAttribute(info: IPlayerInfo) {
-        this._baseAttribute[ATTRIBUTE.STR] = info.attribute.strength;
-        this._baseAttribute[ATTRIBUTE.AGI] = info.attribute.agile;
-        this._baseAttribute[ATTRIBUTE.INT] = info.attribute.intellect;
-        this._baseAttribute[ATTRIBUTE.SPI] = info.attribute.spirit;
-        this._baseAttribute[ATTRIBUTE.PER] = info.attribute.perception;
-        this._baseAttribute[ATTRIBUTE.STA] = info.attribute.stamina;
+        this._baseAttribute[BASE_ATTRIBUTE.STR] = info.attribute.strength;
+        this._baseAttribute[BASE_ATTRIBUTE.AGI] = info.attribute.agile;
+        this._baseAttribute[BASE_ATTRIBUTE.INT] = info.attribute.intellect;
+        this._baseAttribute[BASE_ATTRIBUTE.SPI] = info.attribute.spirit;
+        this._baseAttribute[BASE_ATTRIBUTE.PER] = info.attribute.perception;
+        this._baseAttribute[BASE_ATTRIBUTE.STA] = info.attribute.stamina;
     }
-
 }
