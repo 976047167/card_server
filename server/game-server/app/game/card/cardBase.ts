@@ -40,13 +40,14 @@ export default class CardBase {
     protected _field: FieldBase;
     protected _controller: BattlePlayer;
     private _effectMap: {[tiempoint: number]: any};
-    constructor(info: ICardInfo, owner: BattlePlayer, field: FieldBase) {
+    constructor(info: ICardInfo, owner: BattlePlayer, field?: FieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
         this._controller = this.owner;
         this.bId = this.battle.registerBid(this);
         this._field = field;
         this.initInfo(info);
+        this.initEffect();
     }
     public setFiled(field?: FieldBase) {
         this._field = field;
@@ -58,6 +59,9 @@ export default class CardBase {
     }
 
     protected initInfo(info: ICardInfo) {
+        //
+    }
+    protected initEffect() {
         //
     }
     /**
