@@ -1,6 +1,6 @@
 import BattlePlayer from "./battlePlayer";
 import { TIME_POINT } from "./card/cardBase";
-import FieldBase, { CARD_FIELD } from "./field/fieldBase";
+import { CARD_FIELD } from "./field/fieldBase";
 
 export enum DAMAGE_TYPE {
    VOID = 0,
@@ -38,8 +38,7 @@ export default class Damage {
             this.reduce(value);
         }
     }
-    public reduce(value?: number) {
-        if (value !== 0 && !value) {value = this.damageNum; }
+    public reduce(value: number = this.damageNum) {
         this.damageNum -= value;
         if (this.damageNum < 0) {this.damageNum = 0; }
     }

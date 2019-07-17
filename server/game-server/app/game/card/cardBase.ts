@@ -1,9 +1,12 @@
 import Battle from "../battle";
-import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
+import BattlePlayer from "../battlePlayer";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
 
 export enum CARD_TYPE {
-
+    NORMAL,
+    COUNTER,
+    EQUIP,
+    PROFESSION,
 }
 export interface ICardInfo {
     cardId: string;
@@ -23,7 +26,7 @@ export default class CardBase {
         return this._type;
     }
     public get value(): number {
-        return this._type;
+        return this._value;
     }
     public get field() {
         return this._field;
