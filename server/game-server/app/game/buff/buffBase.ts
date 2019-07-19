@@ -6,22 +6,32 @@ export default class BuffBase {
      * 是否可以被驱散
      */
     public get canBeDispeled() {
-        return false;
+        return this._can_be_dispeled;
     }
     public get type() {
         return this._type;
     }
     public get isDebuff() {
-        return false;
+        return this._is_debuff;
     }
     /**
      * 是否可以被同名叠加
      */
     public get isOverlayable() {
-        return true;
+        return this._is_overlayable;
     }
+    private _is_debuff: boolean;
+    private _is_overlayable: boolean;
+    private _can_be_dispeled: boolean;
+
     private _type: BUFF_TYPE;
     constructor(info) {
         //
+        this.init(info);
+    }
+    private init(info) {
+        this._is_debuff  = false;
+        this._is_overlayable = false;
+        this._can_be_dispeled = true;
     }
 }
