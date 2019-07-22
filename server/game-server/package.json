@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "@types/bluebird": "^3.5.19",
-        "@types/node": "^8.5.2",
+        "@types/node": "^8.10.51",
         "bluebird": "^3.5.1",
         "pinus": "1.3.11",
         "reflect-metadata": "^0.1.10",

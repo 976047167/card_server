@@ -1,6 +1,7 @@
 import Battle from "../battle";
 import BattlePlayer from "../battlePlayer";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
+import { TIME_POINT } from "../trriger";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -9,14 +10,10 @@ export enum CARD_TYPE {
     PROFESSION,
 }
 export interface ICardInfo {
-    cardId: string;
-    exp: number;
-    level: number;
+    cardId: number;
+    exp?: number;
+    level?: number;
     arg?: any;
-}
-export enum TIME_POINT {
-    HAND = 0,
-    COUNTER,
 }
 export default class CardBase {
     public get name(): string {
@@ -42,7 +39,6 @@ export default class CardBase {
     protected _value: number;
     protected _field: FieldBase;
     protected _controller: BattlePlayer;
-    private _effectMap: {[tiempoint: number]: any};
     constructor(info: ICardInfo, owner: BattlePlayer, field?: FieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
@@ -55,12 +51,10 @@ export default class CardBase {
     public setFiled(field?: FieldBase) {
         this._field = field;
     }
-    public trrigerEffect(timePoint: TIME_POINT, args?) {
-        const effect = this._effectMap[timePoint];
-        if (!effect) { return; }
-        effect(args);
-    }
-
+    /**
+     * 加载卡片信息
+     * @param info 卡片信息，通常只要一个id，通过读表获取其他信息。如果传入其他属性，会覆盖默认属性
+     */
     protected initInfo(info: ICardInfo) {
         //
     }
@@ -75,13 +69,13 @@ export default class CardBase {
      * @param after 卡片触发结束后处理，通常是送入墓地
      */
     protected registerEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
-        this._effectMap[timePoint] = (args) => {
-            const check = before(args);
-            if (check) {
-                effect(args);
-            }
-            after(args);
-        };
+        // this.battle.trriger.register(timePoint, (args) => {
+        //     const check = before(args);
+        //     if (check) {
+        //         effect(args);
+        //     }
+        //     after(args);
+        // });
     }
     protected beforeEffect(args) {
         const dealingField = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];

@@ -1,8 +1,9 @@
 import Battle from "./battle";
 import BuffBase from "./buff/buffBase";
-import CardBase, { TIME_POINT } from "./card/cardBase";
+import CardBase from "./card/cardBase";
 import BattleDeck from "./field/battleDeck";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
+import { TIME_POINT } from "./trriger";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -87,7 +88,7 @@ export default class BattlePlayer {
         return this._strikeProgress;
     }
     public readonly battle: Battle;
-    public readonly bid: number;
+    public readonly bId: number;
     public readonly uid: string;
     public _strikeProgress: number = 0;
     private playerInfo: IPlayerInfo;
@@ -105,7 +106,7 @@ export default class BattlePlayer {
         this.uid = this.playerInfo.uid;
         this.initFiled();
         this.initAttribute(info);
-        this.bid = this.battle.registerBid(this);
+        this.bId = this.battle.registerBid(this);
     }
     public getInfo(): IPlayerInfo {
         return this.playerInfo;
@@ -134,7 +135,7 @@ export default class BattlePlayer {
         const handCards = this.getCardFileds(CARD_FIELD.HAND)[0];
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-        card.trrigerEffect(TIME_POINT.HAND, args);
+        this.battle.trriger.notify(card, TIME_POINT.HAND, args);
     }
     public shuffle(field: CARD_FIELD) {
         const fields = this.getCardFileds(field);

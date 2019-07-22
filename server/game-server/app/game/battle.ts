@@ -5,12 +5,14 @@ import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import FieldBase from "./field/fieldBase";
 import GameController, { COMMAND_ID, IUserCommand } from "./gameController";
+import Trriger from "./trriger";
 export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
 export default class Battle {
     public get currentController(): BattlePlayer {
         return this._currentController;
     }
     public readonly id: string;
+    public readonly trriger: Trriger;
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
@@ -19,6 +21,7 @@ export default class Battle {
     private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
+        this.trriger = new Trriger();
     }
     public setPlayer(playerInfos: IPlayerInfo[]) {
         const players = playerInfos.map((e) => {

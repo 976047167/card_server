@@ -13,12 +13,12 @@ export default class FieldBase {
     public name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
-    public readonly bid: number;
+    public readonly bId: number;
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
         this.battle = owner.battle;
         this.owner = this.owner;
-        this.bid = this.battle.registerBid(this);
+        this.bId = this.battle.registerBid(this);
     }
     public shuffle() {
         let i = this.cards.length - 1;
@@ -30,8 +30,11 @@ export default class FieldBase {
             i--;
         }
     }
-    public moveCardsTo(cards: CardBase[], target: FieldBase, index?: number) {
+    public moveCardsTo(cards: CardBase[]|CardBase, target: FieldBase, index?: number) {
         const reslut = [];
+        if (cards instanceof CardBase) {
+            cards = [cards];
+        }
         cards.forEach((card) => {
             const cardindex = this.cards.indexOf(card);
             if (cardindex === -1) {
@@ -44,8 +47,11 @@ export default class FieldBase {
         });
         target.addCards(reslut, index);
     }
-    public addCards(cards: CardBase[], index?: number) {
+    public addCards(cards: CardBase[]|CardBase, index?: number) {
         if (!index) { index = this.cards.length - 1; }
+        if (cards instanceof CardBase) {
+            cards = [cards];
+        }
         cards.forEach((card) => {
             card.setFiled(this);
         });

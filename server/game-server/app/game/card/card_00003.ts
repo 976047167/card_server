@@ -1,5 +1,6 @@
 import Damage from "../damage";
-import CardBase, { TIME_POINT } from "./cardBase";
+import { TIME_POINT } from "../trriger";
+import CardBase from "./cardBase";
 
 export default class Card00003 extends CardBase {
     protected initEffect() {

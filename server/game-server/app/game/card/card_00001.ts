@@ -1,6 +1,7 @@
 import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
 import Damage from "../damage";
-import CardBase, { TIME_POINT } from "./cardBase";
+import { TIME_POINT } from "../trriger";
+import CardBase from "./cardBase";
 
 // attack
 export default class Card00001 extends CardBase {
