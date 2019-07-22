@@ -69,13 +69,13 @@ export default class CardBase {
      * @param after 卡片触发结束后处理，通常是送入墓地
      */
     protected registerEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
-        // this.battle.trriger.register(timePoint, (args) => {
-        //     const check = before(args);
-        //     if (check) {
-        //         effect(args);
-        //     }
-        //     after(args);
-        // });
+        this.battle.trriger.register(this, timePoint, (args) => {
+            const check = before(args);
+            if (check) {
+                effect(args);
+            }
+            after(args);
+        });
     }
     protected beforeEffect(args) {
         const dealingField = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];

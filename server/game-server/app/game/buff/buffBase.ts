@@ -47,7 +47,8 @@ export default class BuffBase {
 
     private _type: BUFF_TYPE;
     constructor(battle: Battle, info) {
-        this.bId = battle.registerBid(this);
+        this.battle = battle;
+        this.bId = this.battle.registerBid(this);
         this.initInfo(info);
     }
     protected effect() {
