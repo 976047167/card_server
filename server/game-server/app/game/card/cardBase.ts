@@ -1,7 +1,7 @@
 import Battle from "../battle";
 import BattlePlayer from "../battlePlayer";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
-import { TIME_POINT } from "../trriger";
+import Trriger, { TIME_POINT } from "../trriger";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -34,6 +34,7 @@ export default class CardBase {
     public readonly owner: BattlePlayer;
     public readonly battle: Battle;
     public readonly bId: number;
+    protected readonly trriger: Trriger;
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
@@ -42,6 +43,7 @@ export default class CardBase {
     constructor(info: ICardInfo, owner: BattlePlayer, field?: FieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
+        this.trriger = this.battle.trriger;
         this._controller = this.owner;
         this.bId = this.battle.registerBid(this);
         this._field = field;
@@ -68,8 +70,8 @@ export default class CardBase {
      * @param before 触发效果前将卡片送入执行区执行条件进行检查，返回false则不执行效果
      * @param after 卡片触发结束后处理，通常是送入墓地
      */
-    protected registerEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
-        this.battle.trriger.register(this, timePoint, (args) => {
+    protected registerCardEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
+        this.trriger.register(this, timePoint, (args) => {
             const check = before(args);
             if (check) {
                 effect(args);
@@ -79,12 +81,12 @@ export default class CardBase {
     }
     protected beforeEffect(args) {
         const dealingField = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
-        this.field.moveCardsTo([this], dealingField);
+        this.field.moveCardsTo(this, dealingField);
         return true;
     }
     protected afterEffect(args) {
         const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
         const dealing = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
-        dealing.moveCardsTo([this], grave);
+        dealing.moveCardsTo(this, grave);
     }
 }

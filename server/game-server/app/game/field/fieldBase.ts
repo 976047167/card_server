@@ -10,7 +10,7 @@ export enum CARD_FIELD {
     DEALING = 0x10,
 }
 export default class FieldBase {
-    public name: string;
+    public readonly name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
     public readonly bId: number;
@@ -20,6 +20,9 @@ export default class FieldBase {
         this.owner = this.owner;
         this.bId = this.battle.registerBid(this);
     }
+    /**
+     * 洗牌
+     */
     public shuffle() {
         let i = this.cards.length - 1;
         while (i) {

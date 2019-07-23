@@ -1,4 +1,5 @@
 import Battle from "../battle";
+import Trriger from "../trriger";
 
 export enum BUFF_TYPE {
     CONTINUOUS, // 持续性生效的
@@ -38,16 +39,18 @@ export default class BuffBase {
         return this._type;
     }
     public readonly bId: number;
+    public readonly battle: Battle;
+    protected readonly trriger: Trriger;
     private _is_debuff: boolean;
     private _is_overlayable: boolean;
     private _can_be_dispeled: boolean;
     private _can_be_repressed: boolean;
     private _name: string;
-    private battle: Battle;
 
     private _type: BUFF_TYPE;
     constructor(battle: Battle, info) {
         this.battle = battle;
+        this.trriger = this.battle.trriger;
         this.bId = this.battle.registerBid(this);
         this.initInfo(info);
     }

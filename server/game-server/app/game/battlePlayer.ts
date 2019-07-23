@@ -99,7 +99,6 @@ export default class BattlePlayer {
     private dealing: FieldBase;
     private buffList: BuffBase[];
     private _baseAttribute;
-    private actQueue: number;
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
