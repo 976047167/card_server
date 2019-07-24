@@ -46,7 +46,7 @@ export default class CardBase {
         this.trriger = this.battle.trriger;
         this._controller = this.owner;
         this.bId = this.battle.registerBid(this);
-        this._field = field;
+        this.setFiled(field);
         this.initInfo(info);
         this.initEffect();
     }
