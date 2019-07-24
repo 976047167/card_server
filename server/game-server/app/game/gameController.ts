@@ -7,7 +7,6 @@ export interface IUserCommand {
 }
 export enum COMMAND_ID {
     USE_HAND_CARD,
-
 }
 export default class GameController {
     public static getInstance() {
@@ -16,7 +15,6 @@ export default class GameController {
     }
     private static _instance: GameController;
     private battleMap: {[battleId: string]: Battle};
-
     private constructor() {
         //
     }
@@ -28,7 +26,6 @@ export default class GameController {
         const result = b.start();
         return result;
     }
-
     public getBattle(battleId: string) {
         return this.battleMap[battleId];
     }
@@ -39,5 +36,4 @@ export default class GameController {
         if (!player) {return; }
         battle.command(command);
     }
-
 }

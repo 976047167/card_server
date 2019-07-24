@@ -46,6 +46,8 @@ export default class Trriger {
         }
     }
     public remove(tid: number) {
-        delete (this._tidMap[tid]);
+        if (this._tidMap[tid]) {
+            delete (this._tidMap[tid]);
+        }
     }
 }

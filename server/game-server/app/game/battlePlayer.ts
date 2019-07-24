@@ -15,13 +15,13 @@ export interface IPlayerInfo {
         spirit: number,
     };
 }
-export enum BASE_ATTRIBUTE {
-    STR,
-    AGI,
-    SPI,
-    STA,
-    INT,
-    PER,
+export interface IBaseAttribute {
+    str: number;
+    agi: number;
+    spi: number;
+    sta: number;
+    int: number;
+    per: number;
 }
 export interface IArgsUseHandCard {
     cardBId: number;
@@ -32,37 +32,37 @@ export default class BattlePlayer {
      *
      */
     public get strength(): number {
-        return 1;
+        return this.baseAttribute.str + this.decorator.str;
     }
     /**
      * 敏捷
      */
     public get agile(): number {
-        return 1;
+        return this.baseAttribute.agi + this.decorator.str;
     }
     /**耐力
      *
      */
     public get stamina(): number {
-        return 1;
+        return this.baseAttribute.sta + this.decorator.sta;
     }
     /**感知
      *
      */
     public get perception(): number {
-        return 1;
+        return this.baseAttribute.per + this.decorator.per;
     }
     /**智力
      *
      */
     public get intellect(): number {
-        return 1;
+        return this.baseAttribute.int + this.decorator.int;
     }
     /**意志
      *
      */
     public get spirit(): number {
-        return 1;
+        return this.baseAttribute.spi + this.decorator.spi;
     }
     /**
      * 免疫
@@ -87,6 +87,24 @@ export default class BattlePlayer {
     public get strikeProgress(): number {
         return this._strikeProgress;
     }
+
+    private get decorator() {
+        let decodrator = {
+            agi : 0,
+            int : 0,
+            per : 0,
+            spi : 0,
+            sta : 0,
+            str : 0,
+        };
+        for (const did in this._applyMap) {
+            if (this._applyMap.hasOwnProperty(did)) {
+                const handle = this._applyMap[did];
+                decodrator = handle(decodrator);
+            }
+        }
+        return decodrator;
+    }
     public readonly battle: Battle;
     public readonly bId: number;
     public readonly uid: string;
@@ -98,7 +116,9 @@ export default class BattlePlayer {
     private hand: FieldBase;
     private dealing: FieldBase;
     private buffList: BuffBase[];
-    private _baseAttribute;
+    private baseAttribute: IBaseAttribute;
+    private _applyMap: {[did: number]: (IBaseAttribute) => IBaseAttribute};
+    private _did: number = 0;
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
@@ -136,6 +156,10 @@ export default class BattlePlayer {
         if (card.field !== handCards) { return; }
         this.battle.trriger.notify(card, TIME_POINT.HAND, args);
     }
+    /**
+     * 洗牌
+     * @param field 区域
+     */
     public shuffle(field: CARD_FIELD) {
         const fields = this.getCardFileds(field);
         fields.forEach((f: FieldBase) => {
@@ -154,6 +178,15 @@ export default class BattlePlayer {
     public endStike() {
         this._strikeProgress = 0;
     }
+    public registerAtrributeHandle(apply: (arg: IBaseAttribute) => IBaseAttribute) {
+        this._did++;
+        this._applyMap[this._did] = apply;
+    }
+    public removeAttributeHandle(did: number) {
+        if (this._applyMap[did]) {
+            delete this._applyMap[did];
+        }
+    }
 
     private initFiled() {
         this.deck = new BattleDeck(this);
@@ -163,11 +196,13 @@ export default class BattlePlayer {
         this.dealing = new FieldBase(this);
     }
     private initAttribute(info: IPlayerInfo) {
-        this._baseAttribute[BASE_ATTRIBUTE.STR] = info.attribute.strength;
-        this._baseAttribute[BASE_ATTRIBUTE.AGI] = info.attribute.agile;
-        this._baseAttribute[BASE_ATTRIBUTE.INT] = info.attribute.intellect;
-        this._baseAttribute[BASE_ATTRIBUTE.SPI] = info.attribute.spirit;
-        this._baseAttribute[BASE_ATTRIBUTE.PER] = info.attribute.perception;
-        this._baseAttribute[BASE_ATTRIBUTE.STA] = info.attribute.stamina;
+        this.baseAttribute = {
+            agi : info.attribute.agile,
+            int : info.attribute.intellect,
+            per : info.attribute.perception,
+            spi : info.attribute.spirit,
+            sta : info.attribute.stamina,
+            str : info.attribute.strength,
+        };
     }
 }
