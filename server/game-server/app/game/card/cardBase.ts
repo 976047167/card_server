@@ -70,13 +70,17 @@ export default class CardBase {
      * @param before 触发效果前将卡片送入执行区执行条件进行检查，返回false则不执行效果
      * @param after 卡片触发结束后处理，通常是送入墓地
      */
-    protected registerCardEffect(timePoint: TIME_POINT, effect, before= this.beforeEffect, after= this.afterEffect) {
+    protected registerCardEffect(timePoint: TIME_POINT,
+                                 effect: (args: any) => any,
+                                 before= this.beforeEffect.bind(this),
+                                 after= this.afterEffect.bind(this)) {
         this.trriger.register(this, timePoint, (args) => {
             const check = before(args);
+            let result = null;
             if (check) {
-                effect(args);
+                result = effect(args);
             }
-            after(args);
+            after(result);
         });
     }
     protected beforeEffect(args) {
