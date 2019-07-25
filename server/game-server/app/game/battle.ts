@@ -100,7 +100,7 @@ export default class Battle {
         const act_players = this.players.filter((p) => p.strikeProgress === max_progress);
         if (act_players.length !== 1) {
             act_players.sort((a, b) => {
-                return  b.attribute.perception - a.attribute.perception;
+                return  b.attribute.per - a.attribute.per;
             });
             this._sameStrike = true;
         } else {

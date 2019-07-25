@@ -50,7 +50,11 @@ export default class BattlePlayer {
     public getInfo(): IPlayerInfo {
         return this.playerInfo;
     }
-    public getCardFileds(field: CARD_FIELD) {
+    /**
+     * 获取场地
+     * @param field 场地常量，可以通过按位与来获取多个场地
+     */
+    public getCardFileds(field: CARD_FIELD): FieldBase[] {
         const result: FieldBase[] = [];
         if (field & CARD_FIELD.DECK) {
             result.push(this.deck);
@@ -90,7 +94,7 @@ export default class BattlePlayer {
      * 先攻进度
      */
     public doStrike() {
-        this._strikeProgress += this.attribute.initiative;
+        this._strikeProgress += this.attribute.derive.initiative;
     }
     /**
      * 行动完成后清空进度值

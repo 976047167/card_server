@@ -8,65 +8,75 @@ export interface IAttribute {
     int: number;
     per: number;
     derive?: {
-        initiative: number
-        [derive: string]: number;
+        initiative: number;
+        immunity: number;
+        tenacious: number;
+        [others: string]: number;
     };
 }
-export default class AttributeHandler {
-    /**力量
-     *
+export default class AttributeHandler implements IAttribute {
+    /**
+     * 力量
      */
-    public get strength(): number {
+    public get str(): number {
         return this.baseAttribute.str + this.decorator.str;
     }
     /**
      * 敏捷
      */
-    public get agile(): number {
+    public get agi(): number {
         return this.baseAttribute.agi + this.decorator.str;
     }
-    /**耐力
-     *
+    /**
+     * 耐力
      */
-    public get stamina(): number {
+    public get sta(): number {
         return this.baseAttribute.sta + this.decorator.sta;
     }
-    /**感知
-     *
+    /**
+     * 感知
      */
-    public get perception(): number {
+    public get per(): number {
         return this.baseAttribute.per + this.decorator.per;
     }
-    /**智力
-     *
+    /**
+     * 智力
      */
-    public get intellect(): number {
+    public get int(): number {
         return this.baseAttribute.int + this.decorator.int;
     }
-    /**意志
-     *
+    /**
+     * 意志
      */
-    public get spirit(): number {
+    public get spi(): number {
         return this.baseAttribute.spi + this.decorator.spi;
     }
     /**
-     * 免疫
+     * 衍生属性
      */
-    public get immunity(): number {
-        return this.stamina + this.spirit;
+    public get derive() {
+        return {
+            /**
+             * 免疫
+             */
+            get immunity(): number {
+                return this.sta + this.spi;
+            },
+            /**
+             * 强韧
+             */
+            get tenacious(): number {
+                return this.sta + this.spi;
+            },
+            /**
+             * 先攻值
+             */
+            get initiative(): number {
+                return this.per + this.agi;
+            },
+        };
     }
-    /**
-     * 强韧
-     */
-    public get tenacious(): number {
-        return this.stamina + this.spirit;
-    }
-    /**
-     * 先攻值
-     */
-    public get initiative(): number {
-        return this.perception + this.agile;
-    }
+
     /**
      * 属性装饰器
      */
