@@ -81,21 +81,26 @@ export default class AttributeHandler implements IAttribute {
      * 属性装饰器
      */
     private get decorator() {
-        let decodrator = {
+        let decorator: IAttribute = {
             agi: 0,
             int: 0,
             per: 0,
             spi: 0,
             sta: 0,
             str: 0,
+            derive: {
+                immunity: 0,
+                initiative: 0,
+                tenacious: 0,
+            },
         };
         for (const did in this._applyMap) {
             if (this._applyMap.hasOwnProperty(did)) {
                 const handle = this._applyMap[did];
-                decodrator = handle(decodrator);
+                decorator = handle(decorator);
             }
         }
-        return decodrator;
+        return decorator;
     }
     private baseAttribute: IAttribute;
     private _applyMap: {

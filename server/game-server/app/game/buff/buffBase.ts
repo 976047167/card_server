@@ -1,4 +1,6 @@
+import { IAttribute } from "../attributeHandler";
 import Battle, { BattleObjectId } from "../battle";
+import BattlePlayer from "../battlePlayer";
 import Trriger from "../trriger";
 
 export enum BUFF_TYPE {
@@ -38,9 +40,14 @@ export default class BuffBase {
     public get type() {
         return this._type;
     }
+    public get owner() {
+        return this._owner;
+    }
     public readonly bId: BattleObjectId;
     public readonly battle: Battle;
+    public readonly creator: BattlePlayer;
     protected readonly trriger: Trriger;
+    private _owner: BattlePlayer|null;
     private _is_debuff: boolean;
     private _is_overlayable: boolean;
     private _can_be_dispeled: boolean;
@@ -48,17 +55,36 @@ export default class BuffBase {
     private _name: string;
 
     private _type: BUFF_TYPE;
-    constructor(battle: Battle, info) {
-        this.battle = battle;
+    constructor(creator: BattlePlayer, info) {
+        this.creator = creator;
+        this.battle = this.creator.battle;
         this.trriger = this.battle.trriger;
         this.bId = this.battle.registerBid(this);
         this.initInfo(info);
+    }
+    /**
+     * 设置buff的对象
+     * @param player 对象，可以为null
+     */
+    public setOwner(player: BattlePlayer|null) {
+        this._owner = player;
+        this.initAttributeDecorator();
+    }
+    /**
+     * 对属性进行装饰
+     * @param attribute 传入的属性
+     */
+    protected handle(attribute: IAttribute) {
+        return attribute;
     }
     protected effect() {
         //
     }
     protected dispeled() {
         //
+    }
+    private initAttributeDecorator() {
+        this.owner.attribute.registerAtrributeHandle(this.handle.bind(this));
     }
     private initInfo(info) {
         this._is_debuff  = false;
