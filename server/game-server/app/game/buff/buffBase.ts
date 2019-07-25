@@ -1,4 +1,4 @@
-import Battle from "../battle";
+import Battle, { BattleObjectId } from "../battle";
 import Trriger from "../trriger";
 
 export enum BUFF_TYPE {
@@ -38,7 +38,7 @@ export default class BuffBase {
     public get type() {
         return this._type;
     }
-    public readonly bId: number;
+    public readonly bId: BattleObjectId;
     public readonly battle: Battle;
     protected readonly trriger: Trriger;
     private _is_debuff: boolean;

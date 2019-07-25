@@ -1,4 +1,4 @@
-import { BattleObject } from "./battle";
+import { BattleObject, BattleObjectId } from "./battle";
 export enum TIME_POINT {
     HAND = 0,
     COUNTER,
@@ -12,7 +12,7 @@ export default class Trriger {
     private _trrigerMap: { [bid: number]: {[timePoint: number]: number[]}};
     private _tid: number = 0;
     private _tidMap: {[tid: number]: (args: any) => void};
-    public register(obj: BattleObject|number, timePoint: TIME_POINT, effect: (args: any) => void) {
+    public register(obj: BattleObject|BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => void) {
         if (typeof(obj) !== "number") {
             obj = obj.bId;
         }

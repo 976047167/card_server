@@ -1,5 +1,5 @@
 import AttributeHandler from "./attributeHandler";
-import Battle from "./battle";
+import Battle, { BattleObjectId } from "./battle";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import BattleDeck from "./field/battleDeck";
@@ -17,8 +17,8 @@ export interface IPlayerInfo {
     };
 }
 export interface IArgsUseHandCard {
-    cardBId: number;
-    targetBid: number;
+    cardBId: BattleObjectId;
+    targetBid: BattleObjectId;
 }
 export default class BattlePlayer {
     /**当前先攻的进度
@@ -28,7 +28,7 @@ export default class BattlePlayer {
     }
 
     public readonly battle: Battle;
-    public readonly bId: number;
+    public readonly bId: BattleObjectId;
     public readonly uid: string;
     public _strikeProgress: number = 0;
     public readonly attribute: AttributeHandler;

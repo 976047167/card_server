@@ -7,6 +7,7 @@ import FieldBase from "./field/fieldBase";
 import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trriger from "./trriger";
 export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
+export type BattleObjectId = number;
 export default class Battle {
     public get currentController(): BattlePlayer {
         return this._currentController;
@@ -16,8 +17,8 @@ export default class Battle {
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
-    private bidMap: {[bId: string]: BattleObject}; // 场景里所有物体都有对应的bid，用于检索所有对象
-    private _bid: number = 0; // 自增用的id
+    private bidMap: {[bId: number]: BattleObject}; // 场景里所有物体都有对应的bid，用于检索所有对象
+    private _bid: BattleObjectId = 0; // 自增用的id
     private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
@@ -63,7 +64,7 @@ export default class Battle {
         this.bidMap[this._bid] = card;
         return this._bid;
     }
-    public getObjectByBId<T extends BattleObject>(bId: number, type?: new (...args: any[]) => T): T {
+    public getObjectByBId<T extends BattleObject>(bId: BattleObjectId, type?: new (...args: any[]) => T): T {
         const obj =  this.bidMap[bId] ;
         if (!type) { return obj as T; }
         if (obj instanceof type) {

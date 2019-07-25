@@ -1,4 +1,4 @@
-import Battle from "../battle";
+import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
 import CardBase from "../card/cardBase";
 
@@ -13,7 +13,7 @@ export default class FieldBase {
     public readonly name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
-    public readonly bId: number;
+    public readonly bId: BattleObjectId;
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
         this.battle = owner.battle;

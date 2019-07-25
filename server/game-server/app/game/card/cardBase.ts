@@ -1,4 +1,4 @@
-import Battle from "../battle";
+import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
 import Trriger, { TIME_POINT } from "../trriger";
@@ -33,7 +33,7 @@ export default class CardBase {
     }
     public readonly owner: BattlePlayer;
     public readonly battle: Battle;
-    public readonly bId: number;
+    public readonly bId: BattleObjectId;
     protected readonly trriger: Trriger;
     protected _type: CARD_TYPE;
     protected _name: string;
