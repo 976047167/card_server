@@ -4,7 +4,7 @@ import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import FieldBase from "./field/fieldBase";
-import GameController, { COMMAND_ID, IUserCommand } from "./gameController";
+import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trriger from "./trriger";
 export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
 export default class Battle {

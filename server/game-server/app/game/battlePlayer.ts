@@ -1,3 +1,4 @@
+import { AttributeHandle, IAttribute } from "./attrDecorator";
 import Battle from "./battle";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
@@ -14,14 +15,6 @@ export interface IPlayerInfo {
         intellect: number,
         spirit: number,
     };
-}
-export interface IBaseAttribute {
-    str: number;
-    agi: number;
-    spi: number;
-    sta: number;
-    int: number;
-    per: number;
 }
 export interface IArgsUseHandCard {
     cardBId: number;
@@ -88,27 +81,11 @@ export default class BattlePlayer {
         return this._strikeProgress;
     }
 
-    private get decorator() {
-        let decodrator = {
-            agi : 0,
-            int : 0,
-            per : 0,
-            spi : 0,
-            sta : 0,
-            str : 0,
-        };
-        for (const did in this._applyMap) {
-            if (this._applyMap.hasOwnProperty(did)) {
-                const handle = this._applyMap[did];
-                decodrator = handle(decodrator);
-            }
-        }
-        return decodrator;
-    }
     public readonly battle: Battle;
     public readonly bId: number;
     public readonly uid: string;
     public _strikeProgress: number = 0;
+    public readonly dec: AttributeHandle;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
@@ -116,15 +93,17 @@ export default class BattlePlayer {
     private hand: FieldBase;
     private dealing: FieldBase;
     private buffList: BuffBase[];
-    private baseAttribute: IBaseAttribute;
-    private _applyMap: {[did: number]: (IBaseAttribute) => IBaseAttribute};
-    private _did: number = 0;
+    private baseAttribute: IAttribute;
+    private get decorator(): IAttribute {
+        return this.dec.decorator;
+    }
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
         this.uid = this.playerInfo.uid;
         this.initFiled();
         this.initAttribute(info);
+        this.dec = new AttributeHandle();
         this.bId = this.battle.registerBid(this);
     }
     public getInfo(): IPlayerInfo {
@@ -178,16 +157,6 @@ export default class BattlePlayer {
     public endStike() {
         this._strikeProgress = 0;
     }
-    public registerAtrributeHandle(apply: (arg: IBaseAttribute) => IBaseAttribute) {
-        this._did++;
-        this._applyMap[this._did] = apply;
-    }
-    public removeAttributeHandle(did: number) {
-        if (this._applyMap[did]) {
-            delete this._applyMap[did];
-        }
-    }
-
     private initFiled() {
         this.deck = new BattleDeck(this);
         this.hand = new FieldBase(this);

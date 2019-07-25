@@ -74,6 +74,9 @@ export default class CardBase {
                                  effect: (args: any) => any,
                                  before= this.beforeEffect.bind(this),
                                  after= this.afterEffect.bind(this)) {
+        before = before.bind(this);
+        after = after.bind(this);
+        effect = effect.bind(this);
         this.trriger.register(this, timePoint, (args) => {
             const check = before(args);
             let result = null;
