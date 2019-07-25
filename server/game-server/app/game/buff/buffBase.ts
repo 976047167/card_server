@@ -1,7 +1,7 @@
 import { IAttribute } from "../attributeHandler";
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
-import Trriger from "../trriger";
+import Trriger, { TIME_POINT } from "../trriger";
 
 export enum BUFF_TYPE {
     CONTINUOUS, // 持续性生效的
@@ -47,12 +47,15 @@ export default class BuffBase {
     public readonly battle: Battle;
     public readonly creator: BattlePlayer;
     protected readonly trriger: Trriger;
+    protected active: boolean;
     private _owner: BattlePlayer|null;
     private _is_debuff: boolean;
     private _is_overlayable: boolean;
     private _can_be_dispeled: boolean;
     private _can_be_repressed: boolean;
     private _name: string;
+    private did: number;
+    private tids: number[] = [];
 
     private _type: BUFF_TYPE;
     constructor(creator: BattlePlayer, info) {
@@ -64,11 +67,13 @@ export default class BuffBase {
     }
     /**
      * 设置buff的对象
-     * @param player 对象，可以为null
+     * @param player 对象，可以为null,为null时消除该buff
      */
     public setOwner(player: BattlePlayer|null) {
+        if (this.owner ) {this.deactivate(); }
         this._owner = player;
-        this.initAttributeDecorator();
+        if (!player) {return; }
+        this.activate();
     }
     /**
      * 对属性进行装饰
@@ -77,19 +82,58 @@ export default class BuffBase {
     protected handle(attribute: IAttribute) {
         return attribute;
     }
-    protected effect() {
-        //
-    }
     protected dispeled() {
         //
+        if (this.canBeDispeled) {
+            this.setOwner(null);
+        }
     }
-    private initAttributeDecorator() {
-        this.owner.attribute.registerAtrributeHandle(this.handle.bind(this));
+    protected initTrriger() {
+        return true;
+    }
+    protected registerBuffEffect(timePoint: TIME_POINT, effect: (args: any) => any) {
+        effect = effect.bind(this);
+        const tid = this.trriger.register(this, timePoint, effect);
+        this.tids.push(tid);
+    }
+    private uninitTrriger() {
+        this.tids.forEach((tid) => {
+            this.trriger.remove(tid);
+        });
+        this.tids = [];
+    }
+    /**
+     * 添加属性装饰器
+     */
+    private initDecorator() {
+        this.did = this.owner.attribute.registerAtrributeHandle(this.handle.bind(this));
+    }
+    /**
+     * 移除属性装饰器
+     */
+    private uninitDecorator() {
+        this.owner.attribute.removeAttributeHandle(this.did);
     }
     private initInfo(info) {
         this._is_debuff  = false;
         this._is_overlayable = false;
         this._can_be_dispeled = true;
         this._type = BUFF_TYPE.CONTINUOUS;
+    }
+    /**
+     * 生效
+     */
+    private activate() {
+        this.initDecorator();
+        this.initTrriger();
+        this.active = true;
+    }
+    /**
+     * 失效
+     */
+    private deactivate() {
+        this.uninitDecorator();
+        this.uninitTrriger();
+        this.active = false;
     }
 }

@@ -113,6 +113,7 @@ export default class AttributeHandler implements IAttribute {
     public registerAtrributeHandle(apply: (arg: IAttribute) => IAttribute) {
         this._did++;
         this._applyMap[this._did] = apply;
+        return this._did;
     }
     public removeAttributeHandle(did: number) {
         if (this._applyMap[did]) {
