@@ -1,4 +1,4 @@
-import { AttributeHandle, IAttribute } from "./attrDecorator";
+import AttributeHandler from "./attributeHandler";
 import Battle from "./battle";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
@@ -21,60 +21,6 @@ export interface IArgsUseHandCard {
     targetBid: number;
 }
 export default class BattlePlayer {
-    /**力量
-     *
-     */
-    public get strength(): number {
-        return this.baseAttribute.str + this.decorator.str;
-    }
-    /**
-     * 敏捷
-     */
-    public get agile(): number {
-        return this.baseAttribute.agi + this.decorator.str;
-    }
-    /**耐力
-     *
-     */
-    public get stamina(): number {
-        return this.baseAttribute.sta + this.decorator.sta;
-    }
-    /**感知
-     *
-     */
-    public get perception(): number {
-        return this.baseAttribute.per + this.decorator.per;
-    }
-    /**智力
-     *
-     */
-    public get intellect(): number {
-        return this.baseAttribute.int + this.decorator.int;
-    }
-    /**意志
-     *
-     */
-    public get spirit(): number {
-        return this.baseAttribute.spi + this.decorator.spi;
-    }
-    /**
-     * 免疫
-     */
-    public get immunity(): number {
-        return this.stamina + this.spirit;
-    }
-    /**
-     * 强韧
-     */
-    public get tenacious(): number {
-        return this.stamina + this.spirit;
-    }
-    /**
-     * 先攻值
-     */
-    public get initiative(): number {
-        return this.perception + this.agile;
-    }
     /**当前先攻的进度
      */
     public get strikeProgress(): number {
@@ -85,7 +31,7 @@ export default class BattlePlayer {
     public readonly bId: number;
     public readonly uid: string;
     public _strikeProgress: number = 0;
-    public readonly dec: AttributeHandle;
+    public readonly attribute: AttributeHandler;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: FieldBase;
@@ -93,17 +39,12 @@ export default class BattlePlayer {
     private hand: FieldBase;
     private dealing: FieldBase;
     private buffList: BuffBase[];
-    private baseAttribute: IAttribute;
-    private get decorator(): IAttribute {
-        return this.dec.decorator;
-    }
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
         this.playerInfo = info;
         this.uid = this.playerInfo.uid;
         this.initFiled();
-        this.initAttribute(info);
-        this.dec = new AttributeHandle();
+        this.attribute = new AttributeHandler(this);
         this.bId = this.battle.registerBid(this);
     }
     public getInfo(): IPlayerInfo {
@@ -149,7 +90,7 @@ export default class BattlePlayer {
      * 先攻进度
      */
     public doStrike() {
-        this._strikeProgress += this.initiative;
+        this._strikeProgress += this.attribute.initiative;
     }
     /**
      * 行动完成后清空进度值
@@ -163,15 +104,5 @@ export default class BattlePlayer {
         this.grave = new FieldBase(this);
         this.removed = new FieldBase(this);
         this.dealing = new FieldBase(this);
-    }
-    private initAttribute(info: IPlayerInfo) {
-        this.baseAttribute = {
-            agi : info.attribute.agile,
-            int : info.attribute.intellect,
-            per : info.attribute.perception,
-            spi : info.attribute.spirit,
-            sta : info.attribute.stamina,
-            str : info.attribute.strength,
-        };
     }
 }
