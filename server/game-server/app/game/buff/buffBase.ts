@@ -91,9 +91,9 @@ export default class BuffBase {
     protected initTrriger() {
         return true;
     }
-    protected registerBuffEffect(timePoint: TIME_POINT, effect: (args: any) => any) {
+    protected registerBuffEffect(bid: BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => any) {
         effect = effect.bind(this);
-        const tid = this.trriger.register(this, timePoint, effect);
+        const tid = this.trriger.register(bid, timePoint, effect);
         this.tids.push(tid);
     }
     private uninitTrriger() {
