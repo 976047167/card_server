@@ -33,7 +33,7 @@ export default class Damage {
                 break;
             }
             const value = card.value;
-            if (softDamage < this.target.tenacious ) {
+            if (softDamage < this.target.attribute.derive.tenacious ) {
                 target_deck.moveCardsTo([card], target_grave);
                 this.trriger.notify(card, TIME_POINT.COUNTER, this);
             } else {

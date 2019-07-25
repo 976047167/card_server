@@ -11,7 +11,7 @@ export default class Card00001 extends CardBase {
     }
 
     private effect(args: IArgsUseHandCard) {
-        const damageNum = this.controller.strength;
+        const damageNum = this.controller.attribute.str;
         const target = this.battle.getObjectByBId(args.targetBid, BattlePlayer);
         if (!target) { return; }
         const damage = new Damage(this.controller, target, damageNum);
