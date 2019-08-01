@@ -8,11 +8,12 @@ export enum TRRIGER_PRIORITY {
     NORMAL,
     HIGH,
 }
+export type TrrigerId = number;
 export default class Trriger {
     private _trrigerMap: { [bid: number]: {[timePoint: number]: number[]}};
-    private _tid: number = 0;
+    private _tid: TrrigerId = 0;
     private _tidMap: {[tid: number]: (args: any) => void};
-    public register(obj: BattleObject|BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => void) {
+    public register(obj: BattleObject|BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => void): TrrigerId {
         if (typeof(obj) !== "number") {
             obj = obj.bId;
         }
@@ -45,7 +46,7 @@ export default class Trriger {
             }
         }
     }
-    public remove(tid: number) {
+    public remove(tid: TrrigerId) {
         if (this._tidMap[tid]) {
             delete (this._tidMap[tid]);
         }

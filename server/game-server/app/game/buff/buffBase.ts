@@ -1,7 +1,7 @@
 import { IAttribute } from "../attributeHandler";
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
-import Trriger, { TIME_POINT } from "../trriger";
+import Trriger, { TIME_POINT, TrrigerId } from "../trriger";
 
 export enum BUFF_TYPE {
     CONTINUOUS, // 持续性生效的
@@ -47,7 +47,10 @@ export default class BuffBase {
     public readonly battle: Battle;
     public readonly creator: BattlePlayer;
     protected readonly trriger: Trriger;
-    protected active: boolean;
+    private _active: boolean;
+    public get active() {
+        return this._active;
+    }
     private _owner: BattlePlayer|null;
     private _is_debuff: boolean;
     private _is_overlayable: boolean;
@@ -55,7 +58,7 @@ export default class BuffBase {
     private _can_be_repressed: boolean;
     private _name: string;
     private did: number;
-    private tids: number[] = [];
+    private tids: TrrigerId[] = [];
 
     private _type: BUFF_TYPE;
     constructor(creator: BattlePlayer, info) {
@@ -126,7 +129,7 @@ export default class BuffBase {
     private activate() {
         this.initDecorator();
         this.initTrriger();
-        this.active = true;
+        this._active = true;
     }
     /**
      * 失效
@@ -134,6 +137,6 @@ export default class BuffBase {
     private deactivate() {
         this.uninitDecorator();
         this.uninitTrriger();
-        this.active = false;
+        this._active = false;
     }
 }
