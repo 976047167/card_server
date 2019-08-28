@@ -22,6 +22,9 @@ export default class Damage {
         this.effectList.push(effect);
     }
 
+    /**
+     * 伤害处理
+     */
     public deal() {
         const target_deck =  this.target.getCardFileds(CARD_FIELD.DECK)[0];
         const target_grave =  this.target.getCardFileds(CARD_FIELD.GRAVE)[0];

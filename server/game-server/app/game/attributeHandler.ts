@@ -104,6 +104,9 @@ export default class AttributeHandler implements IAttribute {
         return decorator;
     }
     private baseAttribute: IAttribute;
+    /**
+     * 装饰器handler数组
+     */
     private _applyMap: {
         [dId: number]: (attribute: IAttribute) => IAttribute;
     };
@@ -111,11 +114,19 @@ export default class AttributeHandler implements IAttribute {
     constructor(player: BattlePlayer) {
         this.initAttribute(player.getInfo());
     }
-    public registerAtrributeHandle(apply: (arg: IAttribute) => IAttribute) {
+    /**
+     * 添加装饰器
+     * @param apply 装饰器handler
+     */
+    public registerAtrributeHandle(apply: (arg: IAttribute) => IAttribute): DecoratorId {
         this._dId++;
         this._applyMap[this._dId] = apply;
         return this._dId;
     }
+    /**
+     * 移除装饰器
+     * @param did 装饰器Id
+     */
     public removeAttributeHandle(did: DecoratorId) {
         if (this._applyMap[did]) {
             delete this._applyMap[did];
