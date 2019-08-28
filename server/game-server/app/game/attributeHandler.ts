@@ -94,9 +94,9 @@ export default class AttributeHandler implements IAttribute {
                 tenacious: 0,
             },
         };
-        for (const did in this._applyMap) {
-            if (this._applyMap.hasOwnProperty(did)) {
-                const handle = this._applyMap[did];
+        for (const dId in this._applyMap) {
+            if (this._applyMap.hasOwnProperty(dId)) {
+                const handle = this._applyMap[dId];
                 decorator = handle(decorator);
             }
         }
@@ -104,16 +104,19 @@ export default class AttributeHandler implements IAttribute {
     }
     private baseAttribute: IAttribute;
     private _applyMap: {
-        [did: number]: (IBaseAttribute) => IAttribute;
+        [dId: number]: (IBaseAttribute) => IAttribute;
     };
-    private _did: number = 0;
+    /**
+     * decorator id
+     */
+    private _dId: number = 0;
     constructor(player: BattlePlayer) {
         this.initAttribute(player.getInfo());
     }
     public registerAtrributeHandle(apply: (arg: IAttribute) => IAttribute) {
-        this._did++;
-        this._applyMap[this._did] = apply;
-        return this._did;
+        this._dId++;
+        this._applyMap[this._dId] = apply;
+        return this._dId;
     }
     public removeAttributeHandle(did: number) {
         if (this._applyMap[did]) {
