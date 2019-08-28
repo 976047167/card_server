@@ -14,6 +14,7 @@ export interface IAttribute {
         [others: string]: number;
     };
 }
+export type DecoratorId = number;
 export default class AttributeHandler implements IAttribute {
     /**
      * 力量
@@ -104,12 +105,9 @@ export default class AttributeHandler implements IAttribute {
     }
     private baseAttribute: IAttribute;
     private _applyMap: {
-        [dId: number]: (IBaseAttribute) => IAttribute;
+        [dId: number]: (attribute: IAttribute) => IAttribute;
     };
-    /**
-     * decorator id
-     */
-    private _dId: number = 0;
+    private _dId: DecoratorId = 0;
     constructor(player: BattlePlayer) {
         this.initAttribute(player.getInfo());
     }
@@ -118,7 +116,7 @@ export default class AttributeHandler implements IAttribute {
         this._applyMap[this._dId] = apply;
         return this._dId;
     }
-    public removeAttributeHandle(did: number) {
+    public removeAttributeHandle(did: DecoratorId) {
         if (this._applyMap[did]) {
             delete this._applyMap[did];
         }

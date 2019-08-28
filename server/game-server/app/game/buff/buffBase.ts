@@ -1,4 +1,4 @@
-import { IAttribute } from "../attributeHandler";
+import { DecoratorId, IAttribute } from "../attributeHandler";
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
 import Trriger, { TIME_POINT, TrrigerId } from "../trriger";
@@ -57,7 +57,7 @@ export default class BuffBase {
     private _can_be_dispeled: boolean;
     private _can_be_repressed: boolean;
     private _name: string;
-    private did: number;
+    private did: DecoratorId;
     private tids: TrrigerId[] = [];
 
     private _type: BUFF_TYPE;
