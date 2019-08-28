@@ -7,7 +7,7 @@ import CardBase from "./cardBase";
 export default class Card00002 extends CardBase {
     protected initEffect() {
         super.initEffect();
-        this.registerCardEffect(TIME_POINT.HAND, this.effect1 );
+        this.registerCardEffect(TIME_POINT.HAND, this.effect1);
         this.registerCardEffect(TIME_POINT.COUNTER, this.effect2);
     }
 

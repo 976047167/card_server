@@ -14,7 +14,7 @@ export default class GameController {
         return this._instance;
     }
     private static _instance: GameController;
-    private battleMap: {[battleId: string]: Battle};
+    private battleMap: { [battleId: string]: Battle };
     private constructor() {
         //
     }
@@ -30,10 +30,10 @@ export default class GameController {
         return this.battleMap[battleId];
     }
     public command(command: IUserCommand) {
-        const battle =  this.getBattle(command.battleId);
-        if (!battle) {return; }
+        const battle = this.getBattle(command.battleId);
+        if (!battle) { return; }
         const player = battle.getPlayer(command.uid);
-        if (!player) {return; }
+        if (!player) { return; }
         battle.command(command);
     }
 }

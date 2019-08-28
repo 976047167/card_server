@@ -124,12 +124,12 @@ export default class AttributeHandler implements IAttribute {
 
     private initAttribute(info: IPlayerInfo) {
         this.baseAttribute = {
-            agi : info.attribute.agile,
-            int : info.attribute.intellect,
-            per : info.attribute.perception,
-            spi : info.attribute.spirit,
-            sta : info.attribute.stamina,
-            str : info.attribute.strength,
+            agi: info.attribute.agile,
+            int: info.attribute.intellect,
+            per: info.attribute.perception,
+            spi: info.attribute.spirit,
+            sta: info.attribute.stamina,
+            str: info.attribute.strength,
         };
     }
 }
