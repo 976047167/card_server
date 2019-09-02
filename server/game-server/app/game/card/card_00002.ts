@@ -1,7 +1,7 @@
 import { IArgsUseHandCard } from "../battlePlayer";
+import { TIME_POINT } from "../constants";
 import Damage from "../damage";
 import { CARD_FIELD } from "../field/fieldBase";
-import { TIME_POINT } from "../trriger";
 import CardBase from "./cardBase";
 
 export default class Card00002 extends CardBase {

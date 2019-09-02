@@ -1,5 +1,5 @@
+import { TIME_POINT } from "../constants";
 import Damage from "../damage";
-import { TIME_POINT } from "../trriger";
 import CardBase from "./cardBase";
 
 export default class Card00003 extends CardBase {

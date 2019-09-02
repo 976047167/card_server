@@ -2,9 +2,9 @@ import AttributeHandler from "./attributeHandler";
 import Battle, { BattleObjectId } from "./battle";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
+import { TIME_POINT } from "./constants";
 import BattleDeck from "./field/battleDeck";
 import FieldBase, { CARD_FIELD } from "./field/fieldBase";
-import { TIME_POINT } from "./trriger";
 export interface IPlayerInfo {
     uid: string;
     attribute: {

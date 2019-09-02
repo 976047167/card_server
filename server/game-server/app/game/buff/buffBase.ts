@@ -1,10 +1,14 @@
 import { DecoratorId, IAttribute } from "../attributeHandler";
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
-import Trriger, { TIME_POINT, TrrigerId } from "../trriger";
+import { TIME_POINT } from "../constants";
+import Trriger, { TrrigerId } from "../trriger";
 
 export enum BUFF_TYPE {
-    CONTINUOUS, // 持续性生效的
+    NORAML, // 正常buff
+    BLOOD, // 血统
+    TRANSFORMATION, // 改造
+    EQUIPMENT, // 装备
 }
 export interface IBuffInfo {
     id: number;
@@ -73,6 +77,7 @@ export default class BuffBase {
      * @param player 对象，可以为null,为null时消除该buff
      */
     public setOwner(player: BattlePlayer|null) {
+        if (this.owner === player) { return; }
         if (this.owner ) {this.deactivate(); }
         this._owner = player;
         if (!player) {return; }
@@ -121,7 +126,7 @@ export default class BuffBase {
         this._is_debuff  = false;
         this._is_overlayable = false;
         this._can_be_dispeled = true;
-        this._type = BUFF_TYPE.CONTINUOUS;
+        this._type = BUFF_TYPE.NORAML;
     }
     /**
      * 生效

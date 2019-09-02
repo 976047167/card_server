@@ -1,7 +1,8 @@
 import Battle from "./battle";
 import BattlePlayer from "./battlePlayer";
+import { TIME_POINT } from "./constants";
 import { CARD_FIELD } from "./field/fieldBase";
-import Trriger, { TIME_POINT } from "./trriger";
+import Trriger from "./trriger";
 
 export enum DAMAGE_TYPE {
    VOID = 0,

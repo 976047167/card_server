@@ -1,8 +1,5 @@
 import { BattleObject, BattleObjectId } from "./battle";
-export enum TIME_POINT {
-    HAND = 0,
-    COUNTER,
-}
+import { TIME_POINT } from "./constants";
 /**
  * 触发优先级
  */

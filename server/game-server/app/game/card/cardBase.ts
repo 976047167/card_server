@@ -1,13 +1,14 @@
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
+import { TIME_POINT } from "../constants";
 import FieldBase, { CARD_FIELD } from "../field/fieldBase";
-import Trriger, { TIME_POINT } from "../trriger";
+import Trriger from "../trriger";
 
 export enum CARD_TYPE {
     NORMAL,
-    COUNTER,
-    EQUIP,
-    PROFESSION,
+    COUNTER, // 反击卡
+    EQUIP, // 装备卡
+    PROFESSION, // 法术专业卡
 }
 export interface ICardInfo {
     cardId: number;
