@@ -2,9 +2,9 @@ import AttributeHandler from "./attributeHandler";
 import Battle, { BattleObjectId } from "./battle";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
+import BattleDeck from "./cardField/battleDeck";
+import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
 import { TIME_POINT } from "./constants";
-import BattleDeck from "./field/battleDeck";
-import FieldBase, { CARD_FIELD } from "./field/fieldBase";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -34,10 +34,10 @@ export default class BattlePlayer {
     public readonly attribute: AttributeHandler;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
-    private removed: FieldBase;
-    private grave: FieldBase;
-    private hand: FieldBase;
-    private dealing: FieldBase;
+    private removed: CardFieldBase;
+    private grave: CardFieldBase;
+    private hand: CardFieldBase;
+    private dealing: CardFieldBase;
     private buffList: BuffBase[];
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
@@ -54,8 +54,8 @@ export default class BattlePlayer {
      * 获取场地
      * @param field 场地常量，可以通过按位与来获取多个场地
      */
-    public getCardFileds(field: CARD_FIELD): FieldBase[] {
-        const result: FieldBase[] = [];
+    public getCardFileds(field: CARD_FIELD): CardFieldBase[] {
+        const result: CardFieldBase[] = [];
         if (field & CARD_FIELD.DECK) {
             result.push(this.deck);
         }
@@ -86,7 +86,7 @@ export default class BattlePlayer {
      */
     public shuffle(field: CARD_FIELD) {
         const fields = this.getCardFileds(field);
-        fields.forEach((f: FieldBase) => {
+        fields.forEach((f: CardFieldBase) => {
             f.shuffle();
         });
     }
@@ -104,9 +104,9 @@ export default class BattlePlayer {
     }
     private initFiled() {
         this.deck = new BattleDeck(this);
-        this.hand = new FieldBase(this);
-        this.grave = new FieldBase(this);
-        this.removed = new FieldBase(this);
-        this.dealing = new FieldBase(this);
+        this.hand = new CardFieldBase(this);
+        this.grave = new CardFieldBase(this);
+        this.removed = new CardFieldBase(this);
+        this.dealing = new CardFieldBase(this);
     }
 }

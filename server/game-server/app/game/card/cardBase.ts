@@ -1,7 +1,7 @@
 import Battle, { BattleObjectId } from "../battle";
 import BattlePlayer from "../battlePlayer";
+import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";
-import FieldBase, { CARD_FIELD } from "../field/fieldBase";
 import Trriger from "../trriger";
 
 export enum CARD_TYPE {
@@ -39,9 +39,9 @@ export default class CardBase {
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
-    protected _field: FieldBase;
+    protected _field: CardFieldBase;
     protected _controller: BattlePlayer;
-    constructor(info: ICardInfo, owner: BattlePlayer, field?: FieldBase) {
+    constructor(info: ICardInfo, owner: BattlePlayer, field?: CardFieldBase) {
         this.owner = owner;
         this.battle = owner.battle;
         this.trriger = this.battle.trriger;
@@ -51,7 +51,7 @@ export default class CardBase {
         this.initInfo(info);
         this.initEffect();
     }
-    public setFiled(field?: FieldBase) {
+    public setFiled(field?: CardFieldBase) {
         this._field = field;
     }
     /**

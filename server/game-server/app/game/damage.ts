@@ -1,7 +1,7 @@
 import Battle from "./battle";
 import BattlePlayer from "./battlePlayer";
 import { TIME_POINT } from "./constants";
-import { CARD_FIELD } from "./field/fieldBase";
+import { CARD_FIELD } from "./cardField/cardFieldBase";
 import Trriger from "./trriger";
 
 export enum DAMAGE_TYPE {

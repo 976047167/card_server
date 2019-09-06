@@ -3,10 +3,10 @@ import Utils from "../libs/utils";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
-import FieldBase from "./field/fieldBase";
+import CardFieldBase from "./cardField/cardFieldBase";
 import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trriger from "./trriger";
-export type BattleObject = CardBase|BattlePlayer|FieldBase|BuffBase;
+export type BattleObject = CardBase|BattlePlayer|CardFieldBase|BuffBase;
 export type BattleObjectId = number;
 export default class Battle {
     public get currentController(): BattlePlayer {

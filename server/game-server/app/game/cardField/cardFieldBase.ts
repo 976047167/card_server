@@ -9,7 +9,7 @@ export enum CARD_FIELD {
     REMOVED = 0x8,
     DEALING = 0x10,
 }
-export default class FieldBase {
+export default class CardFieldBase {
     public readonly name: string;
     public readonly battle: Battle;
     public readonly owner: BattlePlayer;
@@ -33,7 +33,7 @@ export default class FieldBase {
             i--;
         }
     }
-    public moveCardsTo(cards: CardBase[]|CardBase, target: FieldBase, index?: number) {
+    public moveCardsTo(cards: CardBase[]|CardBase, target: CardFieldBase, index?: number) {
         const reslut = [];
         if (cards instanceof CardBase) {
             cards = [cards];
