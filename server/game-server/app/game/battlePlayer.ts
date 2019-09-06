@@ -5,6 +5,7 @@ import CardBase from "./card/cardBase";
 import BattleDeck from "./cardField/battleDeck";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
 import { TIME_POINT } from "./constants";
+import Trriger from "./trriger";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -38,9 +39,11 @@ export default class BattlePlayer {
     private grave: CardFieldBase;
     private hand: CardFieldBase;
     private dealing: CardFieldBase;
+    private trrgier: Trriger;
     private buffList: BuffBase[];
     constructor(battle: Battle, info: IPlayerInfo) {
         this.battle = battle;
+        this.trrgier = this.battle.trriger;
         this.playerInfo = info;
         this.uid = this.playerInfo.uid;
         this.initFiled();
@@ -54,40 +57,42 @@ export default class BattlePlayer {
      * 获取场地
      * @param field 场地常量，可以通过按位与来获取多个场地
      */
-    public getCardFileds(field: CARD_FIELD): CardFieldBase[] {
-        const result: CardFieldBase[] = [];
-        if (field & CARD_FIELD.DECK) {
-            result.push(this.deck);
+    public getCardFiled(field: CARD_FIELD): CardFieldBase {
+        switch (field) {
+            case CARD_FIELD.DECK:
+                return this.deck;
+            case CARD_FIELD.DEALING:
+                return this.dealing;
+            case CARD_FIELD.HAND:
+                return this.hand;
+            case CARD_FIELD.GRAVE:
+                return this.grave;
+            case CARD_FIELD.REMOVED:
+                return this.removed;
         }
-        if (field & CARD_FIELD.HAND) {
-            result.push(this.hand);
-        }
-        if (field & CARD_FIELD.GRAVE) {
-            result.push(this.grave);
-        }
-        if (field & CARD_FIELD.REMOVED) {
-            result.push(this.removed);
-        }
-        if (field & CARD_FIELD.DEALING) {
-            result.push(this.dealing);
-        }
-        return result;
     }
 
     public useHandCard(args: IArgsUseHandCard) {
-        const handCards = this.getCardFileds(CARD_FIELD.HAND)[0];
+        const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-        this.battle.trriger.notify(card, TIME_POINT.HAND, args);
+        this.battle.trriger.notify(card, TIME_POINT.CARD_HAND, args);
     }
     /**
      * 洗牌
-     * @param field 区域
+     * @param field 区域,可以传多个
      */
-    public shuffle(field: CARD_FIELD) {
-        const fields = this.getCardFileds(field);
-        fields.forEach((f: CardFieldBase) => {
-            f.shuffle();
+    public shuffle(fields: CARD_FIELD | CARD_FIELD[]) {
+        const cardFields: CardFieldBase[] = [];
+        if (fields instanceof Array) {
+            fields.forEach((field) => {
+                cardFields.push(this.getCardFiled(field));
+            });
+        } else {
+            cardFields.push(this.getCardFiled(fields));
+        }
+        cardFields.forEach((cardField) => {
+            cardField.shuffle();
         });
     }
     /**
@@ -102,6 +107,14 @@ export default class BattlePlayer {
     public endStike() {
         this._strikeProgress = 0;
     }
+    public turnBegin() {
+        this.trrgier.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
+    }
+    public drawCard(cards: CardBase[]|CardBase) {
+        this.trrgier.notify(this, TIME_POINT.PLAYER_DRAW_CARD);
+        //
+    }
+
     private initFiled() {
         this.deck = new BattleDeck(this);
         this.hand = new CardFieldBase(this);

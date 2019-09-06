@@ -1,7 +1,7 @@
 import Battle from "./battle";
 import BattlePlayer from "./battlePlayer";
-import { TIME_POINT } from "./constants";
 import { CARD_FIELD } from "./cardField/cardFieldBase";
+import { TIME_POINT } from "./constants";
 import Trriger from "./trriger";
 
 export enum DAMAGE_TYPE {
@@ -27,9 +27,9 @@ export default class Damage {
      * 伤害处理
      */
     public deal() {
-        const target_deck =  this.target.getCardFileds(CARD_FIELD.DECK)[0];
-        const target_grave =  this.target.getCardFileds(CARD_FIELD.GRAVE)[0];
-        const target_removed = this.target.getCardFileds(CARD_FIELD.REMOVED)[0];
+        const target_deck =  this.target.getCardFiled(CARD_FIELD.DECK);
+        const target_grave =  this.target.getCardFiled(CARD_FIELD.GRAVE);
+        const target_removed = this.target.getCardFiled(CARD_FIELD.REMOVED);
         let softDamage = 0;
         while (this.damageNum) {
             const card = target_deck.getCardByIndex(0);
@@ -39,7 +39,7 @@ export default class Damage {
             const value = card.value;
             if (softDamage < this.target.attribute.derive.tenacious ) {
                 target_deck.moveCardsTo([card], target_grave);
-                this.trriger.notify(card, TIME_POINT.COUNTER, this);
+                this.trriger.notify(card, TIME_POINT.CARD_COUNTER, this);
             } else {
                 target_deck.moveCardsTo([card], target_removed);
             }

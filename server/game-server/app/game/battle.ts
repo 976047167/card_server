@@ -35,6 +35,7 @@ export default class Battle {
     }
     public newTurn() {
         this._currentController = this.calNextController();
+        this.currentController.turnBegin();
         // push
     }
     public turnEnd() {

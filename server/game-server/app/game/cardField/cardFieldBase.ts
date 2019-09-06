@@ -3,11 +3,11 @@ import BattlePlayer from "../battlePlayer";
 import CardBase from "../card/cardBase";
 
 export enum CARD_FIELD {
-    DECK = 0x1,
-    HAND = 0x2,
-    GRAVE = 0x4,
-    REMOVED = 0x8,
-    DEALING = 0x10,
+    DECK = 1,
+    HAND,
+    GRAVE,
+    REMOVED,
+    DEALING,
 }
 export default class CardFieldBase {
     public readonly name: string;
@@ -33,6 +33,12 @@ export default class CardFieldBase {
             i--;
         }
     }
+    /**
+     * 移动卡片至其他区域
+     * @param cards 要移动的卡片，可以是数组或单卡
+     * @param target 移动的目标
+     * @param index 移动到指定位置，可以省略，默认移动到最下方
+     */
     public moveCardsTo(cards: CardBase[]|CardBase, target: CardFieldBase, index?: number) {
         const reslut = [];
         if (cards instanceof CardBase) {

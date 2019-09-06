@@ -88,13 +88,13 @@ export default class CardBase {
         });
     }
     protected beforeEffect(args) {
-        const dealingField = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
+        const dealingField = this.controller.getCardFiled(CARD_FIELD.DEALING);
         this.field.moveCardsTo(this, dealingField);
         return true;
     }
     protected afterEffect(args) {
-        const grave = this.controller.getCardFileds(CARD_FIELD.GRAVE)[0];
-        const dealing = this.controller.getCardFileds(CARD_FIELD.DEALING)[0];
+        const grave = this.controller.getCardFiled(CARD_FIELD.GRAVE);
+        const dealing = this.controller.getCardFiled(CARD_FIELD.DEALING);
         dealing.moveCardsTo(this, grave);
     }
 }
