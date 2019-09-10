@@ -1,13 +1,9 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
+import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import BuffBase from "./buff/buffBase";
-import CardBase from "./card/cardBase";
-import CardFieldBase from "./cardField/cardFieldBase";
 import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trriger from "./trriger";
-export type BattleObject = CardBase|BattlePlayer|CardFieldBase|BuffBase;
-export type BattleObjectId = number;
 export default class Battle {
     public get currentController(): BattlePlayer {
         return this._currentController;
@@ -60,10 +56,8 @@ export default class Battle {
         }
         return player;
     }
-    public registerBid(card: BattleObject) {
-        this._bid++;
-        this.bidMap[this._bid] = card;
-        return this._bid;
+    public registerBid(obj: BattleObject) {
+        this.bidMap[obj.bId] = obj;
     }
     public getObjectByBId<T extends BattleObject>(bId: BattleObjectId, type?: new (...args: any[]) => T): T {
         const obj =  this.bidMap[bId] ;

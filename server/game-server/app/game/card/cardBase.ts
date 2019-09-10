@@ -1,8 +1,8 @@
-import Battle, { BattleObjectId } from "../battle";
+import Battle from "../battle";
+import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";
-import Trriger from "../trriger";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -16,7 +16,7 @@ export interface ICardInfo {
     level?: number;
     arg?: any;
 }
-export default class CardBase {
+export default class CardBase extends BattleObject {
     public get name(): string {
         return this._name;
     }
@@ -33,20 +33,15 @@ export default class CardBase {
         return this._controller;
     }
     public readonly owner: BattlePlayer;
-    public readonly battle: Battle;
-    public readonly bId: BattleObjectId;
-    protected readonly trriger: Trriger;
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
     protected _field: CardFieldBase;
     protected _controller: BattlePlayer;
     constructor(info: ICardInfo, owner: BattlePlayer, field?: CardFieldBase) {
+        super(owner.battle);
         this.owner = owner;
-        this.battle = owner.battle;
-        this.trriger = this.battle.trriger;
         this._controller = this.owner;
-        this.bId = this.battle.registerBid(this);
         this.setFiled(field);
         this.initInfo(info);
         this.initEffect();

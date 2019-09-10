@@ -1,8 +1,8 @@
 import { DecoratorId, IAttribute } from "../attributeHandler";
-import Battle, { BattleObjectId } from "../battle";
+import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import { TIME_POINT } from "../constants";
-import Trriger, { TrrigerId } from "../trriger";
+import { TrrigerId } from "../trriger";
 
 export enum BUFF_TYPE {
     NORAML, // 正常buff
@@ -13,7 +13,7 @@ export enum BUFF_TYPE {
 export interface IBuffInfo {
     id: number;
 }
-export default class BuffBase {
+export default class BuffBase  extends BattleObject {
     /**
      * 是否可以被驱散
      */
@@ -47,10 +47,7 @@ export default class BuffBase {
     public get owner() {
         return this._owner;
     }
-    public readonly bId: BattleObjectId;
-    public readonly battle: Battle;
     public readonly creator: BattlePlayer;
-    protected readonly trriger: Trriger;
     private _active: boolean;
     public get active() {
         return this._active;
@@ -66,10 +63,8 @@ export default class BuffBase {
 
     private _type: BUFF_TYPE;
     constructor(creator: BattlePlayer, info) {
+        super(creator.battle);
         this.creator = creator;
-        this.battle = this.creator.battle;
-        this.trriger = this.battle.trriger;
-        this.bId = this.battle.registerBid(this);
         this.initInfo(info);
     }
     /**

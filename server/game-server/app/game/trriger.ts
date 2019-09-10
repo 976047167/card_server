@@ -1,4 +1,4 @@
-import { BattleObject, BattleObjectId } from "./battle";
+import BattleObject, { BattleObjectId } from "./battleObject";
 import { TIME_POINT } from "./constants";
 /**
  * 触发优先级

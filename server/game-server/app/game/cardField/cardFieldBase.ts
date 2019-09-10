@@ -1,4 +1,5 @@
-import Battle, { BattleObjectId } from "../battle";
+import Battle from "../battle";
+import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardBase from "../card/cardBase";
 
@@ -9,16 +10,13 @@ export enum CARD_FIELD {
     REMOVED,
     DEALING,
 }
-export default class CardFieldBase {
+export default class CardFieldBase extends BattleObject {
     public readonly name: string;
-    public readonly battle: Battle;
     public readonly owner: BattlePlayer;
-    public readonly bId: BattleObjectId;
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
-        this.battle = owner.battle;
+        super(owner.battle);
         this.owner = this.owner;
-        this.bId = this.battle.registerBid(this);
     }
     /**
      * 洗牌

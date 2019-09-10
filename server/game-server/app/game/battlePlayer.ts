@@ -1,5 +1,6 @@
 import AttributeHandler from "./attributeHandler";
-import Battle, { BattleObjectId } from "./battle";
+import Battle  from "./battle";
+import BattleObject, { BattleObjectId } from "./battleObject";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import BattleDeck from "./cardField/battleDeck";
@@ -21,14 +22,13 @@ export interface IArgsUseHandCard {
     cardBId: BattleObjectId;
     targetBid: BattleObjectId;
 }
-export default class BattlePlayer {
+export default class BattlePlayer extends BattleObject {
     /**当前先攻的进度
      */
     public get strikeProgress(): number {
         return this._strikeProgress;
     }
 
-    public readonly battle: Battle;
     public readonly bId: BattleObjectId;
     public readonly uid: string;
     public _strikeProgress: number = 0;
@@ -39,16 +39,13 @@ export default class BattlePlayer {
     private grave: CardFieldBase;
     private hand: CardFieldBase;
     private dealing: CardFieldBase;
-    private trrgier: Trriger;
     private buffList: BuffBase[];
     constructor(battle: Battle, info: IPlayerInfo) {
-        this.battle = battle;
-        this.trrgier = this.battle.trriger;
+        super(battle);
         this.playerInfo = info;
         this.uid = this.playerInfo.uid;
         this.initFiled();
         this.attribute = new AttributeHandler(this);
-        this.bId = this.battle.registerBid(this);
     }
     public getInfo(): IPlayerInfo {
         return this.playerInfo;
@@ -108,10 +105,10 @@ export default class BattlePlayer {
         this._strikeProgress = 0;
     }
     public turnBegin() {
-        this.trrgier.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
+        this.trriger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
     }
     public drawCard(cards: CardBase[]|CardBase) {
-        this.trrgier.notify(this, TIME_POINT.PLAYER_DRAW_CARD);
+        this.trriger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
         //
     }
 
