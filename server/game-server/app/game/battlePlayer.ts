@@ -29,7 +29,6 @@ export default class BattlePlayer extends BattleObject {
         return this._strikeProgress;
     }
 
-    public readonly bId: BattleObjectId;
     public readonly uid: string;
     public _strikeProgress: number = 0;
     public readonly attribute: AttributeHandler;
