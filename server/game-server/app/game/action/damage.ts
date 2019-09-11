@@ -1,23 +1,17 @@
-import Battle from "./battle";
-import BattlePlayer from "./battlePlayer";
-import { CARD_FIELD } from "./cardField/cardFieldBase";
-import { TIME_POINT } from "./constants";
-import Trriger from "./trriger";
+import BattlePlayer from "../battlePlayer";
+import { CARD_FIELD } from "../cardField/cardFieldBase";
+import { TIME_POINT } from "../constants";
+import { GameAction } from "../gameActionHandler";
 
 export enum DAMAGE_TYPE {
    VOID = 0,
 }
-export default class Damage {
-    private creator: BattlePlayer;
+export default class Damage extends GameAction {
     private target: BattlePlayer;
     private damageNum: number;
-    private battle: Battle;
-    private readonly trriger: Trriger;
     private effectList: Array<(damage: Damage) => void>;
     constructor(creator: BattlePlayer, target: BattlePlayer, damageNum: number, effect?: (damage: Damage) => void) {
-        this.creator = creator;
-        this.battle = this.creator.battle;
-        this.trriger = this.battle.trriger;
+        super(creator);
         this.target = target;
         this.damageNum = damageNum;
         this.effectList.push(effect);
@@ -39,7 +33,7 @@ export default class Damage {
             const value = card.value;
             if (softDamage < this.target.attribute.derive.tenacious ) {
                 target_deck.moveCardsTo([card], target_grave);
-                this.trriger.notify(card, TIME_POINT.CARD_COUNTER, this);
+                this.trriger.notify(card, TIME_POINT.CARD_DAMAGE, this);
             } else {
                 target_deck.moveCardsTo([card], target_removed);
             }

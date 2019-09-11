@@ -50,7 +50,7 @@ export default class BattlePlayer extends BattleObject {
     }
     /**
      * 获取场地
-     * @param field 场地常量，可以通过按位与来获取多个场地
+     * @param field 场地常量
      */
     public getCardFiled(field: CARD_FIELD): CardFieldBase {
         switch (field) {
