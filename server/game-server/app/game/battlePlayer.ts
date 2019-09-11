@@ -1,12 +1,11 @@
 import AttributeHandler from "./attributeHandler";
-import Battle  from "./battle";
+import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import BattleDeck from "./cardField/battleDeck";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
 import { TIME_POINT } from "./constants";
-import Trriger from "./trriger";
 export interface IPlayerInfo {
     uid: string;
     attribute: {

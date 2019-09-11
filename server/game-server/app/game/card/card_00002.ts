@@ -1,3 +1,7 @@
+/**
+ * 试做卡
+ * 不死与回复
+ */
 import { IArgsUseHandCard } from "../battlePlayer";
 import { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";

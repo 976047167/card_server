@@ -1,3 +1,7 @@
+/**
+ * 试做卡
+ * 完全减免伤害
+ */
 import { TIME_POINT } from "../constants";
 import Damage from "../damage";
 import CardBase from "./cardBase";
