@@ -1,7 +1,7 @@
 import BattlePlayer from "../battlePlayer";
 import { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";
-import { GameAction } from "../gameActionHandler";
+import { GameAction } from "../gameActionController";
 
 export enum DAMAGE_TYPE {
    VOID = 0,

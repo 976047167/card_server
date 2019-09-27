@@ -1,4 +1,4 @@
-import AttributeHandler from "./attributeHandler";
+import AttributeController from "./attributeController";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BuffBase from "./buff/buffBase";
@@ -30,7 +30,7 @@ export default class BattlePlayer extends BattleObject {
 
     public readonly uid: string;
     public _strikeProgress: number = 0;
-    public readonly attribute: AttributeHandler;
+    public readonly attribute: AttributeController;
     private playerInfo: IPlayerInfo;
     private deck: BattleDeck;
     private removed: CardFieldBase;
@@ -43,7 +43,7 @@ export default class BattlePlayer extends BattleObject {
         this.playerInfo = info;
         this.uid = this.playerInfo.uid;
         this.initFiled();
-        this.attribute = new AttributeHandler(this);
+        this.attribute = new AttributeController(this);
     }
     public getInfo(): IPlayerInfo {
         return this.playerInfo;

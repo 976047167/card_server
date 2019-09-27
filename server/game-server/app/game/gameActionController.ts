@@ -1,6 +1,5 @@
 import Battle from "./battle";
 import BattlePlayer from "./battlePlayer";
-import { TIME_POINT } from "./constants";
 import Trriger from "./trriger";
 
 export class GameAction {
@@ -24,7 +23,7 @@ export class GameAction {
         //
     }
 }
-export default class GameActionHandler {
+export default class GameActionController {
     private actionsStack: GameAction[];
     private isDealing: boolean = false;
     private battle: Battle;
@@ -33,8 +32,11 @@ export default class GameActionHandler {
         this.trriger = battle.trriger;
 
     }
-    public pushAction(action: GameAction) {
-        this.actionsStack.push(action);
+    public pushAction(action: GameAction|GameAction[]) {
+        if (action instanceof GameAction) {
+            action = [action];
+        }
+        this.actionsStack.push(...action);
         if (!this.isDealing) {
             this.dealAction();
         }
@@ -47,7 +49,7 @@ export default class GameActionHandler {
         }
         this.isDealing = true;
         const action = this.actionsStack.pop();
-        this.trriger.notify(action.creator, TIME_POINT.ACTION_COUNTER, action);
+        // this.trriger.notify(action.creator, TIME_POINT.ACTION_COUNTER, action);
         if (!action.rejected) {
             action.deal();
         }

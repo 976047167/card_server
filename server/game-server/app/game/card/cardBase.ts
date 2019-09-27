@@ -1,5 +1,4 @@
-import Battle from "../battle";
-import BattleObject, { BattleObjectId } from "../battleObject";
+import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";
