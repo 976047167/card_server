@@ -1,3 +1,4 @@
+import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import { CARD_FIELD } from "../cardField/cardFieldBase";
 import { TIME_POINT } from "../constants";
@@ -10,7 +11,7 @@ export default class Damage extends GameAction {
     private target: BattlePlayer;
     private damageNum: number;
     private effectList: Array<(damage: Damage) => void>;
-    constructor(creator: BattlePlayer, target: BattlePlayer, damageNum: number, effect?: (damage: Damage) => void) {
+    constructor(creator: BattleObject, target: BattlePlayer, damageNum: number, effect?: (damage: Damage) => void) {
         super(creator);
         this.target = target;
         this.damageNum = damageNum;

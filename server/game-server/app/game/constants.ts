@@ -1,4 +1,5 @@
 /**
+ *  时点 TimePoint 以下统称（TP）
  *  触发时点，命名前缀为触发对象
  */
 export enum TIME_POINT {
