@@ -2,7 +2,7 @@ import { DecoratorId, IAttribute } from "../attributeController";
 import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import { TIME_POINT } from "../constants";
-import { TrrigerId } from "../trriger";
+import { TriggerId } from "../trigger";
 
 export enum BUFF_TYPE {
     NORAML, // 正常buff
@@ -59,7 +59,7 @@ export default class BuffBase  extends BattleObject {
     private _can_be_repressed: boolean;
     private _name: string;
     private did: DecoratorId;
-    private tids: TrrigerId[] = [];
+    private tids: TriggerId[] = [];
 
     private _type: BUFF_TYPE;
     constructor(creator: BattlePlayer, info) {
@@ -91,17 +91,17 @@ export default class BuffBase  extends BattleObject {
             this.setOwner(null);
         }
     }
-    protected initTrriger() {
+    protected initTrigger() {
         return true;
     }
     protected registerBuffEffect(bid: BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => any) {
         effect = effect.bind(this);
-        const tid = this.trriger.register(bid, timePoint, effect);
+        const tid = this.trigger.register(bid, timePoint, effect);
         this.tids.push(tid);
     }
-    private uninitTrriger() {
+    private uninitTrigger() {
         this.tids.forEach((tid) => {
-            this.trriger.remove(tid);
+            this.trigger.remove(tid);
         });
         this.tids = [];
     }
@@ -128,7 +128,7 @@ export default class BuffBase  extends BattleObject {
      */
     private activate() {
         this.initDecorator();
-        this.initTrriger();
+        this.initTrigger();
         this._active = true;
     }
     /**
@@ -136,7 +136,7 @@ export default class BuffBase  extends BattleObject {
      */
     private deactivate() {
         this.uninitDecorator();
-        this.uninitTrriger();
+        this.uninitTrigger();
         this._active = false;
     }
 }

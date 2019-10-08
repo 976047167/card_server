@@ -2,14 +2,16 @@ import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
+import GameActionController from "./gameActionController";
 import { COMMAND_ID, IUserCommand } from "./gameController";
-import Trriger from "./trriger";
+import Trigger from "./trigger";
 export default class Battle {
     public get currentController(): BattlePlayer {
         return this._currentController;
     }
     public readonly id: string;
-    public readonly trriger: Trriger;
+    public readonly trigger: Trigger;
+    public readonly actionController: GameActionController;
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
@@ -18,7 +20,8 @@ export default class Battle {
     private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
-        this.trriger = new Trriger();
+        this.trigger = new Trigger();
+        this.actionController = new GameActionController(this);
     }
     public setPlayer(playerInfos: IPlayerInfo[]) {
         const players = playerInfos.map((e) => {

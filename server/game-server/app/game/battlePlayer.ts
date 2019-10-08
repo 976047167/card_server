@@ -71,7 +71,7 @@ export default class BattlePlayer extends BattleObject {
         const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-        this.battle.trriger.notify(card, TIME_POINT.CARD_HAND, args);
+        this.battle.trigger.notify(card, TIME_POINT.CARD_HAND, args);
     }
     /**
      * 洗牌
@@ -103,10 +103,10 @@ export default class BattlePlayer extends BattleObject {
         this._strikeProgress = 0;
     }
     public turnBegin() {
-        this.trriger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
+        this.trigger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
     }
     public drawCard(cards: CardBase[]|CardBase) {
-        this.trriger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
+        this.trigger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
         //
     }
 

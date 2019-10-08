@@ -8,7 +8,6 @@ export enum DAMAGE_TYPE {
    VOID = 0,
 }
 export default class Damage extends GameAction {
-    private target: BattlePlayer;
     private damageNum: number;
     private effectList: Array<(damage: Damage) => void>;
     constructor(creator: BattleObject, target: BattlePlayer, damageNum: number, effect?: (damage: Damage) => void) {
@@ -34,7 +33,7 @@ export default class Damage extends GameAction {
             const value = card.value;
             if (softDamage < this.target.attribute.derive.tenacious ) {
                 target_deck.moveCardsTo([card], target_grave);
-                this.trriger.notify(card, TIME_POINT.CARD_DAMAGE, this);
+                this.trigger.notify(card, TIME_POINT.CARD_DAMAGE, this);
             } else {
                 target_deck.moveCardsTo([card], target_removed);
             }

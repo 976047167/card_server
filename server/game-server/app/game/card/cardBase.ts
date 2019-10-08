@@ -72,7 +72,7 @@ export default class CardBase extends BattleObject {
         before = before.bind(this);
         after = after.bind(this);
         effect = effect.bind(this);
-        this.trriger.register(this, timePoint, (args) => {
+        this.trigger.register(this, timePoint, (args) => {
             const check = before(args);
             let result = null;
             if (check) {

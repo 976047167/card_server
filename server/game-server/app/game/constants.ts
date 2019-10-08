@@ -10,7 +10,7 @@ export enum TIME_POINT {
     ACTION_COUNTER, // 某种行为发动，但未生效时
 }
 
-export enum ACTIONS_ID {
+export enum ACTION_TYPE {
     DRAW_CARD,
     DAMAGE,
 }
