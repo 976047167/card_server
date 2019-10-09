@@ -1,3 +1,4 @@
+import UseHandCard from "./action/useHandCard";
 import AttributeController from "./attributeController";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
@@ -71,7 +72,8 @@ export default class BattlePlayer extends BattleObject {
         const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-        this.battle.trigger.notify(card, TIME_POINT.CARD_HAND, args);
+        const action = new UseHandCard(this, args);
+        this.action.pushAction(action);
     }
     /**
      * 洗牌

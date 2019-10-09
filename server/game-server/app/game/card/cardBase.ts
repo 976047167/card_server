@@ -1,7 +1,10 @@
+import CardEffect from "../action/cardEffect";
+import UseHandCard from "../action/useHandCard";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
-import { TIME_POINT } from "../constants";
+import { ACTION_TYPE } from "../constants";
+import { ACTION_STATE, GameAction } from "../gameActionController";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -45,8 +48,17 @@ export default class CardBase extends BattleObject {
         this.initInfo(info);
         this.initEffect();
     }
-    public setFiled(field?: CardFieldBase) {
-        this._field = field;
+    public setFiled(field?: CardFieldBase|CARD_FIELD) {
+        if (!field) {
+            this._field = null;
+            return;
+        }
+        if (field instanceof CardFieldBase) {
+            this._field = field;
+        } else {
+            const f = this.controller.getCardFiled(field);
+            this._field = f;
+        }
     }
     /**
      * 加载卡片信息
@@ -56,7 +68,19 @@ export default class CardBase extends BattleObject {
         //
     }
     protected initEffect() {
+        this.trigger.register(ACTION_TYPE.USE_HAND_CARD, (action: UseHandCard) => {
+            if (action.state === ACTION_STATE.COMPLETED && action.target === this) {
+                this.action.pushAction(new CardEffect(this));
+            }
+        });
         //
+        this.regester<UseHandCard>((action) => {
+          return true;
+        });
+    }
+    protected regester<T extends GameAction>(fun: (action: T) => boolean) {
+        const A: T = new T(this);
+        this.trigger.register( A.type, fun);
     }
     /**
      * 注册效果，在相应时点触发
@@ -65,28 +89,29 @@ export default class CardBase extends BattleObject {
      * @param before 触发效果前将卡片送入执行区执行条件进行检查，返回false则不执行效果
      * @param after 卡片触发结束后处理，通常是送入墓地
      */
-    protected registerCardEffect(timePoint: TIME_POINT,
-                                 effect: (args: any) => any,
-                                 before= this.beforeEffect.bind(this),
-                                 after= this.afterEffect.bind(this)) {
+    protected registerCardEffect(
+        effect: (args: any) => any,
+        before = this.beforeEffect.bind(this),
+        after = this.afterEffect.bind(this),
+    ) {
         before = before.bind(this);
         after = after.bind(this);
         effect = effect.bind(this);
-        this.trigger.register(this, timePoint, (args) => {
-            const check = before(args);
+        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action) => {
+            const check = before(action);
             let result = null;
             if (check) {
-                result = effect(args);
+                result = effect(action);
             }
             after(result);
         });
     }
-    protected beforeEffect(args) {
+    protected beforeEffect(action) {
         const dealingField = this.controller.getCardFiled(CARD_FIELD.DEALING);
         this.field.moveCardsTo(this, dealingField);
         return true;
     }
-    protected afterEffect(args) {
+    protected afterEffect(action) {
         const grave = this.controller.getCardFiled(CARD_FIELD.GRAVE);
         const dealing = this.controller.getCardFiled(CARD_FIELD.DEALING);
         dealing.moveCardsTo(this, grave);

@@ -11,6 +11,13 @@ export enum TIME_POINT {
 }
 
 export enum ACTION_TYPE {
+    MOVE_FIELD,
+    SEND_TO_GRAVE,
+    SEND_TO_REMOVED,
+    SEND_TO_HAND,
+    SEND_TO_DEALING,
     DRAW_CARD,
     DAMAGE,
+    CARD_EFFECT,
+    USE_HAND_CARD,
 }

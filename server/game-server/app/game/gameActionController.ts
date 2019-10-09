@@ -1,6 +1,6 @@
 import Battle from "./battle";
 import BattleObject from "./battleObject";
-import { ACTION_TYPE, TIME_POINT } from "./constants";
+import { ACTION_TYPE } from "./constants";
 import Trigger from "./trigger";
 /**
  *  GameAction 游戏行为（以后统称GA）
@@ -27,7 +27,6 @@ export class GameAction {
     public get state(): ACTION_STATE {
         return this._state;
     }
-
     public set target(foo: BattleObject) {
         this. _target = foo;
     }
@@ -42,7 +41,7 @@ export class GameAction {
     private _target: BattleObject ;
     constructor(creator: BattleObject) {
         this.creator = creator;
-        this.target = this.creator;
+        this._target = this.creator;
         this.battle = creator.battle;
         this.trigger = creator.battle.trigger;
     }

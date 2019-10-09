@@ -1,6 +1,6 @@
 /**
  * 试做卡
- * 完全减免伤害
+ * 受到伤害时完全减免伤害
  */
 import Damage from "../action/damage";
 import { TIME_POINT } from "../constants";
