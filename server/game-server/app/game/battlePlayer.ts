@@ -73,7 +73,7 @@ export default class BattlePlayer extends BattleObject {
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
         const action = new UseHandCard(this, args);
-        this.actionCtrl.pushAction(action);
+        this.GAM.pushAction(action);
     }
     /**
      * 洗牌

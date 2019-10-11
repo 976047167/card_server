@@ -19,6 +19,6 @@ export default class UseHandCard extends GameAction {
         const dealField = this.creator.getCardFiled(CARD_FIELD.DEALING);
         const card = this.target;
         handField.moveCardsTo(card, dealField);
-        this.actionCtrl.pushAction(new SendCardToField(card, {target: CARD_FIELD.GRAVE}));
+        this.GAM.pushAction(new SendCardToField(card, {target: CARD_FIELD.GRAVE}));
     }
 }

@@ -70,7 +70,7 @@ export default class CardBase extends BattleObject {
     protected initEffect() {
         this.trigger.register(ACTION_TYPE.USE_HAND_CARD, (action: GameAction) => {
             if (action.state === ACTION_STATE.COMPLETED && action.target === this) {
-                this.actionCtrl.pushAction(new CardEffect(this));
+                this.GAM.pushAction(new CardEffect(this));
             }
         });
         //

@@ -36,7 +36,7 @@ export class GameAction {
     public readonly creator: BattleObject;
     public readonly trigger: Trigger;
     public readonly type: ACTION_TYPE;
-    public readonly actionCtrl: GameActionManager;
+    public readonly GAM: GameActionManager;
     protected readonly battle: Battle;
     private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
     private _target: BattleObject ;
@@ -45,7 +45,7 @@ export class GameAction {
         this._target = this.creator;
         this.battle = creator.battle;
         this.trigger = creator.battle.trigger;
-        this.actionCtrl = this.battle.actionController;
+        this.GAM = this.battle.actionManager;
     }
     public setState(foo: ACTION_STATE) {
         this._state = foo;

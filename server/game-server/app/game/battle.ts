@@ -11,7 +11,7 @@ export default class Battle {
     }
     public readonly id: string;
     public readonly trigger: Trigger;
-    public readonly actionController: GameActionManager;
+    public readonly actionManager: GameActionManager;
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
@@ -21,7 +21,7 @@ export default class Battle {
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
         this.trigger = new Trigger();
-        this.actionController = new GameActionManager(this);
+        this.actionManager = new GameActionManager(this);
     }
     public setPlayer(playerInfos: IPlayerInfo[]) {
         const players = playerInfos.map((e) => {

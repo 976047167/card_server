@@ -6,13 +6,13 @@ export default class BattleObject {
     private static _bid: BattleObjectId = 0;
     public readonly bId: BattleObjectId;
     public readonly battle: Battle;
-    public readonly actionCtrl: GameActionManager;
+    public readonly GAM: GameActionManager;
     protected readonly trigger: Trigger;
     constructor(battle: Battle) {
         this.bId = ++BattleObject._bid;
         this.battle = battle;
         this.trigger = battle.trigger;
-        this.actionCtrl = battle.actionController;
+        this.GAM = battle.actionManager;
         this.battle.registerBid(this);
     }
 }
