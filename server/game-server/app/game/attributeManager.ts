@@ -15,7 +15,7 @@ export interface IAttribute {
     };
 }
 export type DecoratorId = number;
-export default class AttributeController implements IAttribute {
+export default class AttributeManager implements IAttribute {
     /**
      * 力量
      */

@@ -1,5 +1,5 @@
 import { ACTION_TYPE } from "./constants";
-import { GameAction } from "./gameActionController";
+import { GameAction } from "./gameActionManager";
 /**
  * 触发优先级
  */

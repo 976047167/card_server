@@ -2,7 +2,7 @@ import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import GameActionController from "./gameActionController";
+import GameActionManager from "./gameActionManager";
 import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trigger from "./trigger";
 export default class Battle {
@@ -11,7 +11,7 @@ export default class Battle {
     }
     public readonly id: string;
     public readonly trigger: Trigger;
-    public readonly actionController: GameActionController;
+    public readonly actionController: GameActionManager;
     private players: BattlePlayer[];
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
@@ -21,7 +21,7 @@ export default class Battle {
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
         this.trigger = new Trigger();
-        this.actionController = new GameActionController(this);
+        this.actionController = new GameActionManager(this);
     }
     public setPlayer(playerInfos: IPlayerInfo[]) {
         const players = playerInfos.map((e) => {

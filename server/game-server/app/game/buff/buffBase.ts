@@ -1,4 +1,4 @@
-import { DecoratorId, IAttribute } from "../attributeController";
+import { DecoratorId, IAttribute } from "../attributeManager";
 import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import { TIME_POINT } from "../constants";

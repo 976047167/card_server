@@ -4,7 +4,7 @@ import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../constants";
-import { ACTION_STATE, GameAction } from "../gameActionController";
+import { ACTION_STATE, GameAction } from "../gameActionManager";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -68,19 +68,12 @@ export default class CardBase extends BattleObject {
         //
     }
     protected initEffect() {
-        this.trigger.register(ACTION_TYPE.USE_HAND_CARD, (action: UseHandCard) => {
+        this.trigger.register(ACTION_TYPE.USE_HAND_CARD, (action: GameAction) => {
             if (action.state === ACTION_STATE.COMPLETED && action.target === this) {
-                this.action.pushAction(new CardEffect(this));
+                this.actionCtrl.pushAction(new CardEffect(this));
             }
         });
         //
-        this.regester<UseHandCard>((action) => {
-          return true;
-        });
-    }
-    protected regester<T extends GameAction>(fun: (action: T) => boolean) {
-        const A: T = new T(this);
-        this.trigger.register( A.type, fun);
     }
     /**
      * 注册效果，在相应时点触发

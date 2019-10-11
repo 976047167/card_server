@@ -36,6 +36,7 @@ export class GameAction {
     public readonly creator: BattleObject;
     public readonly trigger: Trigger;
     public readonly type: ACTION_TYPE;
+    public readonly actionCtrl: GameActionManager;
     protected readonly battle: Battle;
     private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
     private _target: BattleObject ;
@@ -44,6 +45,7 @@ export class GameAction {
         this._target = this.creator;
         this.battle = creator.battle;
         this.trigger = creator.battle.trigger;
+        this.actionCtrl = this.battle.actionController;
     }
     public setState(foo: ACTION_STATE) {
         this._state = foo;
@@ -62,7 +64,7 @@ export class GameAction {
         //
     }
 }
-export default class GameActionController {
+export default class GameActionManager {
     private actionsStack: GameAction[];
     private isDealing: boolean = false;
     private battle: Battle;
