@@ -1,48 +1,65 @@
 import BattleObject from "../../battleObject";
 import BattlePlayer from "../../battlePlayer";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
-import { GameAction } from "../gameActionManager";
+import { ACTION_STATE, GameAction } from "../gameActionManager";
 
+export interface IDamageSettleArg {
+    target: BattlePlayer;
+    originNumber: number;
+    totalNumber: number;
+    settledNumber: number;
+    settledCardBid: number;
+}
 export enum DAMAGE_TYPE {
    VOID = 0,
 }
 export default class Damage extends GameAction {
     public readonly target: BattlePlayer;
     private damageNum: number;
-    private effectList: Array<(damage: Damage) => void>;
-    constructor(creator: BattleObject, target: BattlePlayer, damageNum: number, effect?: (damage: Damage) => void) {
-        super(creator);
-        this.target = target ;
-        this.damageNum = damageNum;
-        this.effectList.push(effect);
+    constructor(creator: BattleObject, args: {target: BattlePlayer, damageNum: number}) {
+        super(creator, args);
+        this.damageNum = args.damageNum;
     }
 
     /**
      * 伤害处理
+     * 宣言伤害，并开启伤害处理链
      */
     public deal() {
-        const target_deck =  this.target.getCardFiled(CARD_FIELD.DECK);
-        const target_grave =  this.target.getCardFiled(CARD_FIELD.GRAVE);
-        const target_removed = this.target.getCardFiled(CARD_FIELD.REMOVED);
-        let softDamage = 0;
-        while (this.damageNum) {
-            const card = target_deck.getCardByIndex(0);
-            if (!card) {
-                break;
-            }
-            const value = card.value;
-            if (softDamage < this.target.attribute.derive.tenacious ) {
-                target_deck.moveCardsTo([card], target_grave);
-                // this.trigger.notify(card, TIME_POINT.CARD_DAMAGE, this);
-            } else {
-                target_deck.moveCardsTo([card], target_removed);
-            }
-            softDamage += value;
-            this.reduce(value);
-        }
+        const originNumber = this.damageNum;
+        const args: IDamageSettleArg = {
+            target: this.target,
+            originNumber,
+            totalNumber: this.damageNum,
+            settledNumber: 0,
+            settledCardBid: 0,
+        };
+        this.GAM.pushAction(new DamageSettle(this.creator, args));
     }
-    public reduce(value: number = this.damageNum) {
-        this.damageNum -= value;
-        if (this.damageNum < 0) {this.damageNum = 0; }
+}
+export class DamageSettle extends GameAction {
+    public readonly target: BattlePlayer;
+    public readonly extraData: IDamageSettleArg;
+    constructor(creator, args: IDamageSettleArg) {
+        super(creator, args);
+    }
+    public deal() {
+        if (this.extraData.settledNumber >= this.extraData.totalNumber) {
+            return;
+        }
+        const deck = this.target.getCardFiled(CARD_FIELD.DECK);
+        const card = deck.getCardByIndex(0);
+        if (!card) {return; }
+        if (this.extraData.settledNumber < this.target.attribute.derive.tenacious) {
+            card.setFiled(CARD_FIELD.GRAVE);
+        } else {
+            card.setFiled(CARD_FIELD.REMOVED);
+        }
+        this.extraData.settledNumber += card.value;
+        this.extraData.settledCardBid = card.bId;
+        if (this.extraData.settledNumber < this.extraData.totalNumber) {
+            this.setState(ACTION_STATE.UNTRIGGERED);
+            this.GAM.pushAction(this);
+        }
     }
 }

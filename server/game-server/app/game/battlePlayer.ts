@@ -105,10 +105,10 @@ export default class BattlePlayer extends BattleObject {
         this._strikeProgress = 0;
     }
     public turnBegin() {
-        this.trigger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
+        // this.trigger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
     }
     public drawCard(cards: CardBase[]|CardBase) {
-        this.trigger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
+        // this.trigger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
         //
     }
 

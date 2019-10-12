@@ -3,7 +3,6 @@ import CardBase from "../../card/cardBase";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameActionManager";
-import SendCardToField from "./sendCardToField";
 
 export default class UseHandCard extends GameAction {
     public readonly type: ACTION_TYPE;
@@ -20,6 +19,5 @@ export default class UseHandCard extends GameAction {
         const dealField = this.creator.getCardFiled(CARD_FIELD.DEALING);
         const card = this.target;
         handField.moveCardsTo(card, dealField);
-        this.GAM.pushAction(new SendCardToField(card, {target: CARD_FIELD.GRAVE}));
     }
 }

@@ -13,7 +13,7 @@ export default class SendCardToField extends GameAction {
         if (args.target instanceof CardFieldBase) {
             this.target = args.target;
         } else {
-            this.target = this.creator.controller.getCardFiled(args.target);
+            this.target = this.creator.owner.getCardFiled(args.target);
         }
 
     }

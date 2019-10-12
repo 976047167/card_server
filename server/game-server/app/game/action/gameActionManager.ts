@@ -48,6 +48,9 @@ export class GameAction {
         this.trigger = creator.battle.trigger;
         this.GAM = this.battle.actionManager;
         this.extraData = args;
+        if (args && args.target) {
+            this.target = args.target;
+        }
     }
     public setState(foo: ACTION_STATE) {
         this._state = foo;

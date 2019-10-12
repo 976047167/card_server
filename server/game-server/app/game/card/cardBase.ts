@@ -1,10 +1,10 @@
 import CardEffect from "../action/archives/cardEffect";
+import SendCardToField from "../action/archives/sendCardToField";
 import { ACTION_STATE, GameAction } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD} from "../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../constants";
-import { CardIndex } from "./cardIndex";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -61,45 +61,45 @@ export default class CardBase extends BattleObject {
         }
     }
     protected initEffect() {
-        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: GameAction) => {
-            if (action.state === ACTION_STATE.COMPLETED && action.target === this) {
-            }
-        });
 
     }
     /**
-     * 注册效果，在相应时点触发
-     * @param timePoint 注册的时点
+     * 注册效果，在卡牌效果确定发动时执行
+     * @param actionType 触发卡片效果的行为
      * @param effect 卡片的基本效果
-     * @param before 触发效果前将卡片送入执行区执行条件进行检查，返回false则不执行效果
-     * @param after 卡片触发结束后处理，通常是送入墓地
+     * @param before 卡牌发动条件检查
+     * @param after 卡牌发动完毕后处理，通常是送入墓地
      */
     protected registerCardEffect(
-        effect: (args: any) => any,
-        before = this.beforeEffect.bind(this),
-        after = this.afterEffect.bind(this),
-    ) {
-        before = before.bind(this);
-        after = after.bind(this);
-        effect = effect.bind(this);
-        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action) => {
-            const check = before(action);
-            let result = null;
-            if (check) {
-                result = effect(action);
+        actionType: ACTION_TYPE,
+        args: {
+            effect: (args: GameAction) => any,
+            beffore?: (action: GameAction) => boolean,
+            after?: (GameAction) => void,
+        }) {
+        const effect = args.effect.bind(this);
+        if (args.beffore) {
+            args.beffore = args.beffore.bind(this);
+        }
+        if (args.after) {
+            args.after = args.after.bind(this);
+        }
+        this.trigger.register(actionType, (action: GameAction) => {
+            if (action.state === ACTION_STATE.COMPLETED && action.target === this && !args.beffore ||
+                args.beffore(action)) {
+                const cardEffect = new CardEffect(this, action.extraData);
+                this.GAM.pushAction(cardEffect);
+                let result;
+                if (cardEffect.state === ACTION_STATE.COMPLETED) {
+                   result = effect(action);
+                }
+                if (args.after) {
+                    args.after(result);
+                } else {
+                    this.GAM.pushAction(new SendCardToField(this, {target: CARD_FIELD.GRAVE}));
+                }
             }
-            after(result);
         });
-    }
-    protected beforeEffect(action) {
-        const dealingField = this.controller.getCardFiled(CARD_FIELD.DEALING);
-        this.field.moveCardsTo(this, dealingField);
-        return true;
-    }
-    protected afterEffect(action) {
-        const grave = this.controller.getCardFiled(CARD_FIELD.GRAVE);
-        const dealing = this.controller.getCardFiled(CARD_FIELD.DEALING);
-        dealing.moveCardsTo(this, grave);
     }
     /**
      * 加载卡片信息
@@ -110,15 +110,3 @@ export default class CardBase extends BattleObject {
     }
 }
 
-export class CardFactory {
-    public  createCard(card: ICardData, owner: BattlePlayer, field?: CardFieldBase): CardBase|null {
-        return this.createCards([card], owner, field)[0];
-    }
-    public  createCards(cards: ICardData[], owner: BattlePlayer, field?: CardFieldBase): CardBase[]|null {
-        const reslut = cards.map((c) => {
-            const cardClass = CardIndex[c.cardId];
-            return new cardClass(c, owner, field);
-        });
-        return reslut;
-    }
-}
