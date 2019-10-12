@@ -2,11 +2,11 @@
  * 试做卡
  * 不死与回复
  */
-import Damage from "../action/damage";
-import { IArgsUseHandCard } from "../battlePlayer";
-import { CARD_FIELD } from "../cardField/cardFieldBase";
-import { TIME_POINT } from "../constants";
-import CardBase from "./cardBase";
+import Damage from "../../action/archives/damage";
+import { IArgsUseHandCard } from "../../battlePlayer";
+import { CARD_FIELD } from "../../cardField/cardFieldBase";
+import { TIME_POINT } from "../../constants";
+import CardBase from "../cardBase";
 
 export default class Card00002 extends CardBase {
     protected initEffect() {

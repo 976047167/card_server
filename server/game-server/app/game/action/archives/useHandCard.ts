@@ -1,7 +1,7 @@
-import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
-import CardBase from "../card/cardBase";
-import { CARD_FIELD } from "../cardField/cardFieldBase";
-import { ACTION_TYPE } from "../constants";
+import BattlePlayer, { IArgsUseHandCard } from "../../battlePlayer";
+import CardBase from "../../card/cardBase";
+import { CARD_FIELD } from "../../cardField/cardFieldBase";
+import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameActionManager";
 import SendCardToField from "./sendCardToField";
 
@@ -9,9 +9,10 @@ export default class UseHandCard extends GameAction {
     public readonly type: ACTION_TYPE;
     public readonly creator: BattlePlayer;
     public readonly target: CardBase;
+    public readonly extraData: IArgsUseHandCard;
     constructor(creator: BattlePlayer, args: IArgsUseHandCard) {
-        super(creator);
-        this.target = this.battle.getObjectByBId(args.targetBid);
+        super(creator, args);
+        this.target = this.battle.getObjectByBId(args.cardBId, CardBase);
         this.type = ACTION_TYPE.USE_HAND_CARD;
     }
     protected deal() {

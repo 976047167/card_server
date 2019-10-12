@@ -1,4 +1,4 @@
-import UseHandCard from "./action/useHandCard";
+import UseHandCard from "./action/archives/useHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
@@ -20,7 +20,7 @@ export interface IPlayerInfo {
 }
 export interface IArgsUseHandCard {
     cardBId: BattleObjectId;
-    targetBid: BattleObjectId;
+    targetBids?: BattleObjectId[];
 }
 export default class BattlePlayer extends BattleObject {
     /**当前先攻的进度

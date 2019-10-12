@@ -1,5 +1,5 @@
+import GameActionManager from "./action/gameActionManager";
 import Battle from "./battle";
-import GameActionManager from "./gameActionManager";
 import Trigger from "./trigger";
 export type BattleObjectId = number;
 export default class BattleObject {

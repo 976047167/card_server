@@ -1,7 +1,7 @@
-import Battle from "./battle";
-import BattleObject from "./battleObject";
-import { ACTION_TYPE } from "./constants";
-import Trigger from "./trigger";
+import Battle from "../battle";
+import BattleObject from "../battleObject";
+import { ACTION_TYPE } from "../constants";
+import Trigger from "../trigger";
 /**
  *  GameAction 游戏行为（以后统称GA）
  *  GA通常由一个BO直接调用或设置后由时点触发。
@@ -37,15 +37,17 @@ export class GameAction {
     public readonly trigger: Trigger;
     public readonly type: ACTION_TYPE;
     public readonly GAM: GameActionManager;
+    public readonly extraData: any;
     protected readonly battle: Battle;
     private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
     private _target: BattleObject ;
-    constructor(creator: BattleObject) {
+    constructor(creator: BattleObject, args?: any) {
         this.creator = creator;
         this._target = this.creator;
         this.battle = creator.battle;
         this.trigger = creator.battle.trigger;
         this.GAM = this.battle.actionManager;
+        this.extraData = args;
     }
     public setState(foo: ACTION_STATE) {
         this._state = foo;
@@ -58,9 +60,13 @@ export class GameAction {
         if (this.state === ACTION_STATE.REJECTED) { return; }
         this.setState(ACTION_STATE.WORKING);
         this.deal();
+        this.done();
         this.setState(ACTION_STATE.COMPLETED);
     }
     protected deal() {
+        //
+    }
+    protected done() {
         //
     }
 }

@@ -1,6 +1,6 @@
-import { IArgsUseHandCard } from "../battlePlayer";
-import CardBase from "../card/cardBase";
-import { ACTION_TYPE } from "../constants";
+import { IArgsUseHandCard } from "../../battlePlayer";
+import CardBase from "../../card/cardBase";
+import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameActionManager";
 
 export default class CardEffect extends GameAction {
@@ -9,7 +9,7 @@ export default class CardEffect extends GameAction {
     constructor(creator: CardBase, args: IArgsUseHandCard) {
         super(creator);
         this.type = ACTION_TYPE.CARD_EFFECT;
-        this.target = this.battle.getObjectByBId(args.targetBid);
+        this.target = this.battle.getObjectByBId(args.targetBids[0]);
     }
     protected deal() {
         //

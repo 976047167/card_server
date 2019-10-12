@@ -1,10 +1,10 @@
-import CardEffect from "../action/cardEffect";
-import UseHandCard from "../action/useHandCard";
+import CardEffect from "../action/archives/cardEffect";
+import { ACTION_STATE, GameAction } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
-import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
+import CardFieldBase, { CARD_FIELD} from "../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../constants";
-import { ACTION_STATE, GameAction } from "../gameActionManager";
+import { CardIndex } from "./cardIndex";
 
 export enum CARD_TYPE {
     NORMAL,
@@ -12,7 +12,7 @@ export enum CARD_TYPE {
     EQUIP, // 装备卡
     PROFESSION, // 法术专业卡
 }
-export interface ICardInfo {
+export interface ICardData {
     cardId: number;
     exp?: number;
     level?: number;
@@ -40,12 +40,12 @@ export default class CardBase extends BattleObject {
     protected _value: number;
     protected _field: CardFieldBase;
     protected _controller: BattlePlayer;
-    constructor(info: ICardInfo, owner: BattlePlayer, field?: CardFieldBase) {
+    constructor(data: ICardData, owner: BattlePlayer, field?: CardFieldBase) {
         super(owner.battle);
         this.owner = owner;
         this._controller = this.owner;
         this.setFiled(field);
-        this.initInfo(info);
+        this.initData(data);
         this.initEffect();
     }
     public setFiled(field?: CardFieldBase|CARD_FIELD) {
@@ -60,20 +60,12 @@ export default class CardBase extends BattleObject {
             this._field = f;
         }
     }
-    /**
-     * 加载卡片信息
-     * @param info 卡片信息，通常只要一个id，通过读表获取其他信息。如果传入其他属性，会覆盖默认属性
-     */
-    protected initInfo(info: ICardInfo) {
-        //
-    }
     protected initEffect() {
-        this.trigger.register(ACTION_TYPE.USE_HAND_CARD, (action: GameAction) => {
+        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: GameAction) => {
             if (action.state === ACTION_STATE.COMPLETED && action.target === this) {
-                this.GAM.pushAction(new CardEffect(this));
             }
         });
-        //
+
     }
     /**
      * 注册效果，在相应时点触发
@@ -108,5 +100,25 @@ export default class CardBase extends BattleObject {
         const grave = this.controller.getCardFiled(CARD_FIELD.GRAVE);
         const dealing = this.controller.getCardFiled(CARD_FIELD.DEALING);
         dealing.moveCardsTo(this, grave);
+    }
+    /**
+     * 加载卡片信息
+     * @param info 卡片信息，通常只要一个id，通过读表获取其他信息。如果传入其他属性，会覆盖默认属性
+     */
+    private initData(info: ICardData) {
+        //
+    }
+}
+
+export class CardFactory {
+    public  createCard(card: ICardData, owner: BattlePlayer, field?: CardFieldBase): CardBase|null {
+        return this.createCards([card], owner, field)[0];
+    }
+    public  createCards(cards: ICardData[], owner: BattlePlayer, field?: CardFieldBase): CardBase[]|null {
+        const reslut = cards.map((c) => {
+            const cardClass = CardIndex[c.cardId];
+            return new cardClass(c, owner, field);
+        });
+        return reslut;
     }
 }

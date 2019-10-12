@@ -1,5 +1,5 @@
+import { GameAction } from "./action/gameActionManager";
 import { ACTION_TYPE } from "./constants";
-import { GameAction } from "./gameActionManager";
 /**
  * 触发优先级
  */

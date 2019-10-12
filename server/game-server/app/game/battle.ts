@@ -1,8 +1,8 @@
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
+import GameActionManager from "./action/gameActionManager";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import GameActionManager from "./gameActionManager";
 import { COMMAND_ID, IUserCommand } from "./gameController";
 import Trigger from "./trigger";
 export default class Battle {

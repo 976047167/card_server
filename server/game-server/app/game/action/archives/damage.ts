@@ -1,6 +1,6 @@
-import BattleObject from "../battleObject";
-import BattlePlayer from "../battlePlayer";
-import { CARD_FIELD } from "../cardField/cardFieldBase";
+import BattleObject from "../../battleObject";
+import BattlePlayer from "../../battlePlayer";
+import { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { GameAction } from "../gameActionManager";
 
 export enum DAMAGE_TYPE {

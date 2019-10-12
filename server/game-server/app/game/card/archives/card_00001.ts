@@ -1,7 +1,6 @@
-import Damage from "../action/damage";
-import BattlePlayer, { IArgsUseHandCard } from "../battlePlayer";
-import { TIME_POINT } from "../constants";
-import CardBase from "./cardBase";
+import Damage from "../../action/archives/damage";
+import BattlePlayer, { IArgsUseHandCard } from "../../battlePlayer";
+import CardBase from "../cardBase";
 
 // attack
 /**
@@ -15,9 +14,9 @@ export default class Card00001 extends CardBase {
 
     private effect(args: IArgsUseHandCard) {
         const damageNum = this.controller.attribute.str;
-        const target = this.battle.getObjectByBId(args.targetBid, BattlePlayer);
+        const target = this.battle.getObjectByBId(args.targetBids[0], BattlePlayer);
         if (!target) { return; }
         const damage = new Damage(this.controller, target, damageNum);
-        damage.deal();
+        this.GAM.pushAction(damage);
     }
 }
