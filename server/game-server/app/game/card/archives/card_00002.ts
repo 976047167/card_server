@@ -4,7 +4,7 @@
  */
 import CardEffect from "../../action/archives/cardEffect";
 import Damage, { DamageSettle } from "../../action/archives/damage";
-import SendCardToField from "../../action/archives/sendCardToField";
+import MoveCard from "../../action/archives/moveCard";
 import Shuffle from "../../action/archives/shuffle";
 import { ACTION_STATE } from "../../action/gameActionManager";
 import { IArgsUseHandCard } from "../../battlePlayer";
@@ -32,13 +32,13 @@ export default class Card00002 extends CardBase {
         const deck = this.owner.getCardFiled(CARD_FIELD.DECK);
         const card = grave.getCardByIndex(0);
         if (card) {
-            this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
+            this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.DECK }));
         }
-        this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
+        this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.DECK }));
         this.GAM.pushAction(new Shuffle(this, { target: deck }));
     }
     private effect2(args: DamageSettle) {
-        this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
+        this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.DECK }));
         const deck = this.owner.getCardFiled(CARD_FIELD.DECK);
         this.GAM.pushAction(new Shuffle(this, { target: deck }));
     }

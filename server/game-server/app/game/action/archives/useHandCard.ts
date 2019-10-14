@@ -1,6 +1,5 @@
 import BattlePlayer, { IArgsUseHandCard } from "../../battlePlayer";
 import CardBase from "../../card/cardBase";
-import { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameActionManager";
 

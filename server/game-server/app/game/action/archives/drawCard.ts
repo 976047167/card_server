@@ -1,12 +1,15 @@
 import BattlePlayer from "../../battlePlayer";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
+import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameActionManager";
 
 export default class DrawCard extends GameAction {
     public readonly creator: BattlePlayer;
+    public readonly type: ACTION_TYPE;
     private number: number;
     constructor(creator, args?: {number: number}) {
         super(creator, args);
+        this.type = ACTION_TYPE.DRAW_CARD;
         if (args && args.number) {
             this.number = args.number;
         } else {

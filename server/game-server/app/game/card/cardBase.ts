@@ -1,5 +1,5 @@
 import CardEffect from "../action/archives/cardEffect";
-import SendCardToField from "../action/archives/sendCardToField";
+import MoveCard from "../action/archives/moveCard";
 import { ACTION_STATE, GameAction } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
@@ -99,7 +99,7 @@ export default class CardBase extends BattleObject {
                 if (args.after) {
                     args.after(result);
                 } else {
-                    this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.GRAVE }));
+                    this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.GRAVE }));
                 }
             }
         });

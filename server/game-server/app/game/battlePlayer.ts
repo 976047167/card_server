@@ -1,3 +1,4 @@
+import TurnBegin from "./action/archives/turnBegin";
 import UseHandCard from "./action/archives/useHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
@@ -6,7 +7,6 @@ import BuffBase from "./buff/buffBase";
 import CardBase from "./card/cardBase";
 import BattleDeck from "./cardField/battleDeck";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
-import { TIME_POINT } from "./constants";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -107,7 +107,7 @@ export default class BattlePlayer extends BattleObject {
     }
     public turnBegin() {
         console.log(this.uid, "turn begins");
-        // this.trigger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
+        this.GAM.pushAction(new TurnBegin(this));
     }
     public drawCard(cards: CardBase[]|CardBase) {
         // this.trigger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
