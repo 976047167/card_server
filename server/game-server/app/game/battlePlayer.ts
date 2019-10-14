@@ -107,7 +107,7 @@ export default class BattlePlayer extends BattleObject {
 
     }
 
-    public getNow() {
+    public getSituation() {
         return {
             hand: this.hand.getCardInfos(),
             grave: this.grave.getCardInfos(),

@@ -39,9 +39,9 @@ export default class GameController {
         if (!player) { return; }
         battle.command(command);
     }
-    public getNow(battleId: string) {
+    public getSituation(battleId: string) {
         const battle = this.getBattle(battleId);
-        const info = JSON.stringify(battle.getNow(), null, 2);
+        const info = JSON.stringify(battle.getSituation(), null, 2);
         console.log(info);
     }
     private getBattle(battleId: string) {

@@ -87,7 +87,7 @@ export default class Battle {
         }
     }
 
-    public getNow() {
+    public getSituation() {
         const reslut = {
             currentController: this.currentController.uid,
             players: [],
@@ -95,7 +95,7 @@ export default class Battle {
         const players = this.players.map((p) => {
             return {
                 uid: p.uid,
-                info: p.getNow(),
+                info: p.getSituation(),
             };
         });
         reslut.players = players;

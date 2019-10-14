@@ -35,7 +35,7 @@ function deal(id, cmd, args) {
             g.startBattle(gid);
             break;
         case "-b":
-            g.getNow(gid);
+            g.getSituation(gid);
             break;
         case "-c":
             g.command({
