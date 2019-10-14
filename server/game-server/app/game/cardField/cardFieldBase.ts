@@ -71,4 +71,9 @@ export default class CardFieldBase extends BattleObject {
     public getCardsNum() {
         return this.cards.length;
     }
+    public getCardInfos() {
+        return this.cards.map((c) => {
+            return c.info;
+        });
+    }
 }

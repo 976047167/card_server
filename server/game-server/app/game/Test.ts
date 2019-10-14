@@ -1,5 +1,6 @@
 import Battle from "./battle";
 import { IPlayerInfo } from "./battlePlayer";
+import { COMMAND_ID } from "./constants";
 import GameController from "./gameController";
 
 const readline = require("readline");
@@ -32,8 +33,17 @@ function deal(id, cmd, args) {
         case "-a":
             setPlayer();
             g.startBattle(gid);
-        case "-b":
             break;
+        case "-b":
+            g.getNow(gid);
+            break;
+        case "-c":
+            g.command({
+                uid: id,
+                commandId: COMMAND_ID.USE_HAND_CARD,
+                battleId: gid,
+                args: JSON.parse(args),
+            });
     }
 }
 function setPlayer() {

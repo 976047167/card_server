@@ -71,6 +71,9 @@ export default class BattlePlayer extends BattleObject {
         }
     }
 
+    public gameStart() {
+        this.drawCard();
+    }
     public useHandCard(args: IArgsUseHandCard) {
         const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
@@ -94,8 +97,9 @@ export default class BattlePlayer extends BattleObject {
     public turnBegin() {
         console.log(this.uid, "turn begins");
         this.GAM.pushAction(new TurnBegin(this));
+        this.drawCard();
     }
-    public drawCard(cards: CardBase[]|CardBase) {
+    public drawCard() {
         const hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
         if (hand > 0) {
             this.GAM.pushAction(new DrawCard(this, {number: hand}));
@@ -103,6 +107,15 @@ export default class BattlePlayer extends BattleObject {
 
     }
 
+    public getNow() {
+        return {
+            hand: this.hand.getCardInfos(),
+            grave: this.grave.getCardInfos(),
+            dealing: this.dealing.getCardInfos(),
+            removed: this.removed.getCardInfos(),
+            deck: this.deck.getCardInfos(),
+        };
+    }
     private initFiled() {
         this.deck = new BattleDeck(this);
         this.hand = new CardFieldBase(this);

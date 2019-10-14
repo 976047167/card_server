@@ -20,6 +20,10 @@ export enum ACTION_TYPE {
     TURN_BEGIN,
     SHUFFLE,
 }
+
+export enum COMMAND_ID {
+    USE_HAND_CARD,
+}
 export const SETTINGS = {
     ORIGIN_HAND : 4,
 };

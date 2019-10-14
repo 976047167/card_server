@@ -4,7 +4,8 @@ import Utils from "../libs/utils";
 import GameActionManager from "./action/gameActionManager";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import { COMMAND_ID, IUserCommand } from "./gameController";
+import { COMMAND_ID } from "./constants";
+import { IUserCommand } from "./gameController";
 import Trigger from "./trigger";
 export default class Battle {
     public get currentController(): BattlePlayer {
@@ -34,6 +35,9 @@ export default class Battle {
     }
     public start() {
         console.log("game start!", this.id);
+        this.players.forEach((p) => {
+            p.gameStart();
+        });
         this.newTurn();
     }
     public newTurn() {
@@ -82,6 +86,21 @@ export default class Battle {
                 break;
         }
     }
+
+    public getNow() {
+        const reslut = {
+            currentController: this.currentController.uid,
+            players: [],
+        };
+        const players = this.players.map((p) => {
+            return {
+                uid: p.uid,
+                info: p.getNow(),
+            };
+        });
+        reslut.players = players;
+        return reslut;
+    }
     private useHandCard(cmd: IUserCommand) {
         const args = cmd.args as IArgsUseHandCard;
         if (!args) {return; }
@@ -112,5 +131,4 @@ export default class Battle {
         this._currentController = act_players[0];
         return this._currentController;
     }
-
 }

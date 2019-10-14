@@ -1,13 +1,11 @@
 import Battle from "./battle";
 import { IPlayerInfo } from "./battlePlayer";
+import { COMMAND_ID } from "./constants";
 export interface IUserCommand {
     uid: string;
     battleId: string;
     commandId: COMMAND_ID;
     args?: any;
-}
-export enum COMMAND_ID {
-    USE_HAND_CARD,
 }
 export default class GameController {
     public static getInstance() {
@@ -40,6 +38,11 @@ export default class GameController {
         const player = battle.getPlayer(command.uid);
         if (!player) { return; }
         battle.command(command);
+    }
+    public getNow(battleId: string) {
+        const battle = this.getBattle(battleId);
+        const info = JSON.stringify(battle.getNow(), null, 2);
+        console.log(info);
     }
     private getBattle(battleId: string) {
         return this.battleMap[battleId];

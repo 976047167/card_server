@@ -35,6 +35,7 @@ export default class CardBase extends BattleObject {
         return this._controller;
     }
     public readonly owner: BattlePlayer;
+    public info: ICardData;
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
@@ -122,6 +123,7 @@ export default class CardBase extends BattleObject {
      * @param info 卡片信息，通常只要一个id，通过读表获取其他信息。如果传入其他属性，会覆盖默认属性
      */
     private initData(info: ICardData) {
+        this.info = info;
         //
     }
 }
