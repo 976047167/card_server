@@ -5,7 +5,7 @@ const g = GameController.getInstance();
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: "Input line, column & verion (eg: 1:1399 v-0.0.0).  ",
+    prompt: "Input ID, command & arg (eg: 1 -set 1).  ",
 });
 
 rl.prompt();
