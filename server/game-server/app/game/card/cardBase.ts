@@ -36,6 +36,7 @@ export default class CardBase extends BattleObject {
     }
     public readonly owner: BattlePlayer;
     public info: ICardData;
+    public readonly cardId: number;
     protected _type: CARD_TYPE;
     protected _name: string;
     protected _value: number;
@@ -45,6 +46,7 @@ export default class CardBase extends BattleObject {
         super(owner.battle);
         this.owner = owner;
         this._controller = this.owner;
+        this.cardId = data.cardId;
         this.initData(data);
         this.initEffect();
     }
@@ -99,8 +101,8 @@ export default class CardBase extends BattleObject {
             args.after = args.after.bind(this);
         }
         this.trigger.register(actionType, (action: GameAction) => {
-            if (action.state === ACTION_STATE.COMPLETED && action.target === this && !args.beffore ||
-                args.beffore(action)) {
+            if (action.state === ACTION_STATE.COMPLETED && action.target === this && (!args.beffore ||
+                args.beffore(action))) {
                 const cardEffect = new CardEffect(this, action.extraData);
                 this.GAM.pushAction(cardEffect);
                 let result;

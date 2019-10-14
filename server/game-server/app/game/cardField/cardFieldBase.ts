@@ -1,5 +1,4 @@
-import Battle from "../battle";
-import BattleObject, { BattleObjectId } from "../battleObject";
+import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardBase from "../card/cardBase";
 
@@ -73,7 +72,7 @@ export default class CardFieldBase extends BattleObject {
     }
     public getCardInfos() {
         return this.cards.map((c) => {
-            return c.info;
+            return [c.bId, c.info.cardId];
         });
     }
 }

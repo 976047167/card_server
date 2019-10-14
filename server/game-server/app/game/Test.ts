@@ -4,14 +4,11 @@ import { COMMAND_ID } from "./constants";
 import GameController from "./gameController";
 
 const readline = require("readline");
-const gid = createBattle();
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: "Input ID, command & arg (eg: 1 -set 1).  ",
 });
-
-rl.prompt();
 
 rl.on("line", (answer) => {
     answer.trim();
@@ -26,27 +23,29 @@ rl.on("line", (answer) => {
     process.exit(0);
 });
 
+const gid = initBattle();
+rl.prompt();
 function deal(id, cmd, args) {
+    const c = {cardBId: 14, targetBids: [22]};
     const g = GameController.getInstance();
     console.log(cmd);
     switch (cmd) {
         case "-a":
-            setPlayer();
-            g.startBattle(gid);
+            g.command({
+                uid: id,
+                commandId: COMMAND_ID.USE_HAND_CARD,
+                battleId: gid,
+                args: c,
+            });
             break;
         case "-b":
             g.getSituation(gid);
             break;
         case "-c":
-            g.command({
-                uid: id,
-                commandId: COMMAND_ID.USE_HAND_CARD,
-                battleId: gid,
-                args: JSON.parse(args),
-            });
+            break;
     }
 }
-function setPlayer() {
+function setPlayer(_gid) {
     const g = GameController.getInstance();
     const player1: IPlayerInfo = {
         uid: "1",
@@ -104,10 +103,12 @@ function setPlayer() {
             {cardId: 3},
         ],
     };
-    g.setPlayer(gid, [player1, player2]);
+    g.setPlayer(_gid, [player1, player2]);
 }
-function createBattle() {
+function initBattle() {
     const g = GameController.getInstance();
-    const id = g.createBattle(111);
-    return id;
+    const  gid = g.createBattle(111);
+    setPlayer(gid);
+    g.startBattle(gid);
+    return gid;
 }

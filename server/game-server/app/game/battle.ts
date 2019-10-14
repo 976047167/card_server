@@ -95,6 +95,7 @@ export default class Battle {
         const players = this.players.map((p) => {
             return {
                 uid: p.uid,
+                bid: p.bId,
                 info: p.getSituation(),
             };
         });

@@ -109,11 +109,11 @@ export default class BattlePlayer extends BattleObject {
 
     public getSituation() {
         return {
-            hand: this.hand.getCardInfos(),
-            grave: this.grave.getCardInfos(),
-            dealing: this.dealing.getCardInfos(),
-            removed: this.removed.getCardInfos(),
-            deck: this.deck.getCardInfos(),
+            hand: [this.hand.bId, this.hand.getCardInfos()],
+            grave: [this.grave.bId, this.grave.getCardInfos()],
+            dealing: [this.dealing.bId, this.dealing.getCardInfos()],
+            removed: [this.removed.bId, this.removed.getCardInfos()],
+            deck: [this.deck.bId, this.deck.getCardInfos()],
         };
     }
     private initFiled() {
