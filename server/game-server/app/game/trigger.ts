@@ -10,9 +10,14 @@ export enum TRIGGER_PRIORITY {
 }
 export type TriggerId = number;
 export default class Trigger {
-    private _triggerMap: { [action: number]: number[]  };
+    private _triggerMap: { [action: number]: number[]  } ;
     private _tid: TriggerId = 0;
-    private _tidMap: { [tid: number]: (args: any) => void };
+    private _tidMap: { [tid: number]: (args: any) => void } ;
+    constructor() {
+        this._tidMap = {};
+        this._triggerMap = {};
+
+    }
     public register(type: ACTION_TYPE , effect: (args: GameAction) => void): TriggerId {
         if (!this._triggerMap[type]) {
             this._triggerMap[type] = [];

@@ -81,6 +81,7 @@ export default class GameActionManager {
     constructor(battle: Battle) {
         this.battle = battle;
         this.trigger = battle.trigger;
+        this.actionsStack = [];
     }
     public pushAction(action: GameAction | GameAction[]) {
         if (action instanceof GameAction) {

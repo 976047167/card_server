@@ -40,11 +40,10 @@ export default class CardBase extends BattleObject {
     protected _value: number;
     protected _field: CardFieldBase;
     protected _controller: BattlePlayer;
-    constructor(data: ICardData, owner: BattlePlayer, field?: CardFieldBase) {
+    constructor(data: ICardData, owner: BattlePlayer) {
         super(owner.battle);
         this.owner = owner;
         this._controller = this.owner;
-        this.setFiled(field);
         this.initData(data);
         this.initEffect();
     }
@@ -59,6 +58,20 @@ export default class CardBase extends BattleObject {
             const f = this.controller.getCardFiled(field);
             this._field = f;
         }
+    }
+    public moveTo(field: CardFieldBase | CARD_FIELD) {
+        let target: CardFieldBase;
+        if (field instanceof CardFieldBase) {
+            target = field;
+        } else {
+            target = this.controller.getCardFiled(field);
+        }
+        if (!this.field) {
+            target.addCards(this);
+        } else {
+            this.field.moveCardsTo(this, target);
+        }
+
     }
     protected initEffect() {
         //

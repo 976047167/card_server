@@ -48,6 +48,23 @@ function setPlayer() {
             perception: 1,
             intellect: 0,
         },
+        cards: [
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 2},
+            {cardId: 3},
+        ],
     };
     const player2: IPlayerInfo = {
         uid: "2",
@@ -59,6 +76,23 @@ function setPlayer() {
             perception: 1,
             intellect: 0,
         },
+        cards: [
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 1},
+            {cardId: 2},
+            {cardId: 3},
+        ],
     };
     g.setPlayer(gid, [player1, player2]);
 }

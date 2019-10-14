@@ -4,18 +4,19 @@ import BattlePlayer from "../battlePlayer";
 import CardBase from "../card/cardBase";
 
 export enum CARD_FIELD {
-    DECK = 1,
-    HAND,
-    GRAVE,
-    REMOVED,
-    DEALING,
+    DECK = "deck",
+    HAND= "hand",
+    GRAVE= "grave",
+    REMOVED= "removed",
+    DEALING= "dealing",
 }
 export default class CardFieldBase extends BattleObject {
-    public readonly name: string;
+    public readonly type: CARD_FIELD;
     public readonly owner: BattlePlayer;
     protected cards: CardBase[];
     constructor(owner: BattlePlayer) {
         super(owner.battle);
+        this.cards = [];
         this.owner = this.owner;
     }
     /**
@@ -45,7 +46,7 @@ export default class CardFieldBase extends BattleObject {
         cards.forEach((card) => {
             const cardindex = this.cards.indexOf(card);
             if (cardindex === -1) {
-                console.log("card is not in the filed!", card.name, this.name);
+                console.log("card is not in the filed!", card.name, this.type);
                 return;
             }
             card.setFiled();
@@ -66,5 +67,8 @@ export default class CardFieldBase extends BattleObject {
     }
     public getCardByIndex(index: number) {
         if (this.cards[index]) { return this.cards[index]; }
+    }
+    public getCardsNum() {
+        return this.cards.length;
     }
 }

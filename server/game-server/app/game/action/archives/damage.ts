@@ -51,9 +51,9 @@ export class DamageSettle extends GameAction {
         const card = deck.getCardByIndex(0);
         if (!card) {return; }
         if (this.extraData.settledNumber < this.target.attribute.derive.tenacious) {
-            card.setFiled(CARD_FIELD.GRAVE);
+            card.moveTo(CARD_FIELD.GRAVE);
         } else {
-            card.setFiled(CARD_FIELD.REMOVED);
+            card.moveTo(CARD_FIELD.REMOVED);
         }
         this.extraData.settledNumber += card.value;
         this.extraData.settledCardBid = card.bId;

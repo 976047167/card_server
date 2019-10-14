@@ -1,12 +1,14 @@
+import DrawCard from "./action/archives/drawCard";
 import TurnBegin from "./action/archives/turnBegin";
 import UseHandCard from "./action/archives/useHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BuffBase from "./buff/buffBase";
-import CardBase from "./card/cardBase";
+import CardBase, { ICardData } from "./card/cardBase";
 import BattleDeck from "./cardField/battleDeck";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
+import { SETTINGS } from "./constants";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -17,6 +19,7 @@ export interface IPlayerInfo {
         intellect: number,
         spirit: number,
     };
+    cards: ICardData[];
 }
 export interface IArgsUseHandCard {
     cardBId: BattleObjectId;
@@ -76,23 +79,6 @@ export default class BattlePlayer extends BattleObject {
         this.GAM.pushAction(action);
     }
     /**
-     * 洗牌
-     * @param field 区域,可以传多个
-     */
-    public shuffle(fields: CARD_FIELD | CARD_FIELD[]) {
-        const cardFields: CardFieldBase[] = [];
-        if (fields instanceof Array) {
-            fields.forEach((field) => {
-                cardFields.push(this.getCardFiled(field));
-            });
-        } else {
-            cardFields.push(this.getCardFiled(fields));
-        }
-        cardFields.forEach((cardField) => {
-            cardField.shuffle();
-        });
-    }
-    /**
      * 先攻进度
      */
     public doStrike() {
@@ -110,8 +96,11 @@ export default class BattlePlayer extends BattleObject {
         this.GAM.pushAction(new TurnBegin(this));
     }
     public drawCard(cards: CardBase[]|CardBase) {
-        // this.trigger.notify(this, TIME_POINT.PLAYER_DRAW_CARD, cards);
-        //
+        const hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
+        if (hand > 0) {
+            this.GAM.pushAction(new DrawCard(this, {number: hand}));
+        }
+
     }
 
     private initFiled() {

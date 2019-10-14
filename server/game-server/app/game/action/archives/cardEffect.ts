@@ -13,6 +13,6 @@ export default class CardEffect extends GameAction {
         this.target = this.battle.getObjectByBId(args.targetBids[0]);
     }
     protected deal() {
-        this.creator.setFiled(CARD_FIELD.DEALING);
+        this.creator.moveTo(CARD_FIELD.DEALING);
     }
 }
