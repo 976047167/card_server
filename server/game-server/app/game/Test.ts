@@ -1,8 +1,9 @@
+import Battle from "./battle";
+import { IPlayerInfo } from "./battlePlayer";
 import GameController from "./gameController";
 
 const readline = require("readline");
-const g = GameController.getInstance();
-const gid = g.createBattle(111);
+const gid = createBattle();
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -25,7 +26,45 @@ rl.on("line", (answer) => {
 });
 
 function deal(id, cmd, args) {
+    const g = GameController.getInstance();
+    const battle: Battle = g.getBattle(gid);
+    console.log(cmd);
     switch (cmd) {
-        case "-c":
+        case "-s":
+            setPlayer();
     }
+}
+function setPlayer() {
+    const g = GameController.getInstance();
+    const battle: Battle = g.getBattle(gid);
+    const player1: IPlayerInfo = {
+        uid: "1",
+        attribute: {
+            spirit: 1,
+            agile: 1,
+            stamina: 1,
+            strength: 1,
+            perception: 1,
+            intellect: 0,
+        },
+    };
+    const player2: IPlayerInfo = {
+        uid: "2",
+        attribute: {
+            spirit: 1,
+            agile: 1,
+            stamina: 1,
+            strength: 1,
+            perception: 1,
+            intellect: 0,
+        },
+    };
+    battle.setPlayer([player1, player2]);
+    console.log("add player");
+}
+function createBattle() {
+    const g = GameController.getInstance();
+    const id = g.createBattle(111);
+    const battle: Battle = g.getBattle(id);
+    return id;
 }

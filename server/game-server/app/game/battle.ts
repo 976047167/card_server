@@ -1,3 +1,4 @@
+import uuid = require("uuid");
 import MersenneTwister from "../libs/mersenneTwister";
 import Utils from "../libs/utils";
 import GameActionManager from "./action/gameActionManager";
@@ -20,6 +21,8 @@ export default class Battle {
     private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
+        this.id = uuid.v1();
+        this.bidMap = {};
         this.trigger = new Trigger();
         this.actionManager = new GameActionManager(this);
     }

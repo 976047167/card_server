@@ -16,10 +16,11 @@ export default class GameController {
     private static _instance: GameController;
     private battleMap: { [battleId: string]: Battle };
     private constructor() {
-        //
+        this.battleMap = {};
     }
     public createBattle(seed: number) {
         const battle = new Battle(seed);
+        this.battleMap[battle.id] = battle;
         return battle.id;
     }
     public startBattle(b: Battle) {
