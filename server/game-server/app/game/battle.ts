@@ -33,6 +33,7 @@ export default class Battle {
         this.players = players;
     }
     public start() {
+        console.log("game start!", this.id);
         this.newTurn();
     }
     public newTurn() {

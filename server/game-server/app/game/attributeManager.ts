@@ -56,24 +56,25 @@ export default class AttributeManager implements IAttribute {
      * 衍生属性
      */
     public get derive() {
+        const _this = this;
         return {
             /**
              * 免疫
              */
             get immunity(): number {
-                return this.sta + this.spi;
+                return _this.sta + _this.spi;
             },
             /**
              * 强韧
              */
             get tenacious(): number {
-                return this.sta + this.spi;
+                return _this.sta + _this.spi;
             },
             /**
              * 先攻值
              */
             get initiative(): number {
-                return this.per + this.agi;
+                return _this.per + _this.agi;
             },
         };
     }
@@ -142,5 +143,6 @@ export default class AttributeManager implements IAttribute {
             sta: info.attribute.stamina,
             str: info.attribute.strength,
         };
+        console.log("initAttribute", this.baseAttribute);
     }
 }

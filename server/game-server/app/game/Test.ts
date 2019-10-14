@@ -27,16 +27,17 @@ rl.on("line", (answer) => {
 
 function deal(id, cmd, args) {
     const g = GameController.getInstance();
-    const battle: Battle = g.getBattle(gid);
     console.log(cmd);
     switch (cmd) {
-        case "-s":
+        case "-a":
             setPlayer();
+            g.startBattle(gid);
+        case "-b":
+            break;
     }
 }
 function setPlayer() {
     const g = GameController.getInstance();
-    const battle: Battle = g.getBattle(gid);
     const player1: IPlayerInfo = {
         uid: "1",
         attribute: {
@@ -59,12 +60,10 @@ function setPlayer() {
             intellect: 0,
         },
     };
-    battle.setPlayer([player1, player2]);
-    console.log("add player");
+    g.setPlayer(gid, [player1, player2]);
 }
 function createBattle() {
     const g = GameController.getInstance();
     const id = g.createBattle(111);
-    const battle: Battle = g.getBattle(id);
     return id;
 }

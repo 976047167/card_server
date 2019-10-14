@@ -97,6 +97,7 @@ export default class BattlePlayer extends BattleObject {
      */
     public doStrike() {
         this._strikeProgress += this.attribute.derive.initiative;
+        console.log("do strike", this.uid, this._strikeProgress);
     }
     /**
      * 行动完成后清空进度值
@@ -105,6 +106,7 @@ export default class BattlePlayer extends BattleObject {
         this._strikeProgress = 0;
     }
     public turnBegin() {
+        console.log(this.uid, "turn begins");
         // this.trigger.notify(this, TIME_POINT.PLAYER_TURN_BEGIN);
     }
     public drawCard(cards: CardBase[]|CardBase) {
