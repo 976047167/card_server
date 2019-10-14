@@ -14,7 +14,8 @@
             ]
         },
         "max-classes-per-file" : true,
-        "object-literal-sort-keys":false
+        "object-literal-sort-keys":false,
+        "no-empty":false
     },
     "rulesDirectory": []
 }

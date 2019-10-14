@@ -15,9 +15,6 @@ export default class UseHandCard extends GameAction {
         this.type = ACTION_TYPE.USE_HAND_CARD;
     }
     protected deal() {
-        const handField = this.creator.getCardFiled(CARD_FIELD.HAND);
-        const dealField = this.creator.getCardFiled(CARD_FIELD.DEALING);
-        const card = this.target;
-        handField.moveCardsTo(card, dealField);
+        //
     }
 }

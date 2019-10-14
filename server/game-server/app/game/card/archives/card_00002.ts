@@ -15,14 +15,15 @@ import CardBase from "../cardBase";
 export default class Card00002 extends CardBase {
     protected initEffect() {
         super.initEffect();
-        this.registerCardEffect(ACTION_TYPE.USE_HAND_CARD, { effect: this.effect1, after: () => {}});
-        this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, { effect: this.effect2,
+        this.registerCardEffect(ACTION_TYPE.USE_HAND_CARD, { effect: this.effect1, after: () => { } });
+        this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, {
+            effect: this.effect2,
             beffore: (action: DamageSettle) => {
                 if (action.state === ACTION_STATE.COMPLETED && action.extraData.settledCardBid === this.bId) {
                     return true;
                 }
                 return false;
-            }, after: () => {},
+            }, after: () => { },
         });
     }
 
@@ -31,15 +32,15 @@ export default class Card00002 extends CardBase {
         const deck = this.owner.getCardFiled(CARD_FIELD.DECK);
         const card = grave.getCardByIndex(0);
         if (card) {
-            this.GAM.pushAction(new SendCardToField(this, {target: CARD_FIELD.DECK}));
+            this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
         }
-        this.GAM.pushAction(new SendCardToField(this, {target: CARD_FIELD.DECK}));
-        this.GAM.pushAction(new Shuffle(this, {target: deck}));
+        this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
+        this.GAM.pushAction(new Shuffle(this, { target: deck }));
     }
     private effect2(args: DamageSettle) {
-        this.GAM.pushAction(new SendCardToField(this, {target: CARD_FIELD.DECK}));
+        this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.DECK }));
         const deck = this.owner.getCardFiled(CARD_FIELD.DECK);
-        this.GAM.pushAction(new Shuffle(this, {target: deck}));
+        this.GAM.pushAction(new Shuffle(this, { target: deck }));
     }
 
 }

@@ -3,7 +3,7 @@ import SendCardToField from "../action/archives/sendCardToField";
 import { ACTION_STATE, GameAction } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
-import CardFieldBase, { CARD_FIELD} from "../cardField/cardFieldBase";
+import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../constants";
 
 export enum CARD_TYPE {
@@ -48,7 +48,7 @@ export default class CardBase extends BattleObject {
         this.initData(data);
         this.initEffect();
     }
-    public setFiled(field?: CardFieldBase|CARD_FIELD) {
+    public setFiled(field?: CardFieldBase | CARD_FIELD) {
         if (!field) {
             this._field = null;
             return;
@@ -61,7 +61,7 @@ export default class CardBase extends BattleObject {
         }
     }
     protected initEffect() {
-
+        //
     }
     /**
      * 注册效果，在卡牌效果确定发动时执行
@@ -91,12 +91,15 @@ export default class CardBase extends BattleObject {
                 this.GAM.pushAction(cardEffect);
                 let result;
                 if (cardEffect.state === ACTION_STATE.COMPLETED) {
-                   result = effect(action);
+                    result = effect(action);
+                }
+                if (this.field !== this.controller.getCardFiled(CARD_FIELD.DEALING)) {
+                    return;
                 }
                 if (args.after) {
                     args.after(result);
                 } else {
-                    this.GAM.pushAction(new SendCardToField(this, {target: CARD_FIELD.GRAVE}));
+                    this.GAM.pushAction(new SendCardToField(this, { target: CARD_FIELD.GRAVE }));
                 }
             }
         });
@@ -109,4 +112,3 @@ export default class CardBase extends BattleObject {
         //
     }
 }
-
