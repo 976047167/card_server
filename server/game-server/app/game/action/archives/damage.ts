@@ -50,7 +50,8 @@ export class DamageSettle extends GameAction {
         this.type = ACTION_TYPE.DAMAGE_SETTLE;
     }
     public deal() {
-        console.log("deal Damage", this.extraData.settledNumber);
+        this.extraData.settledCardBid = null;
+        console.log("deal Damage", this.extraData.settledNumber, this.extraData.totalNumber);
         if (this.extraData.settledNumber >= this.extraData.totalNumber) {
             return;
         }
