@@ -1,6 +1,7 @@
 import BattleObject from "../../battleObject";
 import BattlePlayer from "../../battlePlayer";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
+import { ACTION_TYPE } from "../../constants";
 import { ACTION_STATE, GameAction } from "../gameActionManager";
 
 export interface IDamageSettleArg {
@@ -15,10 +16,12 @@ export enum DAMAGE_TYPE {
 }
 export default class Damage extends GameAction {
     public readonly target: BattlePlayer;
+    public readonly type: ACTION_TYPE;
     private damageNum: number;
     constructor(creator: BattleObject, args: {target: BattlePlayer, damageNum: number}) {
         super(creator, args);
         this.damageNum = args.damageNum;
+        this.type = ACTION_TYPE.DAMAGE;
     }
 
     /**
@@ -40,8 +43,10 @@ export default class Damage extends GameAction {
 export class DamageSettle extends GameAction {
     public readonly target: BattlePlayer;
     public readonly extraData: IDamageSettleArg;
+    public readonly type: ACTION_TYPE;
     constructor(creator, args: IDamageSettleArg) {
         super(creator, args);
+        this.type = ACTION_TYPE.DAMAGE_SETTLE;
     }
     public deal() {
         if (this.extraData.settledNumber >= this.extraData.totalNumber) {

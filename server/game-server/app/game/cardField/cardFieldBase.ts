@@ -35,7 +35,7 @@ export default class CardFieldBase extends BattleObject {
      * 移动卡片至其他区域
      * @param cards 要移动的卡片，可以是数组或单卡
      * @param target 移动的目标
-     * @param index 移动到指定位置，可以省略，默认移动到最下方
+     * @param index 移动到指定位置，可以省略，默认移动到最上方
      */
     public moveCardsTo(cards: CardBase[]|CardBase, target: CardFieldBase, index?: number) {
         const reslut = [];
@@ -54,8 +54,7 @@ export default class CardFieldBase extends BattleObject {
         });
         target.addCards(reslut, index);
     }
-    public addCards(cards: CardBase[]|CardBase, index?: number) {
-        if (!index) { index = this.cards.length - 1; }
+    public addCards(cards: CardBase[]|CardBase, index: number = 0) {
         if (cards instanceof CardBase) {
             cards = [cards];
         }

@@ -100,25 +100,34 @@ export default class CardBase extends BattleObject {
         if (args.after) {
             args.after = args.after.bind(this);
         }
+        let cardEffect: CardEffect;
         this.trigger.register(actionType, (action: GameAction) => {
             if (action.state === ACTION_STATE.COMPLETED && action.target === this && (!args.beffore ||
                 args.beffore(action))) {
-                const cardEffect = new CardEffect(this, action.extraData);
+                cardEffect = new CardEffect(this, action.extraData);
                 this.GAM.pushAction(cardEffect);
-                let result;
-                if (cardEffect.state === ACTION_STATE.COMPLETED) {
+            }
+        });
+        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: CardEffect) => {
+            let result;
+            if (action !== cardEffect) { return; }
+            if (action.state !==  ACTION_STATE.COMPLETED && action.state !== ACTION_STATE.REJECTED ) {
+                return;
+            }
+            if (action.state === ACTION_STATE.COMPLETED) {
                     result = effect(action);
-                }
-                if (this.field !== this.controller.getCardFiled(CARD_FIELD.DEALING)) {
+            }
+
+            if (this.field !== this.controller.getCardFiled(CARD_FIELD.DEALING)) {
                     return;
                 }
-                if (args.after) {
+            if (args.after) {
                     args.after(result);
                 } else {
                     this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.GRAVE }));
                 }
-            }
-        });
+
+            });
     }
     /**
      * 加载卡片信息
