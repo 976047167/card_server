@@ -1,7 +1,7 @@
 import { DecoratorId, IAttribute } from "../attributeManager";
 import BattleObject, { BattleObjectId } from "../battleObject";
 import BattlePlayer from "../battlePlayer";
-import { TIME_POINT } from "../constants";
+import { ACTION_TYPE } from "../constants";
 import { TriggerId } from "../trigger";
 
 export enum BUFF_TYPE {
@@ -94,9 +94,9 @@ export default class BuffBase  extends BattleObject {
     protected initTrigger() {
         return true;
     }
-    protected registerBuffEffect(bid: BattleObjectId, timePoint: TIME_POINT, effect: (args: any) => any) {
+    protected registerBuffEffect(type: ACTION_TYPE, effect: (args: any) => any) {
         effect = effect.bind(this);
-        const tid = this.trigger.register(bid, timePoint, effect);
+        const tid = this.trigger.register(type, effect);
         this.tids.push(tid);
     }
     private uninitTrigger() {
