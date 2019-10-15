@@ -37,6 +37,7 @@ export default class Damage extends GameAction {
             settledNumber: 0,
             settledCardBid: 0,
         };
+        console.log("Damage", this.damageNum);
         this.GAM.pushAction(new DamageSettle(this.creator, args));
     }
 }
@@ -49,11 +50,13 @@ export class DamageSettle extends GameAction {
         this.type = ACTION_TYPE.DAMAGE_SETTLE;
     }
     public deal() {
+        console.log("deal Damage", this.extraData.settledNumber);
         if (this.extraData.settledNumber >= this.extraData.totalNumber) {
             return;
         }
         const deck = this.target.getCardFiled(CARD_FIELD.DECK);
         const card = deck.getCardByIndex(0);
+        console.log("settleCard", card.bId);
         if (!card) {return; }
         if (this.extraData.settledNumber < this.target.attribute.derive.tenacious) {
             card.moveTo(CARD_FIELD.GRAVE);

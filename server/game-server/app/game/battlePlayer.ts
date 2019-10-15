@@ -6,8 +6,9 @@ import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BuffBase from "./buff/buffBase";
 import CardBase, { ICardData } from "./card/cardBase";
-import BattleDeck from "./cardField/battleDeck";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
+import FieldDeck from "./cardField/fieldDeck";
+import FieldGrave from "./cardField/fieldGrave";
 import { SETTINGS } from "./constants";
 export interface IPlayerInfo {
     uid: string;
@@ -36,7 +37,7 @@ export default class BattlePlayer extends BattleObject {
     public _strikeProgress: number = 0;
     public readonly attribute: AttributeManager;
     private playerInfo: IPlayerInfo;
-    private deck: BattleDeck;
+    private deck: FieldDeck;
     private removed: CardFieldBase;
     private grave: CardFieldBase;
     private hand: CardFieldBase;
@@ -117,9 +118,9 @@ export default class BattlePlayer extends BattleObject {
         };
     }
     private initFiled() {
-        this.deck = new BattleDeck(this);
+        this.deck = new FieldDeck(this);
         this.hand = new CardFieldBase(this);
-        this.grave = new CardFieldBase(this);
+        this.grave = new FieldGrave(this);
         this.removed = new CardFieldBase(this);
         this.dealing = new CardFieldBase(this);
     }

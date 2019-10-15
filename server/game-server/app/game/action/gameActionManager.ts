@@ -109,6 +109,7 @@ export default class GameActionManager {
         }
     }
     private doneAcions() {
+        console.log("action done");
         this.isDealing = false;
 
     }

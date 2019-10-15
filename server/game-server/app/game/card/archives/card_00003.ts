@@ -11,12 +11,7 @@ export default class Card00003 extends CardBase {
     protected initEffect() {
         super.initEffect();
         this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, { effect: this.effect2,
-            beffore: (action: DamageSettle) => {
-                if (action.state === ACTION_STATE.COMPLETED && action.extraData.settledCardBid === this.bId) {
-                    return true;
-                }
-                return false;
-            },
+            beffore: this.counterEffect,
         });
     }
 

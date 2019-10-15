@@ -1,4 +1,5 @@
 import CardEffect from "../action/archives/cardEffect";
+import { DamageSettle, IDamageSettleArg } from "../action/archives/damage";
 import MoveCard from "../action/archives/moveCard";
 import { ACTION_STATE, GameAction } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
@@ -102,8 +103,8 @@ export default class CardBase extends BattleObject {
         }
         let cardEffect: CardEffect;
         this.trigger.register(actionType, (action: GameAction) => {
-            if (action.state === ACTION_STATE.COMPLETED && action.target === this && (!args.beffore ||
-                args.beffore(action))) {
+            if (action.state === ACTION_STATE.COMPLETED && action.target === this ||
+                args.beffore && args.beffore(action)) {
                 cardEffect = new CardEffect(this, action.extraData);
                 this.GAM.pushAction(cardEffect);
             }
@@ -115,7 +116,8 @@ export default class CardBase extends BattleObject {
                 return;
             }
             if (action.state === ACTION_STATE.COMPLETED) {
-                    result = effect(action);
+                console.log("card effect trigger!", this.info.cardId);
+                result = effect(action);
             }
 
             if (this.field !== this.controller.getCardFiled(CARD_FIELD.DEALING)) {
@@ -129,12 +131,20 @@ export default class CardBase extends BattleObject {
 
             });
     }
+    protected counterEffect(action: DamageSettle) {
+        if (action.state === ACTION_STATE.COMPLETED &&
+            action.extraData.settledCardBid === this.bId &&
+            this.field.type === CARD_FIELD.GRAVE) {
+            return true;
+        }
+        return false;
+    }
     /**
      * 加载卡片信息
      * @param info 卡片信息，通常只要一个id，通过读表获取其他信息。如果传入其他属性，会覆盖默认属性
      */
-    private initData(info: ICardData) {
+    protected initData(info: ICardData) {
         this.info = info;
-        //
+        this._value = 2; //
     }
 }

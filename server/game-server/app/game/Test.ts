@@ -53,7 +53,7 @@ function setPlayer(_gid) {
             spirit: 1,
             agile: 1,
             stamina: 1,
-            strength: 1,
+            strength: 10,
             perception: 1,
             intellect: 0,
         },
@@ -80,7 +80,7 @@ function setPlayer(_gid) {
         attribute: {
             spirit: 1,
             agile: 1,
-            stamina: 1,
+            stamina: 5,
             strength: 1,
             perception: 1,
             intellect: 0,
