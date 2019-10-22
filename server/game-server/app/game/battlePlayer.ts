@@ -79,6 +79,7 @@ export default class BattlePlayer extends BattleObject {
         const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
+
         const action = new UseHandCard(this, args);
         this.GAM.pushAction(action);
     }
@@ -100,13 +101,6 @@ export default class BattlePlayer extends BattleObject {
         this.GAM.pushAction(new TurnBegin(this));
         this.drawCard();
     }
-    public drawCard() {
-        const hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
-        if (hand > 0) {
-            this.GAM.pushAction(new DrawCard(this, {number: hand}));
-        }
-
-    }
 
     public getSituation() {
         return {
@@ -116,6 +110,13 @@ export default class BattlePlayer extends BattleObject {
             removed: [this.removed.bId, this.removed.getCardInfos()],
             deck: [this.deck.bId, this.deck.getCardInfos()],
         };
+    }
+    private drawCard() {
+        const hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
+        if (hand > 0) {
+            this.GAM.pushAction(new DrawCard(this, {number: hand}));
+        }
+
     }
     private initFiled() {
         this.deck = new FieldDeck(this);

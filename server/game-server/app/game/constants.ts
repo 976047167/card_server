@@ -11,6 +11,7 @@ export enum ACTION_TYPE {
 
 export enum COMMAND_ID {
     USE_HAND_CARD,
+    TURN_END,
 }
 export const SETTINGS = {
     ORIGIN_HAND : 4,

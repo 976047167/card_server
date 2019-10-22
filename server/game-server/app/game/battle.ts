@@ -40,16 +40,12 @@ export default class Battle {
         });
         this.newTurn();
     }
-    public newTurn() {
-        this._currentController = this.calNextController();
-        this.currentController.turnBegin();
-        // push
-    }
-    public turnEnd() {
-        this.currentController.endStike();
-        this.newTurn();
-    }
-
+    /**
+     * 获取随机数，采用伪随机算法，确保还原日志。范围为[min,max)
+     * @param min 下限
+     * @param max 上限
+     * @param integer 是否为整数，如果为真的话,范围为[min,max]
+     */
     public getRandom(min= 0, max = 1, integer = true) {
         const r = this.random.rnd();
         if (!integer) {
@@ -58,6 +54,10 @@ export default class Battle {
             return Math.floor(min + (max + 1 - min) * r);
         }
     }
+    /**
+     * 根据uid获取player对象
+     * @param uid
+     */
     public getPlayer(uid: string) {
         let player: BattlePlayer;
         for (const p of this.players) {
@@ -82,11 +82,16 @@ export default class Battle {
             case COMMAND_ID.USE_HAND_CARD:
                 this.useHandCard(cmd);
                 break;
+            case COMMAND_ID.TURN_END:
+                this.turnEnd(cmd);
             default:
                 break;
         }
     }
 
+    /**
+     * 获取当前场上信息，重连时会用到
+     */
     public getSituation() {
         const reslut = {
             currentController: this.currentController.uid,
@@ -101,6 +106,17 @@ export default class Battle {
         });
         reslut.players = players;
         return reslut;
+    }
+    private newTurn() {
+        this._currentController = this.calNextController();
+        this.currentController.turnBegin();
+        // push
+    }
+    private turnEnd(cmd: IUserCommand) {
+        const player = this.getPlayer(cmd.uid);
+        if (player !== this.currentController) {return; }
+        this.currentController.endStike();
+        this.newTurn();
     }
     private useHandCard(cmd: IUserCommand) {
         const args = cmd.args as IArgsUseHandCard;
