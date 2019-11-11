@@ -56,7 +56,7 @@ export class GameAction {
         this._state = foo;
         this.trigger.notify(this);
     }
-    public doTrriger() {
+    public doTrigger() {
         this.state = ACTION_STATE.TRIGGERED;
     }
     public doDeal() {
@@ -97,9 +97,11 @@ export default class GameActionManager {
         const len = this.actionsStack.length;
         const action = this.actionsStack[len - 1];
         if (action.state === ACTION_STATE.UNTRIGGERED) {
-            action.doTrriger();
+            console.log("action trigger", action.type);
+            action.doTrigger();
         } else {
             this.actionsStack.pop();
+            console.log("action dealing", action.type);
             action.doDeal();
         }
         if (this.actionsStack.length !== 0) {
