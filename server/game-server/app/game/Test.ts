@@ -42,6 +42,11 @@ function deal(id, cmd, args) {
             g.getSituation(gid);
             break;
         case "-c":
+            g.command({
+                uid: id,
+                commandId: COMMAND_ID.TURN_END,
+                battleId: gid,
+            });
             break;
     }
 }
