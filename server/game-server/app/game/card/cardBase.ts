@@ -112,7 +112,7 @@ export default class CardBase extends BattleObject {
         this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: CardEffect) => {
             let result;
             if (action !== cardEffect) { return; }
-            if (action.state !==  ACTION_STATE.COMPLETED && action.state !== ACTION_STATE.REJECTED ) {
+            if (action.state !== ACTION_STATE.COMPLETED && action.state !== ACTION_STATE.REJECTED) {
                 return;
             }
             if (action.state === ACTION_STATE.COMPLETED) {
@@ -121,15 +121,15 @@ export default class CardBase extends BattleObject {
             }
 
             if (this.field !== this.controller.getCardFiled(CARD_FIELD.DEALING)) {
-                    return;
-                }
+                return;
+            }
             if (args.after) {
-                    args.after(result);
-                } else {
-                    this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.GRAVE }));
-                }
+                args.after(result);
+            } else {
+                this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.GRAVE }));
+            }
 
-            });
+        });
     }
     protected counterEffect(action: DamageSettle) {
         if (action.state === ACTION_STATE.COMPLETED &&

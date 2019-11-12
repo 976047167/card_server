@@ -1,5 +1,4 @@
 import BattlePlayer from "../battlePlayer";
-import CardFieldBase from "../cardField/cardFieldBase";
 import CardBase, { ICardData } from "./cardBase";
 import { CardIndex } from "./cardIndex";
 export class CardFactory {
