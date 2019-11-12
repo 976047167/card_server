@@ -115,7 +115,7 @@ export default class Battle {
     private turnEnd(cmd: IUserCommand) {
         const player = this.getPlayer(cmd.uid);
         if (player !== this.currentController) {return; }
-        this.currentController.endStike();
+        this.currentController.turnEnd();
         this.newTurn();
     }
     private useHandCard(cmd: IUserCommand) {

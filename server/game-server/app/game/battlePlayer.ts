@@ -1,5 +1,6 @@
 import DrawCard from "./action/archives/drawCard";
 import TurnBegin from "./action/archives/turnBegin";
+import TurnEnd from "./action/archives/turnEnd";
 import UseHandCard from "./action/archives/useHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
@@ -93,7 +94,8 @@ export default class BattlePlayer extends BattleObject {
     /**
      * 行动完成后清空进度值
      */
-    public endStike() {
+    public turnEnd() {
+        this.GAM.pushAction(new TurnEnd(this));
         this._strikeProgress = 0;
     }
     public turnBegin() {
@@ -112,10 +114,11 @@ export default class BattlePlayer extends BattleObject {
         };
     }
     private drawCard() {
-        const hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
-        if (hand > 0) {
-            this.GAM.pushAction(new DrawCard(this, {number: hand}));
+        let hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
+        if (hand < 0) {
+            hand = 0;
         }
+        this.GAM.pushAction(new DrawCard(this, {number: hand}));
 
     }
     private initFiled() {

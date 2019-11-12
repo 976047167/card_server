@@ -7,10 +7,10 @@ export default class DrawCard extends GameAction {
     public readonly creator: BattlePlayer;
     public readonly type: ACTION_TYPE;
     private number: number;
-    constructor(creator: BattlePlayer, args?: {number: number}) {
+    constructor(creator: BattlePlayer, args?: { number: number }) {
         super(creator, args);
         this.type = ACTION_TYPE.DRAW_CARD;
-        if (args && args.number) {
+        if (args && args.number != null) {
             this.number = args.number;
         } else {
             this.number = 1;
