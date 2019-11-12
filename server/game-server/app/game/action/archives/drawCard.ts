@@ -17,12 +17,14 @@ export default class DrawCard extends GameAction {
         }
     }
     protected deal() {
+        const cards = [];
         for (let i = 0; i < this.number; i++) {
             const deck = this.creator.getCardFiled(CARD_FIELD.DECK);
             const hand = this.creator.getCardFiled(CARD_FIELD.HAND);
             const card = deck.getCardByIndex(0);
             deck.moveCardsTo(card, hand);
+            cards.push(card);
         }
-
+        this.extraData.cards = cards;
     }
 }

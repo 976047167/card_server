@@ -69,6 +69,10 @@ export class GameAction {
     protected deal() {
         //
     }
+    /**
+     * 主要用来生成log,用于客户端表现。
+     * 需要注意深拷贝数据,防止引用
+     */
     protected done() {
         //
     }
