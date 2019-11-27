@@ -18,7 +18,6 @@ export default class Battle {
     private random: MersenneTwister;
     private _currentController: BattlePlayer;
     private bidMap: {[bId: number]: BattleObject}; // 场景里所有物体都有对应的bid，用于检索所有对象
-    private _bid: BattleObjectId = 0; // 自增用的id
     private _sameStrike = false; // 是否有多个相同先攻权
     constructor(seed: number) {
         this.random = Utils.getRandom(seed);
