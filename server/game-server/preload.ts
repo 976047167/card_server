@@ -1,6 +1,6 @@
-﻿import {Promise} from 'bluebird';
+import {Promise} from "bluebird";
 // 支持注解
-import 'reflect-metadata';
+import "reflect-metadata";
 
 /**
  *  替换全局Promise
@@ -19,21 +19,21 @@ export function preload() {
         // Enable cancellation
         cancellation: true,
         // Enable monitoring
-        monitoring: true
+        monitoring: true,
     });
 
     // 自动解析ts的sourcemap
-    require('source-map-support').install({
-        handleUncaughtExceptions: false
+    require("source-map-support").install({
+        handleUncaughtExceptions: false,
     });
 
     // 捕获普通异常
-    process.on('uncaughtException', function (err) {
-        console.error('Caught exception: ' + err.stack);
+    process.on("uncaughtException", function(err) {
+        console.error("Caught exception: " + err.stack);
     });
 
     // 捕获async异常
-    process.on('unhandledRejection', (reason, p) => {
-        console.error('Caught Unhandled Rejection at:' + p + 'reason:' + reason.stack);
+    process.on("unhandledRejection", (reason, p) => {
+        console.error("Caught Unhandled Rejection at:" + p + "reason:" + reason.stack);
     });
 }

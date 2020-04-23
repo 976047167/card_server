@@ -1,6 +1,6 @@
-import {Application, RemoterClass, FrontendSession} from 'pinus';
+import {Application, FrontendSession, RemoterClass} from "pinus";
 
-export default function (app: Application) {
+export default function(app: Application) {
     return new AuthRemoter(app);
 }
 
@@ -13,7 +13,6 @@ declare global {
         };
     }
 }
-
 
 export class AuthRemoter {
     constructor(private app: Application) {
@@ -30,7 +29,7 @@ export class AuthRemoter {
     }
 
     // 私有方法不会加入到RPC提示里
-    private async privateMethod(testarg:string,arg2:number){
+    private async privateMethod(testarg: string, arg2: number) {
 
     }
 }

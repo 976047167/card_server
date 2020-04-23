@@ -1,6 +1,6 @@
-import { Application, FrontendSession } from 'pinus';
+import { Application, FrontendSession } from "pinus";
 
-export default function (app: Application) {
+export default function(app: Application) {
     return new Handler(app);
 }
 
@@ -17,8 +17,8 @@ export class Handler {
      * @param  {Function} next    next step callback
      * @return {Void}
      */
-    async entry(msg: any, session: FrontendSession) {
-        return { code: 200, msg: 'game server is ok.' };
+    public async entry(msg: any, session: FrontendSession) {
+        return { code: 200, msg: "game server is ok." };
     }
 
     /**
@@ -29,10 +29,10 @@ export class Handler {
      * @param  {Function} next    next step callback
      * @return {Void}
      */
-    async publish(msg: any, session: FrontendSession) {
-        let result = {
-            topic: 'publish',
-            payload: JSON.stringify({ code: 200, msg: 'publish message is ok.' })
+    public async publish(msg: any, session: FrontendSession) {
+        const result = {
+            topic: "publish",
+            payload: JSON.stringify({ code: 200, msg: "publish message is ok." }),
         };
         return result;
     }
@@ -45,10 +45,10 @@ export class Handler {
      * @param  {Function} next    next step callback
      * @return {Void}
      */
-    async subscribe(msg: any, session: FrontendSession) {
-        let result = {
-            topic: 'subscribe',
-            payload: JSON.stringify({ code: 200, msg: 'subscribe message is ok.' })
+    public async subscribe(msg: any, session: FrontendSession) {
+        const result = {
+            topic: "subscribe",
+            payload: JSON.stringify({ code: 200, msg: "subscribe message is ok." }),
         };
         return result;
     }

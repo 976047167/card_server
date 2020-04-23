@@ -1,5 +1,5 @@
-import { pinus } from 'pinus';
-import { preload } from './preload';
+import { pinus } from "pinus";
+import { preload } from "./preload";
 
 /**
  *  替换全局Promise
@@ -11,20 +11,19 @@ preload();
 /**
  * Init app for client.
  */
-let app = pinus.createApp();
-app.set('name', 'server');
+const app = pinus.createApp();
+app.set("name", "server");
 
 // app configuration
-app.configure('production|development', 'connector', function () {
-    app.set('connectorConfig',
+app.configure("production|development", "connector", () => {
+    app.set("connectorConfig",
         {
             connector: pinus.connectors.hybridconnector,
             heartbeat: 3,
             useDict: true,
-            useProtobuf: true
+            useProtobuf: true,
         });
 });
 
 // start app
 app.start();
-

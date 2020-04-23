@@ -59,7 +59,6 @@ export default class Huffman {
         return root;
     }
 
-
     private static buildTree(tree: TreeNode[]) {
         if (tree.length === 1) {
             return tree[0];
@@ -80,7 +79,6 @@ export default class Huffman {
         tree.splice(i, 0, newTreeNode);
         return this.buildTree(tree);
     }
-
 
     private static serializeTree( node: TreeNode,  s: string = "") {
         if (!node.left && !node.right) {
