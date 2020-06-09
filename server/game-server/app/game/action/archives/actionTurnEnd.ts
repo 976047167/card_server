@@ -4,11 +4,11 @@ import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameAction";
 
 export default class ActionTurnEnd extends GameAction {
-    public readonly type: ACTION_TYPE;
-    public readonly creator: BattlePlayer;
-    public readonly target: CardBase;
+	public readonly type: ACTION_TYPE;
+	public readonly creator: BattlePlayer;
+	public readonly target: CardBase;
 
-    protected deal() {
-        //
-    }
+	protected deal () {
+		//
+	}
 }

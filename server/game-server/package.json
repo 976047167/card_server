@@ -11,16 +11,14 @@
         "build": "node_modules/.bin/tsc"
     },
     "dependencies": {
-        "@types/bluebird": "^3.5.19",
         "@types/node": "^8.10.51",
-        "bluebird": "^3.5.1",
-        "pinus": "1.3.11",
-        "reflect-metadata": "^0.1.10",
-        "source-map-support": "^0.5.0"
+        "uuid": "^8.1.0"
     },
     "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^3.1.0",
+        "@typescript-eslint/parser": "^3.1.0",
+        "eslint": "^7.2.0",
         "readline": "^1.3.0",
-        "tslint": "^5.18.0",
         "typescript": "^2.9.2"
     }
 }

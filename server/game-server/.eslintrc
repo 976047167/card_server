@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "no-case-declarations":"off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-var-requires":"off",
+    "@typescript-eslint/no-empty-function":"off",
+    "@typescript-eslint/no-inferrable-types":"off",
+    "@typescript-eslint/no-explicit-any":"off",
+    "@typescript-eslint/semi":["warn","always"],
+    "indent":["warn","tab",{"SwitchCase": 1}],
+    "curly":["warn","multi-line"],
+    "no-prototype-builtins":"off",
+    "no-irregular-whitespace":"warn",
+    "no-multi-spaces":"warn",
+    "comma-spacing":"warn",
+    "space-before-blocks": ["warn", "always"],//不以新行开始的块{前面要不要有空格
+    "space-before-function-paren": ["warn", "always"],//函数定义时括号前面要不要有空格
+    "space-in-parens": ["warn", "never"],//小括号里面要不要有空格
+    "space-infix-ops": "warn",//中缀操作符周围要不要有空格
+    "space-unary-ops": ["warn", { "words": true, "nonwords": false }],//一元运算符的前/后要不要加空格
+	"keyword-spacing":"warn"
+  }
+}

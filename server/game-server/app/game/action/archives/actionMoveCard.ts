@@ -4,19 +4,19 @@ import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameAction";
 
 export default class ActionMoveCard extends GameAction {
-    public readonly type: ACTION_TYPE;
+	public readonly type: ACTION_TYPE;
 	public readonly creator: CardBase;
-	public readonly target:CardFieldBase
-	protected _target:CardFieldBase
-    protected onCreator( args: {target: CardFieldBase |CARD_FIELD}) {
-        if (args.target instanceof CardFieldBase) {
-            this._target = args.target;
-        } else {
-            this._target = this.creator.owner.getCardFiled(args.target);
-        }
+	public readonly target: CardFieldBase;
+	protected _target: CardFieldBase;
+	protected onCreator (args: { target: CardFieldBase | CARD_FIELD }) {
+		if (args.target instanceof CardFieldBase) {
+			this._target = args.target;
+		} else {
+			this._target = this.creator.owner.getCardFiled(args.target);
+		}
 
-    }
-    protected deal() {
-        this.creator.field.moveCardsTo(this.creator, this.target);
-    }
+	}
+	protected deal () {
+		this.creator.field.moveCardsTo(this.creator, this.target);
+	}
 }

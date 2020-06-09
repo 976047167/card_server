@@ -8,15 +8,15 @@ import { ACTION_TYPE } from "../../constants";
 import CardBase from "../cardBase";
 
 export default class Card00003 extends CardBase {
-    protected initEffect() {
-        super.initEffect();
-        this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, {
-            effect: this.effect2,
-            beffore: this.counterEffect,
-        });
-    }
+	protected initEffect () {
+		super.initEffect();
+		this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, {
+			effect: this.effect2,
+			beffore: this.counterEffect,
+		});
+	}
 
-    private effect2(damage: ActionDamageSettle) {
-        damage.extraData.totalNumber = damage.extraData.settledNumber;
-    }
+	private effect2 (damage: ActionDamageSettle) {
+		damage.extraData.totalNumber = damage.extraData.settledNumber;
+	}
 }

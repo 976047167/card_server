@@ -4,10 +4,10 @@ import { ACTION_TYPE } from "../../constants";
 import { GameAction } from "../gameAction";
 
 export default class ActionTurnBegin extends GameAction {
-    public readonly type: ACTION_TYPE;
-    public readonly creator: BattlePlayer;
-    public readonly target: CardBase;
-    protected deal() {
-        //
-    }
+	public readonly type: ACTION_TYPE;
+	public readonly creator: BattlePlayer;
+	public readonly target: CardBase;
+	protected deal () {
+		//
+	}
 }
