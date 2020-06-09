@@ -8,7 +8,7 @@ export default class ActionMoveCard extends GameAction {
 	public readonly creator: CardBase;
 	public readonly target:CardFieldBase
 	protected _target:CardFieldBase
-    init( args: {target: CardFieldBase |CARD_FIELD}) {
+    protected onCreator( args: {target: CardFieldBase |CARD_FIELD}) {
         if (args.target instanceof CardFieldBase) {
             this._target = args.target;
         } else {

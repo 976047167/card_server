@@ -6,7 +6,7 @@ import { GameAction } from "../gameAction";
 export default class ActionDrawCard extends GameAction {
     public readonly creator: BattlePlayer;
     private number: number;
-    init( args?: { number: number }) {
+    onCreator( args?: { number: number }) {
         if (args && args.number != null) {
             this.number = args.number;
         } else {

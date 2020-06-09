@@ -18,7 +18,7 @@ export enum DAMAGE_TYPE {
 export default class ActionDamage extends GameAction {
     public readonly target: BattlePlayer;
     private damageNum: number;
-	protected init(args: {target: BattlePlayer, damageNum: number}) {
+	protected onCreator(args: {target: BattlePlayer, damageNum: number}) {
         this.damageNum = args.damageNum;
     }
 

@@ -23,6 +23,7 @@ export enum ACTION_STATE {
 }
 export default class GameActionManager {
     private actionsStack: GameAction[];
+    private doneStack: GameAction[];
     private isDealing: boolean = false;
     private battle: Battle;
     private trigger: Trigger;
@@ -43,12 +44,13 @@ export default class GameActionManager {
         const len = this.actionsStack.length;
         const action = this.actionsStack[len - 1];
         if (action.state === ACTION_STATE.UNTRIGGERED) {
-            console.log("action trigger", action.type);
+            console.log("action trigger",ACTION_TYPE[action.type]);
             action.doTrigger();
         } else {
             this.actionsStack.pop();
-            console.log("action dealing", action.type);
-            action.doDeal();
+            console.log("action dealing",ACTION_TYPE[action.type]);
+			action.doDeal();
+			this.doneStack.push(action)
         }
         if (this.actionsStack.length !== 0) {
             this.dealActions();
@@ -58,7 +60,11 @@ export default class GameActionManager {
     }
     private doneAcions() {
         console.log("action done");
-        this.isDealing = false;
-
+		this.isDealing = false;
+		this.doneStack.forEach(action=>{
+			action.clear()
+			gameActionPool.recycle(action)
+		})
+		this.doneStack = []
     }
 }

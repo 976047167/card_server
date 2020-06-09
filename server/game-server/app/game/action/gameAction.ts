@@ -35,9 +35,14 @@ export class GameAction {
     private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
     protected _target: BattleObject;
     constructor() {
-    }
+	}
+	/**
+	 * 做一些默认的初始化操作，之后交由子类自己完成
+	 * @param battle action所属的battle
+	 * @param args 传给子类的arg
+	 */
     public initialize(battle: Battle, args) {
-        this._creator =args.creator;
+        this._creator =args.creator || battle;
         this._target = this.creator;
         this._battle = battle;
         this._trigger = this.battle.trigger;
@@ -54,9 +59,9 @@ export class GameAction {
                 return;
             }
 		}
-		this.init(args)
+		this.onCreator(args)
 	}
-	protected init(args){
+	protected onCreator(args){
 
 	}
     public setState(foo: ACTION_STATE) {
@@ -84,5 +89,16 @@ export class GameAction {
      */
     protected done() {
         //
-    }
+	}
+
+	/**
+	 * 删除数据引用，返回池中
+	 */
+	public clear(){
+		//to do
+		this.onDestory()
+	}
+	protected onDestory(){
+
+	}
 }
