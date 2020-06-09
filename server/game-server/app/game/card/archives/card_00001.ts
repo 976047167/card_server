@@ -1,5 +1,5 @@
-import CardEffect from "../../action/archives/cardEffect";
-import Damage from "../../action/archives/damage";
+import ActionCardEffect from "../../action/archives/actionCardEffect";
+import ActionDamage from "../../action/archives/actionDamage";
 import BattlePlayer, { IArgsUseHandCard } from "../../battlePlayer";
 import { ACTION_TYPE } from "../../constants";
 import CardBase from "../cardBase";
@@ -15,12 +15,11 @@ export default class Card00001 extends CardBase {
         this.registerCardEffect(ACTION_TYPE.USE_HAND_CARD, { effect: this.effect });
     }
 
-    private effect(action: CardEffect) {
+    private effect(action: ActionCardEffect) {
         const args: IArgsUseHandCard = action.extraData;
         const damageNum = this.controller.attribute.str;
         const target = this.battle.getObjectByBId(args.targetBids[0], BattlePlayer);
         if (!target) { return; }
-        const damage = new Damage(this.controller, { target, damageNum });
-        this.GAM.pushAction(damage);
+        this.GAM.pushAction(ACTION_TYPE.DAMAGE,{ target, damageNum });
     }
 }

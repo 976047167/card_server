@@ -1,4 +1,4 @@
-import { GameAction } from "./action/gameActionManager";
+import { GameAction } from "./action/gameAction";
 import { ACTION_TYPE } from "./constants";
 /**
  * 触发优先级

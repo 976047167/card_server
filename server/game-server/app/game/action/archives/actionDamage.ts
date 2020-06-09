@@ -2,7 +2,8 @@ import BattleObject from "../../battleObject";
 import BattlePlayer from "../../battlePlayer";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../../constants";
-import { ACTION_STATE, GameAction } from "../gameActionManager";
+import { GameAction } from "../gameAction";
+import { ACTION_STATE } from "../gameActionManager";
 
 export interface IDamageSettleArg {
     target: BattlePlayer;
@@ -14,14 +15,11 @@ export interface IDamageSettleArg {
 export enum DAMAGE_TYPE {
    VOID = 0,
 }
-export default class Damage extends GameAction {
+export default class ActionDamage extends GameAction {
     public readonly target: BattlePlayer;
-    public readonly type: ACTION_TYPE;
     private damageNum: number;
-    constructor(creator: BattleObject, args: {target: BattlePlayer, damageNum: number}) {
-        super(creator, args);
+	protected init(args: {target: BattlePlayer, damageNum: number}) {
         this.damageNum = args.damageNum;
-        this.type = ACTION_TYPE.DAMAGE;
     }
 
     /**
@@ -38,17 +36,12 @@ export default class Damage extends GameAction {
             settledCardBid: 0,
         };
         console.log("Damage", this.damageNum);
-        this.GAM.pushAction(new DamageSettle(this.creator, args));
+        this.GAM.pushAction(ACTION_TYPE.DAMAGE_SETTLE, args);
     }
 }
-export class DamageSettle extends GameAction {
+export class ActionDamageSettle extends GameAction {
     public readonly target: BattlePlayer;
     public readonly extraData: IDamageSettleArg;
-    public readonly type: ACTION_TYPE;
-    constructor(creator, args: IDamageSettleArg) {
-        super(creator, args);
-        this.type = ACTION_TYPE.DAMAGE_SETTLE;
-    }
     public deal() {
         this.extraData.settledCardBid = null;
         console.log("deal Damage", this.extraData.settledNumber, this.extraData.totalNumber);
@@ -68,7 +61,7 @@ export class DamageSettle extends GameAction {
         this.extraData.settledCardBid = card.bId;
         if (this.extraData.settledNumber < this.extraData.totalNumber) {
             this.setState(ACTION_STATE.UNTRIGGERED);
-            this.GAM.pushAction(this);
+            this.GAM.pushAction(this.type,this.extraData);
         }
     }
 }

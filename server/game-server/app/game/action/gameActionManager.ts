@@ -1,7 +1,8 @@
 import Battle from "../battle";
-import BattleObject from "../battleObject";
-import { ACTION_TYPE } from "../constants";
 import Trigger from "../trigger";
+import { GameAction } from "./gameAction";
+import gameActionPool from "./gameActionPool";
+import { ACTION_TYPE } from "../constants";
 /**
  *  GameAction 游戏行为（以后统称GA）
  *  GA通常由一个BO直接调用或设置后由时点触发。
@@ -14,68 +15,11 @@ import Trigger from "../trigger";
  *  如果GA处理被否决，不会触发处理完成时点
  */
 export enum ACTION_STATE {
-    UNTRIGGERED,
+    UNTRIGGERED, // action还没有触发
     TRIGGERED,
     WORKING,
     REJECTED,
     COMPLETED,
-}
-export class GameAction {
-    public set state(foo: ACTION_STATE) {
-        this.setState(foo);
-    }
-    public get state(): ACTION_STATE {
-        return this._state;
-    }
-    public set target(foo: BattleObject) {
-        this. _target = foo;
-    }
-    public get target() {
-        return this. _target;
-    }
-    public readonly creator: BattleObject;
-    public readonly trigger: Trigger;
-    public readonly type: ACTION_TYPE;
-    public readonly GAM: GameActionManager;
-    public readonly extraData: any;
-    protected readonly battle: Battle;
-    private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
-    private _target: BattleObject ;
-    constructor(creator: BattleObject, args?: any) {
-        this.creator = creator;
-        this._target = this.creator;
-        this.battle = creator.battle;
-        this.trigger = creator.battle.trigger;
-        this.GAM = this.battle.actionManager;
-        this.extraData = args;
-        if (args && args.target) {
-            this.target = args.target;
-        }
-    }
-    public setState(foo: ACTION_STATE) {
-        this._state = foo;
-        this.trigger.notify(this);
-    }
-    public doTrigger() {
-        this.state = ACTION_STATE.TRIGGERED;
-    }
-    public doDeal() {
-        if (this.state === ACTION_STATE.REJECTED) { return; }
-        this.setState(ACTION_STATE.WORKING);
-        this.deal();
-        this.done();
-        this.setState(ACTION_STATE.COMPLETED);
-    }
-    protected deal() {
-        //
-    }
-    /**
-     * 主要用来生成log,用于客户端表现。
-     * 需要注意深拷贝数据,防止引用
-     */
-    protected done() {
-        //
-    }
 }
 export default class GameActionManager {
     private actionsStack: GameAction[];
@@ -87,11 +31,9 @@ export default class GameActionManager {
         this.trigger = battle.trigger;
         this.actionsStack = [];
     }
-    public pushAction(action: GameAction | GameAction[]) {
-        if (action instanceof GameAction) {
-            action = [action];
-        }
-        this.actionsStack.push(...action);
+    public pushAction(type:ACTION_TYPE,args?:any) {
+		const action = gameActionPool.getAction(this.battle,type,args)
+		this.actionsStack.push(action);
         if (!this.isDealing) {
             this.isDealing = true;
             this.dealActions();

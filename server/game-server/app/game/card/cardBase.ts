@@ -1,7 +1,7 @@
-import CardEffect from "../action/archives/cardEffect";
-import { DamageSettle, IDamageSettleArg } from "../action/archives/damage";
-import MoveCard from "../action/archives/moveCard";
-import { ACTION_STATE, GameAction } from "../action/gameActionManager";
+import ActionCardEffect from "../action/archives/actionCardEffect";
+import { ActionDamageSettle } from "../action/archives/actionDamage";
+import { GameAction } from "../action/gameAction";
+import { ACTION_STATE } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import CardFieldBase, { CARD_FIELD } from "../cardField/cardFieldBase";
@@ -101,15 +101,14 @@ export default class CardBase extends BattleObject {
         if (args.after) {
             args.after = args.after.bind(this);
         }
-        let cardEffect: CardEffect;
+        let cardEffect: ActionCardEffect;
         this.trigger.register(actionType, (action: GameAction) => {
             if (action.state === ACTION_STATE.COMPLETED && action.target === this ||
                 args.beffore && args.beffore(action)) {
-                cardEffect = new CardEffect(this, action.extraData);
-                this.GAM.pushAction(cardEffect);
+                this.GAM.pushAction(ACTION_TYPE.CARD_EFFECT,action.extraData);
             }
         });
-        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: CardEffect) => {
+        this.trigger.register(ACTION_TYPE.CARD_EFFECT, (action: ActionCardEffect) => {
             let result;
             if (action !== cardEffect) { return; }
             if (action.state !== ACTION_STATE.COMPLETED && action.state !== ACTION_STATE.REJECTED) {
@@ -126,12 +125,12 @@ export default class CardBase extends BattleObject {
             if (args.after) {
                 args.after(result);
             } else {
-                this.GAM.pushAction(new MoveCard(this, { target: CARD_FIELD.GRAVE }));
+                this.GAM.pushAction(ACTION_TYPE.MOVE_CARD, { target: CARD_FIELD.GRAVE });
             }
 
         });
     }
-    protected counterEffect(action: DamageSettle) {
+    protected counterEffect(action: ActionDamageSettle) {
         if (action.state === ACTION_STATE.COMPLETED &&
             action.extraData.settledCardBid === this.bId &&
             this.field.type === CARD_FIELD.GRAVE) {
@@ -145,6 +144,6 @@ export default class CardBase extends BattleObject {
      */
     protected initData(info: ICardData) {
         this.info = info;
-        this._value = 2; //
+        this._value = 2; // 费用
     }
 }

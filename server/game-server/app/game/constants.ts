@@ -10,7 +10,7 @@ export enum ACTION_TYPE {
     TURN_END = 9,
 }
 
-export enum COMMAND_ID {
+export const enum COMMAND_ID {
     USE_HAND_CARD = 1,
     TURN_END = 2,
 }

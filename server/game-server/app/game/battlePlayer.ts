@@ -1,7 +1,7 @@
-import DrawCard from "./action/archives/drawCard";
-import TurnBegin from "./action/archives/turnBegin";
-import TurnEnd from "./action/archives/turnEnd";
-import UseHandCard from "./action/archives/useHandCard";
+import ActionDrawCard from "./action/archives/actionDrawCard";
+import ActionTurnBegin from "./action/archives/actionTurnBegin";
+import ActionTurnEnd from "./action/archives/actionTurnEnd";
+import ActionUseHandCard from "./action/archives/actionUseHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
@@ -10,7 +10,7 @@ import CardBase, { ICardData } from "./card/cardBase";
 import CardFieldBase, { CARD_FIELD } from "./cardField/cardFieldBase";
 import FieldDeck from "./cardField/fieldDeck";
 import FieldGrave from "./cardField/fieldGrave";
-import { SETTINGS } from "./constants";
+import { SETTINGS, ACTION_TYPE } from "./constants";
 export interface IPlayerInfo {
     uid: string;
     attribute: {
@@ -80,9 +80,7 @@ export default class BattlePlayer extends BattleObject {
         const handCards = this.getCardFiled(CARD_FIELD.HAND);
         const card = this.battle.getObjectByBId(args.cardBId, CardBase);
         if (card.field !== handCards) { return; }
-
-        const action = new UseHandCard(this, args);
-        this.GAM.pushAction(action);
+        this.GAM.pushAction(ACTION_TYPE.USE_HAND_CARD,args);
     }
     /**
      * 先攻进度
@@ -95,12 +93,12 @@ export default class BattlePlayer extends BattleObject {
      * 行动完成后清空进度值
      */
     public turnEnd() {
-        this.GAM.pushAction(new TurnEnd(this));
+        this.GAM.pushAction(ACTION_TYPE.TURN_END);
         this._strikeProgress = 0;
     }
     public turnBegin() {
         console.log(this.uid, "turn begins");
-        this.GAM.pushAction(new TurnBegin(this));
+        this.GAM.pushAction(ACTION_TYPE.TURN_BEGIN);
         this.drawCard();
     }
 
@@ -118,8 +116,7 @@ export default class BattlePlayer extends BattleObject {
         if (hand < 0) {
             hand = 0;
         }
-        this.GAM.pushAction(new DrawCard(this, {number: hand}));
-
+        this.GAM.pushAction( ACTION_TYPE.DRAW_CARD,{number: hand});
     }
     private initFiled() {
         this.deck = new FieldDeck(this);

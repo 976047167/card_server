@@ -57,14 +57,9 @@ export default class Battle {
      * 根据uid获取player对象
      * @param uid
      */
-    public getPlayer(uid: string) {
-        let player: BattlePlayer;
-        for (const p of this.players) {
-            if (p.uid === uid) {
-                player = p;
-            }
-        }
-        return player;
+    public getPlayer(uid: string): BattlePlayer {
+		const p = this.players.find((p)=>p.uid ===uid)
+		return p
     }
     public registerBid(obj: BattleObject) {
         this.bidMap[obj.bId] = obj;
