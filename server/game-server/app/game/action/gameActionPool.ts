@@ -7,7 +7,7 @@ class GameActionPool {
 		return this._instance;
 	}
 	private static _instance: GameActionPool;
-	private actionPools: { [type: number]: GameAction[] };
+	private actionPools: { [type: number]: GameAction[] }=[];
 	public getAction (battle, type: ACTION_TYPE, args?: any): GameAction {
 		const pool = this.actionPools[type];
 		let action: GameAction;

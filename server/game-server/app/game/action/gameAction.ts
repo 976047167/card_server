@@ -35,10 +35,10 @@ export class GameAction {
 	private _state: ACTION_STATE = ACTION_STATE.UNTRIGGERED;
 	protected _target: BattleObject;
 	constructor () {
-		const typeList = Object.values(ACTION_INDEX);
+		const typeList = Object.keys(ACTION_INDEX);
 		// tslint:disable-next-line: prefer-for-of
 		for (let i = 0; i < typeList.length; i++) {
-			if (this instanceof typeList[i]) {
+			if (this instanceof ACTION_INDEX[typeList[i]]) {
 				this._type = i;
 				return;
 			}
@@ -49,8 +49,8 @@ export class GameAction {
 	 * @param battle action所属的battle
 	 * @param args 传给子类的arg
 	 */
-	public initialize (battle: Battle, args) {
-		this._creator = args.creator || battle;
+	public initialize (battle: Battle, args?) {
+		this._creator = (args && args.creator) || battle;
 		this._target = this.creator;
 		this._battle = battle;
 		this._trigger = this.battle.trigger;

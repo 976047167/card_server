@@ -31,6 +31,7 @@ export default class GameActionManager {
 		this.battle = battle;
 		this.trigger = battle.trigger;
 		this.actionsStack = [];
+		this.doneStack = [];
 	}
 	public pushAction (type: ACTION_TYPE, args?: any) {
 		const action = gameActionPool.getAction(this.battle, type, args);

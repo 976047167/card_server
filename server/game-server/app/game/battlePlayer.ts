@@ -1,7 +1,3 @@
-import ActionDrawCard from "./action/archives/actionDrawCard";
-import ActionTurnBegin from "./action/archives/actionTurnBegin";
-import ActionTurnEnd from "./action/archives/actionTurnEnd";
-import ActionUseHandCard from "./action/archives/actionUseHandCard";
 import AttributeManager from "./attributeManager";
 import Battle from "./battle";
 import BattleObject, { BattleObjectId } from "./battleObject";
@@ -116,7 +112,7 @@ export default class BattlePlayer extends BattleObject {
 		if (hand < 0) {
 			hand = 0;
 		}
-		this.GAM.pushAction(ACTION_TYPE.DRAW_CARD, { number: hand });
+		this.GAM.pushAction(ACTION_TYPE.DRAW_CARD, {creator:this, number: hand });
 	}
 	private initFiled () {
 		this.deck = new FieldDeck(this);
