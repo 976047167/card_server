@@ -1,4 +1,4 @@
-import { GameAction } from "./action/gameAction";
+import { GameActionBase } from "./action/gameActionBase";
 import { ACTION_TYPE } from "./constants";
 /**
  * 触发优先级
@@ -18,7 +18,7 @@ export default class Trigger {
 		this._triggerMap = {};
 
 	}
-	public register (type: ACTION_TYPE, effect: (args: GameAction) => void): TriggerId {
+	public register (type: ACTION_TYPE, effect: (args: GameActionBase) => void): TriggerId {
 		if (!this._triggerMap[type]) {
 			this._triggerMap[type] = [];
 		}
@@ -27,7 +27,7 @@ export default class Trigger {
 		this._tidMap[this._tid] = effect;
 		return this._tid;
 	}
-	public notify (action: GameAction) {
+	public notify (action: GameActionBase) {
 		const type = action.type;
 		if (!this._triggerMap[type]) { return; }
 		const tids = this._triggerMap[type];

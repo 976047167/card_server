@@ -4,7 +4,7 @@ import { ACTION_TYPE } from "../constants";
 import Trigger from "../trigger";
 import { ACTION_INDEX } from "./gameActionIndex";
 import GameActionManager, { ACTION_STATE } from "./gameActionManager";
-export class GameAction {
+export class GameActionBase {
 	public get state (): ACTION_STATE {
 		return this._state;
 	}

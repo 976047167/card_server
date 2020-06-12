@@ -7,9 +7,9 @@ import ActionShuffle from "./archives/actionShuffle";
 import ActionTurnBegin from "./archives/actionTurnBegin";
 import ActionTurnEnd from "./archives/actionTurnEnd";
 import ActionUseHandCard from "./archives/actionUseHandCard";
-import { GameAction } from "./gameAction";
+import { GameActionBase } from "./gameActionBase";
 
-type TYPE_ACTION_INDEX = Record<ACTION_TYPE, typeof GameAction>;
+type TYPE_ACTION_INDEX = Record<ACTION_TYPE, typeof GameActionBase>;
 
 export const ACTION_INDEX: TYPE_ACTION_INDEX = {
 	1: ActionMoveCard,

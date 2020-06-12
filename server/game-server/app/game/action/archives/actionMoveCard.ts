@@ -1,9 +1,9 @@
 import CardBase from "../../card/cardBase";
 import CardFieldBase, { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../../constants";
-import { GameAction } from "../gameAction";
+import { GameActionBase } from "../gameActionBase";
 
-export default class ActionMoveCard extends GameAction {
+export default class ActionMoveCard extends GameActionBase {
 	public readonly type: ACTION_TYPE;
 	public readonly creator: CardBase;
 	public readonly target: CardFieldBase;

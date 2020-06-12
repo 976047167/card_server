@@ -1,6 +1,6 @@
 import ActionCardEffect from "../action/archives/actionCardEffect";
 import { ActionDamageSettle } from "../action/archives/actionDamage";
-import { GameAction } from "../action/gameAction";
+import { GameActionBase } from "../action/gameActionBase";
 import { ACTION_STATE } from "../action/gameActionManager";
 import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
@@ -90,8 +90,8 @@ export default class CardBase extends BattleObject {
 	protected registerCardEffect (
 		actionType: ACTION_TYPE,
 		args: {
-			effect: (args: GameAction) => any,
-			beffore?: (action: GameAction) => boolean,
+			effect: (args: GameActionBase) => any,
+			beffore?: (action: GameActionBase) => boolean,
 			after?: (GameAction) => void,
 		}) {
 		const effect = args.effect.bind(this);
@@ -102,7 +102,7 @@ export default class CardBase extends BattleObject {
 			args.after = args.after.bind(this);
 		}
 		let cardEffect: ActionCardEffect;
-		this.trigger.register(actionType, (action: GameAction) => {
+		this.trigger.register(actionType, (action: GameActionBase) => {
 			if (action.state === ACTION_STATE.COMPLETED && action.target === this ||
 				args.beffore && args.beffore(action)) {
 				this.GAM.pushAction(ACTION_TYPE.CARD_EFFECT, action.extraData);

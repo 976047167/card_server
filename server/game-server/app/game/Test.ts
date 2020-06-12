@@ -1,4 +1,3 @@
-import Battle from "./battle";
 import { IPlayerInfo } from "./battlePlayer";
 import { COMMAND_ID } from "./constants";
 import GameController from "./gameController";

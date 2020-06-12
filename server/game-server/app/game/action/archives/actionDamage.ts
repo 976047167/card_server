@@ -1,7 +1,7 @@
 import BattlePlayer from "../../battlePlayer";
 import { CARD_FIELD } from "../../cardField/cardFieldBase";
 import { ACTION_TYPE } from "../../constants";
-import { GameAction } from "../gameAction";
+import { GameActionBase } from "../gameActionBase";
 import { ACTION_STATE } from "../gameActionManager";
 
 export interface IDamageSettleArg {
@@ -14,7 +14,7 @@ export interface IDamageSettleArg {
 export enum DAMAGE_TYPE {
 	VOID = 0,
 }
-export default class ActionDamage extends GameAction {
+export default class ActionDamage extends GameActionBase {
 	public readonly target: BattlePlayer;
 	private damageNum: number;
 	protected onCreator (args: { target: BattlePlayer, damageNum: number }) {
@@ -38,7 +38,7 @@ export default class ActionDamage extends GameAction {
 		this.GAM.pushAction(ACTION_TYPE.DAMAGE_SETTLE, args);
 	}
 }
-export class ActionDamageSettle extends GameAction {
+export class ActionDamageSettle extends GameActionBase {
 	public readonly target: BattlePlayer;
 	public readonly extraData: IDamageSettleArg;
 	public deal () {

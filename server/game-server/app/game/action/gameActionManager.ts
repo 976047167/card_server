@@ -1,6 +1,6 @@
 import Battle from "../battle";
 import Trigger from "../trigger";
-import { GameAction } from "./gameAction";
+import { GameActionBase } from "./gameActionBase";
 import gameActionPool from "./gameActionPool";
 import { ACTION_TYPE } from "../constants";
 /**
@@ -22,8 +22,8 @@ export enum ACTION_STATE {
 	COMPLETED,
 }
 export default class GameActionManager {
-	private actionsStack: GameAction[];
-	private doneStack: GameAction[];
+	private actionsStack: GameActionBase[];
+	private doneStack: GameActionBase[];
 	private isDealing: boolean = false;
 	private battle: Battle;
 	private trigger: Trigger;

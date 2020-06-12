@@ -1,5 +1,5 @@
 import { ACTION_TYPE } from "../constants";
-import { GameAction } from "./gameAction";
+import { GameActionBase } from "./gameActionBase";
 import { ACTION_INDEX } from "./gameActionIndex";
 class GameActionPool {
 	public static getInstance () {
@@ -7,10 +7,10 @@ class GameActionPool {
 		return this._instance;
 	}
 	private static _instance: GameActionPool;
-	private actionPools: { [type: number]: GameAction[] }=[];
-	public getAction (battle, type: ACTION_TYPE, args?: any): GameAction {
+	private actionPools: { [type: number]: GameActionBase[] }=[];
+	public getAction (battle, type: ACTION_TYPE, args?: any): GameActionBase {
 		const pool = this.actionPools[type];
-		let action: GameAction;
+		let action: GameActionBase;
 		if (pool && pool.length > 0) {
 			action = pool.pop();
 		} else {
@@ -19,7 +19,7 @@ class GameActionPool {
 		action.initialize(battle, args);
 		return action;
 	}
-	public recycle (action: GameAction) {
+	public recycle (action: GameActionBase) {
 		const type = action.type;
 		if (!this.actionPools[type]) {
 			this.actionPools[type] = [];
@@ -27,7 +27,7 @@ class GameActionPool {
 		this.actionPools[type].push(action);
 	}
 
-	private createAction (actionType: ACTION_TYPE): GameAction {
+	private createAction (actionType: ACTION_TYPE): GameActionBase {
 		const actionClass = ACTION_INDEX[actionType];
 		if (!actionClass) {
 			console.warn("create action failed! illgal type: " + actionType);
