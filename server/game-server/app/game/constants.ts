@@ -17,3 +17,8 @@ export const enum COMMAND_ID {
 export const SETTINGS = {
 	ORIGIN_HAND: 4,
 };
+
+export const enum BATTLE_STATE {
+	END=0,
+	GAMING=1
+}

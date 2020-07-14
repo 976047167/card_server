@@ -103,8 +103,8 @@ export default class CardBase extends BattleObject {
 		}
 		let cardEffect: ActionCardEffect;
 		this.trigger.register(actionType, (action: GameActionBase) => {
-			if (action.state === ACTION_STATE.COMPLETED && action.target === this ||
-				args.beffore && args.beffore(action)) {
+			//如果有提供额外验证条件，则使用额外验证条件，否则默认是该行动结束，切目标为自己时触发
+			if (args.beffore && args.beffore(action) || action.state === ACTION_STATE.COMPLETED && action.target === this) {
 				this.GAM.pushAction(ACTION_TYPE.CARD_EFFECT, action.extraData);
 			}
 		});
@@ -130,6 +130,12 @@ export default class CardBase extends BattleObject {
 
 		});
 	}
+
+
+	/**
+	 * 受到伤害被送入墓地时发动的效果
+	 * @param action 造成伤害的GA
+	 */
 	protected counterEffect (action: ActionDamageSettle) {
 		if (action.state === ACTION_STATE.COMPLETED &&
 			action.extraData.settledCardBid === this.bId &&

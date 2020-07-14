@@ -56,7 +56,7 @@ export class GameActionBase {
 		}
 	}
 	/**
-	 * 做一些默认的初始化操作，之后交由子类自己完成
+	 * 做一些默认的初始化操作，之后交由子类的onCreator方法自己完成
 	 * @param battle action所属的battle
 	 * @param args 传给子类的arg
 	 */
@@ -67,11 +67,13 @@ export class GameActionBase {
 		this._trigger = this.battle.trigger;
 		this._GAM = this.battle.actionManager;
 		this.extraData = args;
-		if (args && args.target) {
-			this._target = args.target;
-		}
+		this._target = args && args.target;
 		this.onCreator(args);
 	}
+	/**
+	 * 子类进行初始化，用于给特殊变量赋值，或者注册监听
+	 * @param args 传给子类的arg
+	 */
 	protected onCreator (args) {
 
 	}

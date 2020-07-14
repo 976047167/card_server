@@ -4,7 +4,7 @@ import Utils from "../libs/utils";
 import GameActionManager from "./action/gameActionManager";
 import BattleObject, { BattleObjectId } from "./battleObject";
 import BattlePlayer, { IArgsUseHandCard, IPlayerInfo } from "./battlePlayer";
-import { COMMAND_ID } from "./constants";
+import { COMMAND_ID, BATTLE_STATE } from "./constants";
 import { IUserCommand } from "./gameController";
 import Trigger from "./trigger";
 export default class Battle {
@@ -18,7 +18,9 @@ export default class Battle {
 	private random: MersenneTwister;
 	private _currentController: BattlePlayer;
 	private bidMap: { [bId: number]: BattleObject }; // 场景里所有物体都有对应的bid，用于检索所有对象
-	private _sameStrike = false; // 是否有多个相同先攻权
+	private _bid:BattleObjectId=0;
+	private strikeGenerator:Generator;
+	private state:BATTLE_STATE;
 	constructor (seed: number) {
 		this.random = Utils.getRandom(seed);
 		this.id = uuid.v1();
@@ -34,18 +36,20 @@ export default class Battle {
 	}
 	public start () {
 		console.log("game start!", this.id);
+		this.state = BATTLE_STATE.GAMING;
 		this.players.forEach((p) => {
 			p.gameStart();
 		});
+		this.strikeGenerator = this.generatorStriker();
 		this.newTurn();
 	}
 	/**
      * 获取随机数，采用伪随机算法，确保还原日志。范围为[min,max)
      * @param min 下限
      * @param max 上限
-     * @param integer 是否为整数，如果为真的话,范围为[min,max]
+     * @param integer 是否为整数，如果为true的话,范围为[min,max]
      */
-	public getRandom (min = 0, max = 1, integer = true) {
+	public getRandom (min = 0, max = 1, integer?:boolean) {
 		const r = this.random.rnd();
 		if (!integer) {
 			return min + (max - min) * r;
@@ -61,8 +65,9 @@ export default class Battle {
 		const p = this.players.find((p) => p.uid === uid);
 		return p;
 	}
-	public registerBid (obj: BattleObject) {
-		this.bidMap[obj.bId] = obj;
+	public registerBOJ (obj: BattleObject) {
+		this.bidMap[++this._bid] = obj;
+		return this._bid;
 	}
 	public getObjectByBId<T extends BattleObject> (bId: BattleObjectId, type?: new (...args: any[]) => T): T {
 		const obj = this.bidMap[bId];
@@ -85,8 +90,8 @@ export default class Battle {
 	}
 
 	/**
-     * 获取当前场上信息，重连时会用到
-     */
+	* 获取当前场上信息，重连时会用到
+	*/
 	public getSituation () {
 		const reslut = {
 			currentController: this.currentController.uid,
@@ -103,7 +108,7 @@ export default class Battle {
 		return reslut;
 	}
 	private newTurn () {
-		this._currentController = this.calNextController();
+		this._currentController = this.strikeGenerator.next().value;
 		this.currentController.turnBegin();
 		// push
 	}
@@ -121,26 +126,34 @@ export default class Battle {
 		player.useHandCard(args);
 	}
 	/**
-     * 计算先攻顺序队列
-     * @return currentController;
-     */
-	private calNextController () {
-		const max_progress = Math.max(...this.players.map((p) => {
-			if (!this._sameStrike) {
-				p.doStrike();
+	* 计算先攻顺序队列
+	* @return currentController;
+	*/
+	private *generatorStriker () {
+		let actPlayers:BattlePlayer[] = [];
+		while (this.state) {
+			if (actPlayers.length > 0) {
+				yield actPlayers.pop();
+				continue;
 			}
-			return p.strikeProgress;
-		}));
-		const act_players = this.players.filter((p) => p.strikeProgress === max_progress);
-		if (act_players.length !== 1) {
-			act_players.sort((a, b) => {
-				return b.attribute.per - a.attribute.per;
+			let maxProgress = 0;
+			this.players.forEach((p) => {
+				p.doStrike();
+				if (p.strikeProgress > maxProgress) {
+					maxProgress = p.strikeProgress;
+					actPlayers = [p];
+				} else if (p.strikeProgress === maxProgress) {
+					actPlayers.push(p);
+				}
+				console.log(p.uid, p.strikeProgress);
 			});
-			this._sameStrike = true;
-		} else {
-			this._sameStrike = false;
+			if (actPlayers.length > 1) {
+				//先攻权相等比感知
+				actPlayers.sort((a, b) => {
+					return a.attribute.per - b.attribute.per;
+				});
+			}
+			yield actPlayers.pop();
 		}
-		this._currentController = act_players[0];
-		return this._currentController;
 	}
 }

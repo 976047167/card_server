@@ -25,7 +25,7 @@ export default class CardFieldBase extends BattleObject {
 		let i = this.cards.length - 1;
 		while (i) {
 			const a = this.cards[i];
-			const j = this.battle.getRandom(0, i);
+			const j = this.battle.getRandom(0, i, true);
 			this.cards[i] = this.cards[j];
 			this.cards[j] = a;
 			i--;
