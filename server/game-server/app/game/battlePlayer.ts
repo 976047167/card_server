@@ -24,14 +24,7 @@ export interface IArgsUseHandCard {
 	targetBids?: BattleObjectId[];
 }
 export default class BattlePlayer extends BattleObject {
-	/**当前先攻的进度
-     */
-	public get strikeProgress (): number {
-		return this._strikeProgress;
-	}
-
 	public readonly uid: string;
-	public _strikeProgress: number = 0;
 	public readonly attribute: AttributeManager;
 	private playerInfo: IPlayerInfo;
 	private deck: FieldDeck;
@@ -69,8 +62,11 @@ export default class BattlePlayer extends BattleObject {
 		}
 	}
 
+	/**
+	 * 游戏开始
+	 */
 	public gameStart () {
-		this.drawCard();
+		// this.drawCard();
 	}
 	public useHandCard (args: IArgsUseHandCard) {
 		const handCards = this.getCardFiled(CARD_FIELD.HAND);
@@ -79,22 +75,15 @@ export default class BattlePlayer extends BattleObject {
 		this.GAM.pushAction(ACTION_TYPE.USE_HAND_CARD, {creator:this.uid, cardBId:args.cardBId});
 	}
 	/**
-     * 先攻进度
-     */
-	public doStrike () {
-		this._strikeProgress += this.attribute.derive.initiative;
-	}
-	/**
-     * 行动完成后清空进度值
+     * 行动结束
      */
 	public turnEnd () {
 		this.GAM.pushAction(ACTION_TYPE.TURN_END);
-		this._strikeProgress = 0;
 	}
 	public turnBegin () {
 		console.log(this.uid, "turn begins");
 		this.GAM.pushAction(ACTION_TYPE.TURN_BEGIN);
-		this.drawCard();
+		this.drawFullCard();
 	}
 
 	public getSituation () {
@@ -106,7 +95,7 @@ export default class BattlePlayer extends BattleObject {
 			deck: [this.deck.bId, this.deck.getCardInfos()],
 		};
 	}
-	private drawCard () {
+	private drawFullCard () {
 		let hand = SETTINGS.ORIGIN_HAND - this.hand.getCardsNum();
 		if (hand < 0) {
 			hand = 0;

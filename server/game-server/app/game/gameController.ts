@@ -29,7 +29,7 @@ export default class GameController {
 	}
 	public setPlayer (battleId: string, palyerInfos: IPlayerInfo[]) {
 		const b = this.getBattle(battleId);
-		b.setPlayer(palyerInfos);
+		b.setPlayers(palyerInfos);
 		console.log(battleId, "setInfos!");
 	}
 	public command (command: IUserCommand) {

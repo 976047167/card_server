@@ -14,32 +14,32 @@ export default class Battle {
 	public readonly id: string;
 	public readonly trigger: Trigger;
 	public readonly actionManager: GameActionManager;
-	private players: BattlePlayer[];
+	private players:Map<string, BattlePlayer>;
 	private random: MersenneTwister;
 	private _currentController: BattlePlayer;
-	private bidMap: { [bId: number]: BattleObject }; // 场景里所有物体都有对应的bid，用于检索所有对象
+	private bidMap:Map<number, BattleObject >; // 场景里所有物体都有对应的bid，用于检索所有对象
 	private _bid:BattleObjectId=0;
 	private strikeGenerator:Generator;
 	private state:BATTLE_STATE;
 	constructor (seed: number) {
 		this.random = Utils.getRandom(seed);
 		this.id = uuid.v1();
-		this.bidMap = {};
+		this.bidMap = new Map<number, BattleObject>();
 		this.trigger = new Trigger();
 		this.actionManager = new GameActionManager(this);
 	}
-	public setPlayer (playerInfos: IPlayerInfo[]) {
-		const players = playerInfos.map((e) => {
-			return new BattlePlayer(this, e);
+	public setPlayers (playerInfos: IPlayerInfo[]) {
+		this.players = new Map<string, BattlePlayer>();
+		playerInfos.forEach((e) => {
+			this.players.set(e.uid, new BattlePlayer(this, e));
 		});
-		this.players = players;
 	}
 	public start () {
 		console.log("game start!", this.id);
 		this.state = BATTLE_STATE.GAMING;
-		this.players.forEach((p) => {
-			p.gameStart();
-		});
+		for (const player of this.players.values()) {
+			player.gameStart();
+		}
 		this.strikeGenerator = this.generatorStriker();
 		this.newTurn();
 	}
@@ -62,15 +62,14 @@ export default class Battle {
      * @param uid
      */
 	public getPlayer (uid: string): BattlePlayer {
-		const p = this.players.find((p) => p.uid === uid);
-		return p;
+		return this.players.get(uid);
 	}
 	public registerBOJ (obj: BattleObject) {
-		this.bidMap[++this._bid] = obj;
+		this.bidMap.set(++this._bid, obj);
 		return this._bid;
 	}
 	public getObjectByBId<T extends BattleObject> (bId: BattleObjectId, type?: new (...args: any[]) => T): T {
-		const obj = this.bidMap[bId];
+		const obj = this.bidMap.get(bId);
 		if (!type) { return obj as T; }
 		if (obj instanceof type) {
 			return obj;
@@ -97,14 +96,13 @@ export default class Battle {
 			currentController: this.currentController.uid,
 			players: [],
 		};
-		const players = this.players.map((p) => {
-			return {
+		for (const p of this.players.values()) {
+			reslut.players.push({
 				uid: p.uid,
 				bid: p.bId,
 				info: p.getSituation(),
-			};
-		});
-		reslut.players = players;
+			});
+		}
 		return reslut;
 	}
 	private newTurn () {
@@ -129,31 +127,21 @@ export default class Battle {
 	* 计算先攻顺序队列
 	* @return currentController;
 	*/
-	private *generatorStriker () {
+	private *generatorStriker ():Generator<BattlePlayer> {
 		let actPlayers:BattlePlayer[] = [];
 		while (this.state) {
 			if (actPlayers.length > 0) {
 				yield actPlayers.pop();
 				continue;
 			}
-			let maxProgress = 0;
-			this.players.forEach((p) => {
-				p.doStrike();
-				if (p.strikeProgress > maxProgress) {
-					maxProgress = p.strikeProgress;
-					actPlayers = [p];
-				} else if (p.strikeProgress === maxProgress) {
-					actPlayers.push(p);
-				}
-				console.log(p.uid, p.strikeProgress);
+			actPlayers = Array.from(this.players.values());
+			actPlayers.sort((a, b)=>{
+				//先攻相等比感知
+				return a.attribute.derive.initiative - b.attribute.derive.initiative ||
+						a.attribute.per - b.attribute.per;
 			});
-			if (actPlayers.length > 1) {
-				//先攻权相等比感知
-				actPlayers.sort((a, b) => {
-					return a.attribute.per - b.attribute.per;
-				});
-			}
-			yield actPlayers.pop();
+
+
 		}
 	}
 }
