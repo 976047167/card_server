@@ -22,3 +22,23 @@ export const enum BATTLE_STATE {
 	END=0,
 	GAMING=1
 }
+// export interface IAttribute {
+// 	str: number;
+// 	agi: number;
+// 	spi: number;
+// 	sta: number;
+// 	int: number;
+// 	per: number;
+// 	derive?: {
+// 		initiative: number;
+// 		immunity: number;
+// 		tenacious: number;
+// 		[others: string]: number;
+// 	};
+// }
+// agi: info.attribute.agile,
+// int: info.attribute.intellect,
+// per: info.attribute.perception,
+// spi: info.attribute.spirit,
+// sta: info.attribute.stamina,
+// str: info.attribute.strength,
