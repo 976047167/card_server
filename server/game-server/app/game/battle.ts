@@ -20,7 +20,7 @@ export default class Battle {
 	private bidMap:Map<number, BattleObject >; // 场景里所有物体都有对应的bid，用于检索所有对象
 	private _bid:BattleObjectId=0;
 	private strikeGenerator:Generator;
-	private state:BATTLE_STATE;
+	private gamState:BATTLE_STATE;
 	constructor (seed: number) {
 		this.random = Utils.getRandom(seed);
 		this.id = uuid.v1();
@@ -36,7 +36,7 @@ export default class Battle {
 	}
 	public start () {
 		console.log("game start!", this.id);
-		this.state = BATTLE_STATE.GAMING;
+		this.gamState = BATTLE_STATE.GAMING;
 		for (const player of this.players.values()) {
 			player.gameStart();
 		}
@@ -129,7 +129,7 @@ export default class Battle {
 	*/
 	private *generatorStriker ():Generator<BattlePlayer> {
 		let actPlayers:BattlePlayer[] = [];
-		while (this.state) {
+		while (this.gamState) {
 			if (actPlayers.length > 0) {
 				yield actPlayers.pop();
 				continue;
@@ -140,8 +140,6 @@ export default class Battle {
 				return a.attribute.derive.initiative - b.attribute.derive.initiative ||
 						a.attribute.per - b.attribute.per;
 			});
-
-
 		}
 	}
 }
