@@ -101,9 +101,14 @@ export default class AttributeManager {
 			return;
 		}
 		a.value = value;
-		a.effected.forEach((b)=>{
-			b.derived.isDirty = true;
-		});
+		this.setEffectAtrDirty(a);
+	}
+	private setEffectAtrDirty (a:IAttribute) {
+		for (const eff of a.effected) {
+			if (eff.derived.isDirty) continue;
+			eff.derived.isDirty = true;
+			this.setEffectAtrDirty(eff);
+		}
 	}
 
 	/**
