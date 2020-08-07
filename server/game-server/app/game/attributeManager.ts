@@ -1,4 +1,9 @@
 export type DecoratorId = number;
+export type Dhandler = (a:number)=>number;
+export interface Decorator{
+	name:string,
+	apply:Dhandler
+}
 interface IAttribute {
 	name:string,
 	value:number,
@@ -7,6 +12,7 @@ interface IAttribute {
 		isDirty:boolean,
 		update:(...a)=>void,
 	}
+	dHandlers:Set<Dhandler>
 	effected:Set<IAttribute>, //用于反查关联属性
 }
 export default class AttributeManager {
@@ -14,70 +20,58 @@ export default class AttributeManager {
 	 * 属性储存map
 	 */
 	private _atrMap:Map<string, IAttribute>;
-	// /**
-	//  * 装饰器handler数组
-	//  */
-	// private _applyMap: {
-	// 	[dId: number]: (attribute: any) => any;
-	// };
-	// private _dId: DecoratorId = 0;
+	/**
+	 * 装饰器handlerMap
+	 */
+	private _decoratorMap:Map<DecoratorId, Decorator>;
+	private _dId: DecoratorId = 0;
 	constructor () {
 		this._atrMap = new Map();
 		// this.initAttribute(player.getInfo());
 	}
-	// /**
-	//  * 属性装饰器
-	//  */
-	// private get decorator () {
-	// 	let decorator = {
-	// 		agi: 0,
-	// 		int: 0,
-	// 		per: 0,
-	// 		spi: 0,
-	// 		sta: 0,
-	// 		str: 0,
-	// 		derive: {
-	// 			immunity: 0,
-	// 			initiative: 0,
-	// 			tenacious: 0,
-	// 		},
-	// 	};
-	// 	for (const dId in this._applyMap) {
-	// 		if (this._applyMap.hasOwnProperty(dId)) {
-	// 			const handle = this._applyMap[dId];
-	// 			decorator = handle(decorator);
-	// 		}
-	// 	}
-	// 	return decorator;
-	// }
+	/**
+	 * 添加装饰器
+	 * @param apply 装饰器handler
+	 */
+	public registerAtrributeHandle (decorator:Decorator): DecoratorId {
+		if (!this._atrMap.has(decorator.name)) { return 0;}
+		const a = this._atrMap.get(decorator.name);
+		this._dId++;
+		this._decoratorMap.set(this._dId, decorator);
+		a.dHandlers.add(decorator.apply);
+		this.setEffectAtrDirty(a);
+		return this._dId;
+	}
+	/**
+	 * 移除装饰器
+	 * @param did 装饰器Id
+	 */
+	public removeAttributeHandle (did: DecoratorId) {
+		if (!this._decoratorMap.has(did)) return;
+		const d = this._decoratorMap.get(did);
+		const name = d.name;
+		if (!this._atrMap.has(name)) return;
+		const a = this._atrMap.get(name);
+		a.dHandlers.delete(d.apply);
+		this._decoratorMap.delete(did);
+		this.setEffectAtrDirty(a);
+	}
 
-	// /**
-	//  * 添加装饰器
-	//  * @param apply 装饰器handler
-	//  */
-	// public registerAtrributeHandle (apply: (arg: any) => any): DecoratorId {
-	// 	this._dId++;
-	// 	this._applyMap[this._dId] = apply;
-	// 	return this._dId;
-	// }
-	// /**
-	//  * 移除装饰器
-	//  * @param did 装饰器Id
-	//  */
-	// public removeAttributeHandle (did: DecoratorId) {
-	// 	if (this._applyMap[did]) {
-	// 		delete this._applyMap[did];
-	// 	}
-	// }
-
-	// private initAttribute (info: IPlayerInfo) {
-	// 	console.log("initAttribute");
-	// }
+	/**
+	 * 获取属性的值
+	 * @param name 属性名
+	 */
 	public get (name:string) {
 		if (!this._atrMap.has(name)) return 0;
 		const a:IAttribute = this._atrMap.get(name);
-		!a.derived || !a.derived.isDirty || a.derived.update();//别问，问就是炫技
-		return a.value;
+		if (a.derived && a.derived.isDirty) {
+			a.derived.update();
+		}
+		let ret = a.value;
+		for (const iterator of a.dHandlers) {
+			ret = iterator(ret);
+		}
+		return ret;
 	}
 	/**
 	 * 设置基础属性值
@@ -89,8 +83,9 @@ export default class AttributeManager {
 		if (!this._atrMap.has(name)) {
 			a = {
 				name,
-				value,
-				effected:new Set()
+				value: value,
+				effected:new Set(),
+				dHandlers:new Set()
 			};
 			this._atrMap.set(name, a);
 		} else {
@@ -103,8 +98,13 @@ export default class AttributeManager {
 		a.value = value;
 		this.setEffectAtrDirty(a);
 	}
-	private setEffectAtrDirty (a:IAttribute) {
-		for (const eff of a.effected) {
+	/**
+	 * 将影响属性设置dirty
+	 * 当某个属性有变动时需要将所有影响的属性递归设置
+	 * @param atr 改变的属性
+	 */
+	private setEffectAtrDirty (atr:IAttribute) {
+		for (const eff of atr.effected) {
 			if (eff.derived.isDirty) continue;
 			eff.derived.isDirty = true;
 			this.setEffectAtrDirty(eff);
@@ -138,8 +138,8 @@ export default class AttributeManager {
 					isDirty:false,
 					base,
 					update:null
-				}
-
+				},
+				dHandlers:new Set()
 			};
 			this._atrMap.set(name, a);
 		}
@@ -163,6 +163,5 @@ export default class AttributeManager {
 		};
 		a.derived.update = update;
 		a.derived.update();
-
 	}
 }
