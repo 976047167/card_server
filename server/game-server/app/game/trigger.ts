@@ -10,42 +10,39 @@ export enum TRIGGER_PRIORITY {
 }
 export type TriggerId = number;
 export default class Trigger {
-	private _triggerMap: { [action: number]: number[] };
+	private _triggerMap: Map <ACTION_TYPE, Set<TriggerId> >;
 	private _tid: TriggerId = 0;
-	private _tidMap: { [tid: number]: (args: any) => void };
+	private _tidMap: Map< TriggerId, (args: GameActionBase) => void >;
 	constructor () {
-		this._tidMap = {};
-		this._triggerMap = {};
+		this._tidMap = new Map();
+		this._triggerMap = new Map();
 
 	}
 	public register (type: ACTION_TYPE, effect: (args: GameActionBase) => void): TriggerId {
-		if (!this._triggerMap[type]) {
-			this._triggerMap[type] = [];
+		if (!this._triggerMap.has(type)) {
+			this._triggerMap.set(type, new Set());
 		}
 		this._tid++;
-		this._triggerMap[type].push(this._tid);
-		this._tidMap[this._tid] = effect;
+		this._triggerMap.get(type).add(this._tid);
+		this._tidMap.set(this._tid, effect);
 		return this._tid;
 	}
 	public notify (action: GameActionBase) {
 		const type = action.type;
-		if (!this._triggerMap[type]) { return; }
-		const tids = this._triggerMap[type];
+		if (!this._triggerMap.has(type)) { return; }
+		const tids = this._triggerMap.get(type);
 		if (!tids) { return; }
-		for (const key in tids) {
-			if (tids.hasOwnProperty(key)) {
-				const tid = tids[key];
-				if (!this._tidMap[tid]) {
-					delete (tids[key]);
-				} else {
-					this._tidMap[tid](action);
-				}
+		for (const tid of tids) {
+			if (!this._tidMap.has(tid)) {
+				tids.delete(tid);
+			} else {
+				this._tidMap.get(tid)(action);
 			}
 		}
 	}
 	public remove (tid: TriggerId) {
-		if (this._tidMap[tid]) {
-			delete (this._tidMap[tid]);
+		if (this._tidMap.has(tid)) {
+			this._tidMap.delete(tid);
 		}
 	}
 }
