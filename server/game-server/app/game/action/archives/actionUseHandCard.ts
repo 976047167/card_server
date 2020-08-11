@@ -10,7 +10,7 @@ export default class ActionUseHandCard extends GameActionBase {
 	public readonly extraData: IArgsUseHandCard;
 	public _target: CardBase;
 	protected onCreator (args: IArgsUseHandCard) {
-		this._target = this.battle.getObjectByBId(args.cardBId, CardBase);
+		this._target = this.battle.getObjectByBId<CardBase>(args.cardBId);
 	}
 	protected deal () {
 		//

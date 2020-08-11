@@ -9,7 +9,6 @@ import CardBase from "../cardBase";
 
 export default class Card00003 extends CardBase {
 	protected initEffect () {
-		super.initEffect();
 		this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, {
 			effect: this.effect2,
 			beffore: this.counterEffect,

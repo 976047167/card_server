@@ -2,7 +2,11 @@ import GameActionManager from "./action/gameActionManager";
 import Battle from "./battle";
 import Trigger from "./trigger";
 export type BattleObjectId = number;
-export default class BattleObject {
+/**
+ * 场景中所有物体的基类
+ * 衍生类有buff，card，player等
+ */
+export default abstract class BattleObject {
 	public readonly bId: BattleObjectId;
 	public readonly battle: Battle;
 	public readonly GAM: GameActionManager;

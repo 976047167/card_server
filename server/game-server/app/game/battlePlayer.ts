@@ -70,7 +70,7 @@ export default class BattlePlayer extends BattleObject {
 	}
 	public useHandCard (args: IArgsUseHandCard) {
 		const handCards = this.getCardFiled(CARD_FIELD.HAND);
-		const card = this.battle.getObjectByBId(args.cardBId, CardBase);
+		const card = this.battle.getObjectByBId<CardBase>(args.cardBId);
 		if (!card || card.field !== handCards) { return; }
 		this.GAM.pushAction(ACTION_TYPE.USE_HAND_CARD, {creator:this.uid, cardBId:args.cardBId});
 	}

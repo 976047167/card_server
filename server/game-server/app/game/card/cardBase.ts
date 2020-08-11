@@ -19,22 +19,12 @@ export interface ICardData {
 	level?: number;
 	arg?: any;
 }
-export default class CardBase extends BattleObject {
-	public get name (): string {
-		return this._name;
-	}
-	public get type (): CARD_TYPE {
-		return this._type;
-	}
-	public get value (): number {
-		return this._value;
-	}
-	public get field () {
-		return this._field;
-	}
-	public get controller () {
-		return this._controller;
-	}
+export default abstract class CardBase extends BattleObject {
+	public get name (): string { return this._name; }
+	public get type (): CARD_TYPE { return this._type; }
+	public get value (): number { return this._value; }
+	public get field () { return this._field; }
+	public get controller () { return this._controller; }
 	public readonly owner: BattlePlayer;
 	public info: ICardData;
 	public readonly cardId: number;
@@ -77,9 +67,7 @@ export default class CardBase extends BattleObject {
 		}
 
 	}
-	protected initEffect () {
-		//
-	}
+	protected abstract initEffect ();
 	/**
      * 注册效果，在卡牌效果确定发动时执行
      * @param actionType 触发卡片效果的行为
@@ -130,7 +118,6 @@ export default class CardBase extends BattleObject {
 
 		});
 	}
-
 
 	/**
 	 * 受到伤害被送入墓地时发动的效果

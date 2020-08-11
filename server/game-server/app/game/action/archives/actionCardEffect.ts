@@ -10,7 +10,7 @@ export default class ActionCardEffect extends GameActionBase {
 		creator:number,
 		cardBId:number
 	}) {
-		this.card = this.battle.getObjectByBId(args.cardBId);
+		this.card = this.battle.getObjectByBId<CardBase>(args.cardBId);
 	}
 	protected deal () {
 		this.card.moveTo(CARD_FIELD.DEALING);

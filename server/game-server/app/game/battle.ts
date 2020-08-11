@@ -68,12 +68,9 @@ export default class Battle {
 		this.bidMap.set(++this._bid, obj);
 		return this._bid;
 	}
-	public getObjectByBId<T extends BattleObject> (bId: BattleObjectId, type?: new (...args: any[]) => T): T {
+	public getObjectByBId<T extends BattleObject> (bId: BattleObjectId): T {
 		const obj = this.bidMap.get(bId);
-		if (!type) { return obj as T; }
-		if (obj instanceof type) {
-			return obj;
-		}
+		return obj as T;
 	}
 	public command (cmd: IUserCommand) {
 		switch (cmd.commandId) {

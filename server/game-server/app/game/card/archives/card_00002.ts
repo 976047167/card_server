@@ -12,7 +12,6 @@ import CardBase from "../cardBase";
 
 export default class Card00002 extends CardBase {
 	protected initEffect () {
-		super.initEffect();
 		this.registerCardEffect(ACTION_TYPE.USE_HAND_CARD, { effect: this.effect1, after: () => { } });
 		this.registerCardEffect(ACTION_TYPE.DAMAGE_SETTLE, {
 			effect: this.effect2,
