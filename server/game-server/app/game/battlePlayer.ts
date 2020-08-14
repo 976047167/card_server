@@ -38,7 +38,7 @@ export default class BattlePlayer extends BattleObject {
 		this.playerInfo = info;
 		this.uid = this.playerInfo.uid;
 		this.initFiled();
-		this.attribute = new AttributeManager(this);
+		this.attribute = new AttributeManager();
 	}
 	public getInfo (): IPlayerInfo {
 		return this.playerInfo;

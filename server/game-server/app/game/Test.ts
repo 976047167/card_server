@@ -55,7 +55,7 @@ function setPlayer (_gid) {
 		uid: "1",
 		attribute: {
 			spirit: 1,
-			agile: 1,
+			agile: 2,
 			stamina: 1,
 			strength: 10,
 			perception: 1,

@@ -1,11 +1,11 @@
-import { DecoratorId, IAttribute } from "../attributeManager";
-import BattleObject, { BattleObjectId } from "../battleObject";
+import { DecoratorId, Decorator } from "../attributeManager";
+import BattleObject from "../battleObject";
 import BattlePlayer from "../battlePlayer";
 import { ACTION_TYPE } from "../constants";
 import { TriggerId } from "../trigger";
 
 export enum BUFF_TYPE {
-	NORAML, // 正常buff
+	NORAML, // 普通buff
 	BLOOD, // 血统
 	TRANSFORMATION, // 改造
 	EQUIPMENT, // 装备
@@ -13,65 +13,49 @@ export enum BUFF_TYPE {
 export interface IBuffInfo {
 	id: number;
 }
-export default class BuffBase extends BattleObject {
-	/**
-     * 是否可以被驱散
-     */
-	public get canBeDispeled () {
-		return this._can_be_dispeled;
-	}
-	/**
-     * 是否负面的
-     */
-	public get isDebuff () {
-		return this._is_debuff;
-	}
-	/**
-     * 是否可以被同名叠加
-     */
-	public get isOverlayable () {
-		return this._is_overlayable;
-	}
-	/**
-     * 是否可以被压制
-     */
-	public get canBeRepressed () {
-		return this._can_be_repressed;
-	}
-	public get name (): string {
-		return this._name;
-	}
-	public get type () {
-		return this._type;
-	}
-	public get owner () {
-		return this._owner;
-	}
+export default abstract class BuffBase extends BattleObject {
+	/** 是否可以被驱散 */
+	public get canBeDispeled () { return this._can_be_dispeled; }
+	/**是否负面的 */
+	public get isDebuff () { return this._is_debuff; }
+	/** 是否可以被同名叠加 */
+	public get isOverlayable () { return this._is_overlayable; }
+	/**是否可以被压制 */
+	public get canBeRepressed () { return this._can_be_repressed; }
+	/**名字 */
+	public get name (): string { return this._name; }
+	public get type () { return this._type; }
+	/**buff的对象，buff只能附加在player身上 */
+	public get owner () { return this._owner; }
 	public readonly creator: BattlePlayer;
+	public get active () { return this._active; }
+
 	private _active: boolean;
-	public get active () {
-		return this._active;
-	}
-	private _owner: BattlePlayer | null;
+	private _owner: BattlePlayer;
 	private _is_debuff: boolean;
 	private _is_overlayable: boolean;
 	private _can_be_dispeled: boolean;
 	private _can_be_repressed: boolean;
 	private _name: string;
-	private did: DecoratorId;
-	private tids: TriggerId[] = [];
-
 	private _type: BUFF_TYPE;
+
+
+	private decortors:Decorator[];
+	private dids:Set<DecoratorId>;
+	private tids:Set<TriggerId> ;
+
 	constructor (creator: BattlePlayer, info) {
 		super(creator.battle);
 		this.creator = creator;
 		this.initInfo(info);
+		this.dids = new Set();
+		this.tids = new Set();
 	}
 	/**
      * 设置buff的对象
      * @param player 对象，可以为null,为null时消除该buff
      */
-	public setOwner (player: BattlePlayer | null) {
+	public setOwner (player: BattlePlayer) {
 		if (this.owner === player) { return; }
 		if (this.owner) { this.deactivate(); }
 		this._owner = player;
@@ -79,44 +63,42 @@ export default class BuffBase extends BattleObject {
 		this.activate();
 	}
 	/**
-     * 对属性进行装饰
-     * @param attribute 传入的属性
-     */
-	protected handle (attribute: IAttribute) {
-		return attribute;
-	}
+	 * 驱散该buff
+	 */
 	protected dispeled () {
-		//
 		if (this.canBeDispeled) {
 			this.setOwner(null);
 		}
 	}
-	protected initTrigger () {
-		return true;
-	}
+	/**注册效果
+	 * 仅供子类中initTrigger方法调用
+	 */
 	protected registerBuffEffect (type: ACTION_TYPE, effect: (args: any) => any) {
 		effect = effect.bind(this);
 		const tid = this.trigger.register(type, effect);
-		this.tids.push(tid);
+		this.tids.add(tid);
 	}
-	private uninitTrigger () {
-		this.tids.forEach((tid) => {
+	/**
+     * 添加属性装饰器和效果
+     */
+	private initDT () {
+		for (const decorator of this.decortors) {
+			const did = this.owner.attribute.registerAtrributeHandle(decorator);
+			this.dids.add(did);
+		}
+		this.initSpecialDecorator();
+	}
+	private uninitDT () {
+		for (const tid of this.tids) {
 			this.trigger.remove(tid);
-		});
-		this.tids = [];
+		}
+		this.tids.clear();
+		for (const did of this.dids) {
+			this.owner.attribute.removeAttributeHandle(did);
+		}
+		this.dids.clear();
 	}
-	/**
-     * 添加属性装饰器
-     */
-	private initDecorator () {
-		this.did = this.owner.attribute.registerAtrributeHandle(this.handle.bind(this));
-	}
-	/**
-     * 移除属性装饰器
-     */
-	private uninitDecorator () {
-		this.owner.attribute.removeAttributeHandle(this.did);
-	}
+	protected abstract initSpecialDecorator ();
 	private initInfo (info) {
 		this._is_debuff = false;
 		this._is_overlayable = false;
@@ -127,16 +109,14 @@ export default class BuffBase extends BattleObject {
      * 生效
      */
 	private activate () {
-		this.initDecorator();
-		this.initTrigger();
+		this.initDT();
 		this._active = true;
 	}
 	/**
      * 失效
      */
 	private deactivate () {
-		this.uninitDecorator();
-		this.uninitTrigger();
+		this.uninitDT();
 		this._active = false;
 	}
 }
