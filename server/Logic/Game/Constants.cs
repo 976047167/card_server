@@ -28,7 +28,18 @@ enum BATTLE_STATE
 	END = 0,
 	GAMING = 1
 }
-
+enum ACTION_STATE {
+	UNTRIGGERED, // action还没有触发
+	TRIGGERED,
+	WORKING,
+	REJECTED,
+	COMPLETED,
+}
+enum TRIGGER_PRIORITY {
+	LOW,
+	NORMAL,
+	HIGH,
+}
 // export interface IAttribute {
 // 	str: number;
 // 	agi: number;

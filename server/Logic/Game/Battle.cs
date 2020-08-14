@@ -131,14 +131,15 @@ namespace Logic
 		}
 		private void useHandCard(IUserCommand cmd)
 		{
-			args = cmd.args as IArgsUseHandCard;
+			var args = cmd.args as IArgsUseHandCard;
 			if (!args) { return; }
 			BattlePlayer player = this.getPlayer(cmd.uid);
 			if (player != this.currentController) { return; }
 			player.useHandCard(args);
 		}
+
 		/// <summary>
-		/// 计算先攻顺序队列
+		/// 先攻顺序队列生成器
 		/// </summary>
 		/// <returns></returns>
 		private IEnumerator<BattlePlayer> generatorStriker()

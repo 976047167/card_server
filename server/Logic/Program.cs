@@ -4,9 +4,11 @@ namespace Logic
 	class Program
 	{
 		private string gid;
+		private GameController g;
 		static void Main(string[] args)
 		{
 			string line;
+			g = GameController.getInstance();
 			Console.WriteLine("Enter one or more lines of text (press CTRL+Z to exit):\n");
 			do
 			{
@@ -14,7 +16,6 @@ namespace Logic
 				if (line != null)
 				{
 					string[] answer = line.Split(" ");
-
 				}
 			} while (line != null);
 			Console.WriteLine("Have a nice day!");
@@ -22,7 +23,6 @@ namespace Logic
 		void deal(string id, string cmd, string arg)
 		{
 
-			GameController g = GameController.getInstance();
 			Console.WriteLine(cmd);
 			IUserCommand a;
 			switch (cmd)
