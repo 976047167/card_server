@@ -13,6 +13,7 @@ namespace Logic
 	}
 	struct AcitonArg
 	{
-
+		public int creator;
+		public int target;
 	}
 }

@@ -2,65 +2,70 @@ using System.Collections;
 using System.Collections.Generic;
 namespace Logic
 {
-	class GameActionManager
+	namespace Action
 	{
-		private Stack<GameActionBase> actionsStack;
-		private Stack<GameActionBase> doneStack;
-		private bool isDealing = false;
-		private Battle battle;
-		private Trigger trigger;
-		public GameActionManager(Battle battle)
+
+		class GameActionManager
 		{
-			this.battle = battle;
-			this.trigger = battle.trigger;
-			this.actionsStack = new Stack<GameActionBase>();
-			this.doneStack = new Stack<GameActionBase>();
-		}
-		public void pushAction(ACTION_TYPE type,AcitonArg args)
-		{
-			GameActionBase action = GameActionPool.getInstance().getAction(this.battle, type, args);
-			this.actionsStack.Push(action);
-			if (!this.isDealing)
+			private Stack<GameActionBase> actionsStack;
+			private Stack<GameActionBase> doneStack;
+			private bool isDealing = false;
+			private Battle battle;
+			private Trigger trigger;
+			public GameActionManager(Battle battle)
 			{
-				this.isDealing = true;
-				this.dealActions();
+				this.battle = battle;
+				this.trigger = battle.trigger;
+				this.actionsStack = new Stack<GameActionBase>();
+				this.doneStack = new Stack<GameActionBase>();
 			}
-		}
-		private void dealActions()
-		{
-			int len = this.actionsStack.Count;
-			GameActionBase action = this.actionsStack[len - 1];
-			if (action.state == ACTION_STATE.UNTRIGGERED)
+			public void pushAction(ACTION_TYPE type, AcitonArg args)
 			{
-				Console.writeLine("action trigger", ACTION_TYPE[action.type]);
-				action.doTrigger();
+				GameActionBase action = GameActionPool.getInstance().getAction(this.battle, type, args);
+				this.actionsStack.Push(action);
+				if (!this.isDealing)
+				{
+					this.isDealing = true;
+					this.dealActions();
+				}
 			}
-			else
+			private void dealActions()
 			{
-				this.actionsStack.pop();
-				console.log("action dealing", ACTION_TYPE[action.type]);
-				action.doDeal();
-				this.doneStack.Push(action);
+				int len = this.actionsStack.Count;
+				GameActionBase action = this.actionsStack[len - 1];
+				if (action.state == ACTION_STATE.UNTRIGGERED)
+				{
+					System.Console.WriteLine("action trigger", action.type.ToString());
+					action.doTrigger();
+				}
+				else
+				{
+					this.actionsStack.Pop();
+
+					System.Console.WriteLine("action dealing "+action.type.ToString());
+					action.doDeal();
+					this.doneStack.Push(action);
+				}
+				if (this.actionsStack.Count != 0)
+				{
+					this.dealActions();
+				}
+				else
+				{
+					this.doneAcions();
+				}
 			}
-			if (this.actionsStack.Count != 0)
+			private void doneAcions()
 			{
-				this.dealActions();
+				System.Console.WriteLine("action done");
+				this.isDealing = false;
+				foreach(var action in this.doneStack){
+					action.clear();
+					GameActionPool.getInstance().recycle(action);
+				}
+				this.doneStack.Clear();
 			}
-			else
-			{
-				this.doneAcions();
-			}
-		}
-		private void doneAcions()
-		{
-			console.log("action done");
-			this.isDealing = false;
-			this.doneStack.forEach(action =>
-			{
-				action.clear();
-				gameActionPool.recycle(action);
-			});
-			this.doneStack.Clear();
 		}
 	}
+
 }

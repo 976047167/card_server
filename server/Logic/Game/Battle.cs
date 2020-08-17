@@ -79,7 +79,7 @@ namespace Logic
 		}
 		public T getObjectByBId<T>(int bId) where T : BattleObject
 		{
-			BattleObject obj = null;
+			BattleObject obj;
 			this.bidMap.TryGetValue(bId, out obj);
 			return (T)obj;
 		}

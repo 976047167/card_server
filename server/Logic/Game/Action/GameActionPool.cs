@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 namespace Logic{
+	namespace Action{
+
 
 class GameActionPool {
 
@@ -41,5 +43,6 @@ class GameActionPool {
 		}
 		return new actionClass();
 	}
+}
 }
 }
