@@ -3,8 +3,8 @@ namespace Logic
 {
 	class Program
 	{
-		private string gid;
-		private GameController g;
+		private static string gid;
+		private static GameController g;
 		static void Main(string[] args)
 		{
 			string line;
@@ -16,15 +16,16 @@ namespace Logic
 				if (line != null)
 				{
 					string[] answer = line.Split(" ");
+					deal(answer[0],answer[1],answer[2]);
 				}
 			} while (line != null);
 			Console.WriteLine("Have a nice day!");
 		}
-		void deal(string id, string cmd, string arg)
+		static void deal(string id, string cmd, string arg)
 		{
 
 			Console.WriteLine(cmd);
-			IUserCommand a;
+			UserCommand a;
 			switch (cmd)
 			{
 				case "-a":

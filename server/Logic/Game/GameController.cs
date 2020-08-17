@@ -2,18 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 namespace Logic
 {
-	struct IUserCommand
-	{
-		public string uid;
-		public string battleId;
-		public COMMAND_ID commandId;
-		public object args;
-	}
+
 	class GameController
 	{
 		private static GameController _instance;
 		private Dictionary<string, object> battleMap;
-		public GameController()
+		private GameController()
 		{
 			this.battleMap = new Dictionary<string, object>();
 		}
@@ -26,12 +20,12 @@ namespace Logic
 		{
 			return 1;
 		}
-		public void setPlayer(string battleId, IPlayerInfo[] playerInfos)
+		public void setPlayer(string battleId, PlayerInfo[] playerInfos)
 		{
 
 		}
 
-		public void command(IUserCommand command)
+		public void command(UserCommand command)
 		{
 
 		}

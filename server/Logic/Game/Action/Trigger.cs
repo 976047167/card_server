@@ -3,17 +3,17 @@ namespace Logic
 {
 	delegate void Effect(GameActionBase action);
 class Trigger {
-	private Dictionary<ACTION_TYPE, HashSet<int>> _triggerMap ;
+	private Dictionary<ACTION_TYPE, List<int>> _triggerMap ;//保证触发顺序，这里用list
 	 private int _tid = 0;
 	private Dictionary<int, Effect> _tidMap ;
 	public Trigger () {
 		this._tidMap = new Dictionary<int, Effect>();
-		this._triggerMap = new Dictionary<ACTION_TYPE, HashSet<int>>();
+		this._triggerMap = new Dictionary<ACTION_TYPE, List<int>>();
 
 	}
 	public int register (ACTION_TYPE type ,Effect effect){
 		if (!this._triggerMap.ContainsKey(type)) {
-			this._triggerMap.Add(type, new HashSet<int>());
+			this._triggerMap.Add(type, new List<int>());
 		}
 		this._tid++;
 		this._triggerMap[type].Add(this._tid);
@@ -23,7 +23,7 @@ class Trigger {
 	public void notify ( GameActionBase action) {
 		ACTION_TYPE type = action.type;
 		if (!this._triggerMap.ContainsKey(type)) { return; }
-		HashSet<int> tids = this._triggerMap[type];
+		List<int> tids = this._triggerMap[type];
 		if (tids.Count ==0) { return; }
 		HashSet<int> toDelete = new HashSet<int>();
 		foreach (int tid in tids)

@@ -6,11 +6,11 @@ namespace Logic
 	/// <para> GA通常由一个BO直接调用或设置后由时点触发。 </para>
 	/// <para> GA会产生游戏动画，但不是所有GA都产生游戏动画 </para>
 	/// <para>一个GA会导致触发另一个或多个GA。</para>
-	/// 一个GA有宣告处理，和处理完成两个时点
-	/// GA每次状态发生改变后，会周知Trigger
-	/// GA处理之前会宣告时点，此时若响应其他GA，那么优先处理响应的那些GA
-	/// 宣告处理多条GA时，按序触发并处理，若处理完后原GA被否决，则不再继续触发
-	/// 如果GA处理被否决，不会触发处理完成时点
+	/// <para>一个GA有宣告处理，和处理完成两个时点</para>
+	/// <para>GA每次状态发生改变后，会周知Trigger</para>
+	/// <para>GA处理之前会宣告时点，此时若响应其他GA，那么优先处理响应的那些GA</para>
+	/// <para>宣告处理多条GA时，按序触发并处理，若处理完后原GA被否决，则不再继续触发</para>
+	/// <para>如果GA处理被否决，不会触发处理完成时点</para>
 	/// </summary>
 	class GameActionBase
 	{
@@ -21,8 +21,8 @@ namespace Logic
 		public ACTION_TYPE type { get; private set; }
 		public GameActionManager GAM { get; private set; }
 		public Battle battle { get; private set; }
-		// public extraData: any;
-		GameActionBase()
+		public AcitonArg? extraData;
+		public GameActionBase()
 		{
 			// const typeList = Object.keys(ACTION_INDEX);
 			// // tslint:disable-next-line: prefer-for-of
@@ -38,7 +38,7 @@ namespace Logic
 		 * @param battle action所属的battle
 		 * @param args 传给子类的arg
 		 */
-		public void initialize(Battle battle, object args)
+		public void initialize(Battle battle, AcitonArg args)
 		{
 			this.creator = (args && args.creator) || battle;
 			this.target = this.creator;
@@ -53,7 +53,7 @@ namespace Logic
 		 * 子类进行初始化，用于给特殊变量赋值，或者注册监听
 		 * @param args 传给子类的arg
 		 */
-		protected void onCreator(args)
+		protected void onCreator(AcitonArg args)
 		{
 
 		}
@@ -62,7 +62,7 @@ namespace Logic
 			this.state = foo;
 			this.trigger.notify(this);
 		}
-		public doTrigger()
+		public void doTrigger()
 		{
 			this.setState(ACTION_STATE.TRIGGERED);
 		}

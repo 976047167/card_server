@@ -26,7 +26,7 @@ namespace Logic
 			this.trigger = new Trigger();
 			this.actionManager = new GameActionManager(this);
 		}
-		public void setPlayers(IPlayerInfo[] playerInfos)
+		public void setPlayers(PlayerInfo[] playerInfos)
 		{
 			this.players = new Dictionary<string, BattlePlayer>();
 			foreach (var e in playerInfos)
@@ -46,8 +46,8 @@ namespace Logic
 			this.newTurn();
 		}
 		/// <summary>
-		/// 获取随机数，采用伪随机算法，确保还原日志。范围为[min,max)
-		/// 是否为整数，如果为true的话,范围为[min,max]
+		/// <para>获取随机数，采用伪随机算法，确保还原日志。范围为[min,max)</para>
+		/// <para>是否为整数，如果为true的话,范围为[min,max]</para>
 		/// </summary>
 		/// <param name="min">下限</param>
 		/// <param name="max">上限</param>
@@ -83,7 +83,7 @@ namespace Logic
 			this.bidMap.TryGetValue(bId, out obj);
 			return (T)obj;
 		}
-		public void command(IUserCommand cmd)
+		public void command(UserCommand cmd)
 		{
 			switch (cmd.commandId)
 			{
@@ -122,14 +122,14 @@ namespace Logic
 			this.currentController.turnBegin();
 			// push
 		}
-		private void turnEnd(IUserCommand cmd)
+		private void turnEnd(UserCommand cmd)
 		{
 			BattlePlayer player = this.getPlayer(cmd.uid);
 			if (player != this.currentController) { return; }
 			this.currentController.turnEnd();
 			this.newTurn();
 		}
-		private void useHandCard(IUserCommand cmd)
+		private void useHandCard(UserCommand cmd)
 		{
 			var args = cmd.args as IArgsUseHandCard;
 			if (!args) { return; }

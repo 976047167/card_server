@@ -1,37 +1,38 @@
-using System.Collections
+using System.Collections;
+using System.Collections.Generic;
 namespace Logic
 {
 	class GameActionManager
 	{
-	private Stack< GameActionBase> actionsStack ;
-	private Stack<GameActionBase> doneStack ;
-	private bool  isDealing = false;
-	private  Battle battle;
-	private Trigger trigger;
-	public GameActionManager( Battle battle)
+		private Stack<GameActionBase> actionsStack;
+		private Stack<GameActionBase> doneStack;
+		private bool isDealing = false;
+		private Battle battle;
+		private Trigger trigger;
+		public GameActionManager(Battle battle)
 		{
 			this.battle = battle;
 			this.trigger = battle.trigger;
-			this.actionsStack = new Stack();
-			this.doneStack = new Stack();
+			this.actionsStack = new Stack<GameActionBase>();
+			this.doneStack = new Stack<GameActionBase>();
 		}
-		public void pushAction(ACTION_TYPE type)
+		public void pushAction(ACTION_TYPE type,AcitonArg args)
 		{
-			const action = gameActionPool.getAction(this.battle, type, args);
-			this.actionsStack.push(action);
+			GameActionBase action = GameActionPool.getInstance().getAction(this.battle, type, args);
+			this.actionsStack.Push(action);
 			if (!this.isDealing)
 			{
 				this.isDealing = true;
 				this.dealActions();
 			}
 		}
-		private dealActions()
+		private void dealActions()
 		{
-			const len = this.actionsStack.length;
-			const action = this.actionsStack[len - 1];
-			if (action.state === ACTION_STATE.UNTRIGGERED)
+			int len = this.actionsStack.Count;
+			GameActionBase action = this.actionsStack[len - 1];
+			if (action.state == ACTION_STATE.UNTRIGGERED)
 			{
-				console.log("action trigger", ACTION_TYPE[action.type]);
+				Console.writeLine("action trigger", ACTION_TYPE[action.type]);
 				action.doTrigger();
 			}
 			else
@@ -39,9 +40,9 @@ namespace Logic
 				this.actionsStack.pop();
 				console.log("action dealing", ACTION_TYPE[action.type]);
 				action.doDeal();
-				this.doneStack.push(action);
+				this.doneStack.Push(action);
 			}
-			if (this.actionsStack.length != 0)
+			if (this.actionsStack.Count != 0)
 			{
 				this.dealActions();
 			}
@@ -50,7 +51,7 @@ namespace Logic
 				this.doneAcions();
 			}
 		}
-		private doneAcions()
+		private void doneAcions()
 		{
 			console.log("action done");
 			this.isDealing = false;
