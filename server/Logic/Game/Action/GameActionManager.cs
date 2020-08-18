@@ -32,16 +32,15 @@ namespace Logic
 			private void dealActions()
 			{
 				int len = this.actionsStack.Count;
-				GameActionBase action = this.actionsStack[len - 1];
+				GameActionBase action = this.actionsStack.Pop();
 				if (action.state == ACTION_STATE.UNTRIGGERED)
 				{
 					System.Console.WriteLine("action trigger", action.type.ToString());
+					this.actionsStack.Push(action);
 					action.doTrigger();
 				}
 				else
 				{
-					this.actionsStack.Pop();
-
 					System.Console.WriteLine("action dealing "+action.type.ToString());
 					action.doDeal();
 					this.doneStack.Push(action);
@@ -57,7 +56,7 @@ namespace Logic
 			}
 			private void doneAcions()
 			{
-				System.Console.WriteLine("action done");
+				System.Console.WriteLine("actions done");
 				this.isDealing = false;
 				foreach(var action in this.doneStack){
 					action.clear();

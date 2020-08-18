@@ -14,7 +14,6 @@ namespace Logic
 			{
 				this._tidMap = new Dictionary<int, Effect>();
 				this._triggerMap = new Dictionary<ACTION_TYPE, List<int>>();
-
 			}
 			public int register(ACTION_TYPE type, Effect effect)
 			{
@@ -27,14 +26,14 @@ namespace Logic
 				this._tidMap.TryAdd(this._tid, effect);
 				return this._tid;
 			}
-			public void notify(GameActionBase action)
+			internal void notify(GameActionBase action)
 			{
 				ACTION_TYPE type = action.type;
 				if (!this._triggerMap.ContainsKey(type)) { return; }
-				List<int> tids = this._triggerMap[type];
-				if (tids.Count == 0) { return; }
+				List<int> tidList = this._triggerMap[type];
+				if (tidList.Count == 0) { return; }
 				HashSet<int> toDelete = new HashSet<int>();
-				foreach (int tid in tids)
+				foreach (int tid in tidList)
 				{
 					if (!this._tidMap.ContainsKey(tid))
 					{
@@ -48,7 +47,7 @@ namespace Logic
 				}
 				foreach (int tid in toDelete)
 				{
-					this._tidMap.Remove(tid);
+					tidList.Remove(tid);
 				}
 			}
 			public void remove(int tid)

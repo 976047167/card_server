@@ -18,13 +18,13 @@ namespace Logic
 		class GameActionBase
 		{
 			public ACTION_STATE state { get; private set; }
-			public BattleObject target { get; private set; }
-			public BattleObject creator { get; private set; }
-			public Trigger trigger { get; private set; }
-			public ACTION_TYPE type { get; private set; }
-			public GameActionManager GAM { get; private set; }
-			public Battle battle { get; private set; }
-			public AcitonArg? extraData;
+			protected BattleObject target { get; private set; }
+			protected BattleObject creator { get; private set; }
+			protected Trigger trigger { get; private set; }
+			public readonly ACTION_TYPE type;
+			protected GameActionManager GAM { get; private set; }
+			protected Battle battle { get; private set; }
+			protected AcitonArg? extraData;
 			public GameActionBase()
 			{
 				// const typeList = Object.keys(ACTION_INDEX);
@@ -36,11 +36,12 @@ namespace Logic
 				// 	}
 				// }
 			}
-			/**
-			 * 做一些默认的初始化操作，之后交由子类的onCreator方法自己完成
-			 * @param battle action所属的battle
-			 * @param args 传给子类的arg
-			 */
+
+			/// <summary>
+			/// 做一些默认的初始化操作，之后交由子类的onCreator方法自己完成
+			/// </summary>
+			/// <param name="battle">action所属的battle</param>
+			/// <param name="args">传给子类的arg</param>
 			public void initialize(Battle battle, AcitonArg args)
 			{
 				this.creator = battle.getObjectByBId<BattleObject>(args.creator);
@@ -52,21 +53,28 @@ namespace Logic
 				this.target = battle.getObjectByBId<BattleObject>(args.creator); ;
 				this.onCreator(args);
 			}
-			/**
-			 * 子类进行初始化，用于给特殊变量赋值，或者注册监听
-			 * @param args 传给子类的arg
-			 */
+
+			/// <summary>
+			/// 子类进行初始化，用于给特殊变量赋值，或者注册监听
+			/// </summary>
+			/// <param name="args">传给子类的arg</param>
 			protected virtual void onCreator(AcitonArg args)
 			{
 
 			}
-			internal void setState(ACTION_STATE foo)
+			private void setState(ACTION_STATE foo)
 			{
 				this.state = foo;
 				this.trigger.notify(this);
 			}
+			public void rejected()
+			{
+				if (this.state != ACTION_STATE.TRIGGERED) return;
+				this.setState(ACTION_STATE.REJECTED);
+			}
 			internal void doTrigger()
 			{
+				if (this.state != ACTION_STATE.UNTRIGGERED) return;
 				this.setState(ACTION_STATE.TRIGGERED);
 			}
 			internal void doDeal()
@@ -84,19 +92,19 @@ namespace Logic
 			{
 				//
 			}
-			/**
-			 * 主要用来生成log,用于客户端表现。
-			 * 需要注意深拷贝数据,防止引用
-			 */
-			protected void done()
+			/// <summary>
+			/// <para>主要用来生成log,用于客户端表现。</para>
+			/// <para>需要注意深拷贝数据,防止引用。</para>
+			/// </summary>
+			protected virtual void done()
 			{
 				//
 			}
 
-			/**
-			 * 删除数据引用，返回池中
-			 */
-			public void clear()
+			/// <summary>
+			/// 删除数据引用，返回池中
+			/// </summary>
+			internal void clear()
 			{
 				this.creator = null;
 				this.target = null;
@@ -106,7 +114,7 @@ namespace Logic
 				this.extraData = null;
 				this.onDestory();
 			}
-			protected void onDestory()
+			protected virtual void onDestory()
 			{
 
 			}

@@ -1,3 +1,11 @@
-class ActionMoveCard{
+namespace Logic
+{
 
+	namespace Action
+	{
+		class ActionMoveCard : GameActionBase
+		{
+
+		}
+	}
 }
