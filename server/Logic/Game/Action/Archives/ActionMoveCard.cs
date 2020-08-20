@@ -1,11 +1,8 @@
-namespace Logic
+namespace Logic.Action
 {
 
-	namespace Action
+	[GameActionType(ACTION_TYPE.MOVE_CARD)]
+	class ActionMoveCard : GameActionBase
 	{
-		class ActionMoveCard : GameActionBase
-		{
-
-		}
 	}
 }

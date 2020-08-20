@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-namespace Logic
+namespace Logic.Action
 {
-	namespace Action
-	{
 
-		public enum ACTION_TYPE
+		enum ACTION_TYPE
 		{
 			MOVE_CARD = 1,
 			DRAW_CARD = 2,
@@ -25,6 +23,5 @@ namespace Logic
 			COMPLETED,//触发完成
 		}
 
-	}
 
 }
