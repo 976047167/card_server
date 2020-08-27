@@ -1,19 +1,19 @@
+using System;
 using System.Collections.Generic;
 namespace Logic.Action
 {
 
-	delegate void Effect(GameActionBase action);
 	class Trigger
 	{
 		private Dictionary<ACTION_TYPE, List<int>> _triggerMap;//保证触发顺序，这里用list
 		private int _tid = 0;
-		private Dictionary<int, Effect> _tidMap;
+		private Dictionary<int, Action<GameActionBase>> _tidMap;
 		public Trigger()
 		{
-			this._tidMap = new Dictionary<int, Effect>();
+			this._tidMap = new Dictionary<int,Action<GameActionBase>>();
 			this._triggerMap = new Dictionary<ACTION_TYPE, List<int>>();
 		}
-		public int register(ACTION_TYPE type, Effect effect)
+		public int register(ACTION_TYPE type, Action<GameActionBase> effect)
 		{
 			if (!this._triggerMap.ContainsKey(type))
 			{
@@ -39,8 +39,7 @@ namespace Logic.Action
 				}
 				else
 				{
-					Effect a = this._tidMap[tid];
-					a(action);
+					this._tidMap[tid](action);
 				}
 			}
 			foreach (int tid in toDelete)
