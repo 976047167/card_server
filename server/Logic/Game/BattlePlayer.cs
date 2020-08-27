@@ -22,12 +22,18 @@ namespace Logic
  */
 		public void turnEnd()
 		{
-			this.GAM.pushAction(ACTION_TYPE.TURN_END);
+			AcitonArg a;
+			a.creator =this.bId;
+			a.target = 0;
+			this.GAM.pushAction(ACTION_TYPE.TURN_END,a);
 		}
 		public void turnBegin()
 		{
 			System.Console.WriteLine("{1} turn begins",this.uid);
-			this.GAM.pushAction(ACTION_TYPE.TURN_BEGIN);
+			AcitonArg a;
+			a.creator =this.bId;
+			a.target = 0;
+			this.GAM.pushAction(ACTION_TYPE.TURN_BEGIN,a);
 		}
 
 	}
