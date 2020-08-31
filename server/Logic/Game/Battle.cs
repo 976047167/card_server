@@ -71,7 +71,9 @@ namespace Logic
 		/// <returns></returns>
 		public BattlePlayer getPlayer(string uid)
 		{
-			return this.players[uid];
+			BattlePlayer ret;
+			this.players.TryGetValue(uid, out ret);
+			return ret;
 		}
 		public int registerBOJ(BattleObject obj)
 		{
@@ -145,23 +147,50 @@ namespace Logic
 		/// <returns></returns>
 		private IEnumerator<BattlePlayer> generatorStriker()
 		{
-			Stack<BattlePlayer> actPlayers = new Stack<BattlePlayer>();
+			List<BattlePlayer> actPlayers = new List<BattlePlayer>();
 			while (this.gamState == BATTLE_STATE.GAMING)
 			{
 				if (actPlayers.Count > 0)
 				{
-					yield return actPlayers.Pop();
+					BattlePlayer ret = actPlayers[actPlayers.Count - 1];
+					actPlayers.RemoveAt(actPlayers.Count - 1);
+					yield return ret;
 					continue;
 				}
 				else
 				{
-					// 					actPlayers = Array.from(this.players.values());
-					// 	actPlayers.((a, b) =>
-					// 	{
-					// //先攻相等比感知
-					// return a.attribute.derive.initiative - b.attribute.derive.initiative ||
-					// 				a.attribute.per - b.attribute.per;
-					// 	});
+
+					foreach (BattlePlayer player in this.players.Values)
+					{
+						actPlayers.Add(player);
+					}
+					actPlayers.Sort((a, b) =>
+					{
+						if ((a.attribute.get("initiative") > b.attribute.get("initiative")))
+						{
+							return 1;
+						}
+						else if ((a.attribute.get("initiative") < b.attribute.get("initiative")))
+						{
+							return -1;
+						}
+						else
+						{
+							//先攻相等比感知
+							if ((a.attribute.get("per") > b.attribute.get("per")))
+							{
+								return 1;
+							}
+							else if ((a.attribute.get("per") < b.attribute.get("per")))
+							{
+								return -1;
+							}
+							else
+							{
+								return 0;
+							}
+						}
+					});
 				}
 
 			}
