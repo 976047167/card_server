@@ -6,7 +6,7 @@ using System.Collections;
 namespace Utils
 
 {
-	delegate double CalDel(List<double> arg);
+	public delegate double CalDel(List<double> arg);
 	/// <summary>
 	/// 解析字符串为委托
 	/// </summary>
@@ -16,13 +16,14 @@ namespace Utils
 		{
 			Stack ret = new Stack();
 			Stack<string> operate = new Stack<string>();
+			str = str.Replace(" ","");
 			for (int i = 0; i < str.Length; i++)
 			{
 				char ch = str[i];
 				if (isNumber(ch))
 				{
-					StringBuilder a = new StringBuilder(ch);
-					while (i < str.Length)
+					StringBuilder a = new StringBuilder(ch.ToString());
+					while (i < str.Length -1)
 					{
 						i++;
 						ch = str[i];
@@ -113,7 +114,13 @@ namespace Utils
 				object a = operate.Pop();
 				ret.Push(a);
 			}
-			return ret;
+			Stack reverse =new Stack();
+			while (ret.Count > 0)
+			{
+				object a = ret.Pop();
+				reverse.Push(a);
+			}
+			return reverse;
 		}
 		private static bool isNumber(char ch)
 		{
@@ -131,24 +138,40 @@ namespace Utils
 		{
 			return (s1 == "*" || s1 == "/") && (s2 == "+" || s2 == "-");
 		}
-		public static void eval(string str){
+		public static CalDel eval(string str){
 			Stack exps = transStr(str);
-			Stack ret = new Stack();
+			Stack res = new Stack();
 			while (exps.Count>0)
 			{
 				object temp = exps.Pop();
 				if(temp is String ){
-					object a =a
-
-
+					object argA = res.Pop();
+					object argB = res.Pop();
+					if(argA is double && argB is double){
+						res.Push(calret((double)argB,(double)argA,(string)temp));
+					}else if(argA is CalDel && argB is double){
+						res.Push(calret((double)argB,(CalDel)argA,(string)temp));
+					}else if(argA is double && argB is CalDel){
+						res.Push(calret((CalDel)argB,(double)argA,(string)temp));
+					}else if(argA is CalDel && argB is CalDel){
+						res.Push(calret((CalDel)argB,(CalDel)argA,(string)temp));
+					}
 				}else{
-					ret.Push(temp);
+					res.Push(temp);
 				}
-
-
 			}
+			object temp2 =res.Pop();
+			if(temp2 is double){
+				double ret = (double)temp2;
+				return (List<double> arg)=>{
+					return ret;
+				};
+			}
+			return (CalDel)temp2;
+
 
 		}
+
 		private static double calret(double a,double b ,string operate){
 			if(operate =="+"){
 				return a+b;

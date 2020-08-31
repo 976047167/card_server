@@ -20,7 +20,6 @@ namespace Logic
 	}
 
 	delegate double Dhandler(double originValue);
-	delegate double CalDerived(List<double> baseAtrs );
 	struct Decorator
 	{
 		public string name;

@@ -40,7 +40,7 @@ namespace Logic.Action
 			}
 
 		}
-		public GameActionBase getAction(Battle battle, ACTION_TYPE type, AcitonArg? args)
+		public GameActionBase getAction(Battle battle, ACTION_TYPE type, AcitonArg args)
 		{
 			Stack<GameActionBase> pool;
 			bool has = this.actionPools.TryGetValue((int)type, out pool);

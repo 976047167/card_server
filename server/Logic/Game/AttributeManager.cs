@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Utils;
 namespace Logic{
 
 class AttributeManager {
@@ -146,7 +147,7 @@ class AttributeManager {
 		}
 		Derived derived = a.derived.Value;
 		//生成update方法并调用
-		CalDerived func = eval();
+		CalDel func =CSEval.eval(cal);
 		System.Action update = ()=> {
 			List<double> values =derived.baseAtrs.Select(ba=>{return this.get(ba);}).ToList();
 			a.value = func(values);

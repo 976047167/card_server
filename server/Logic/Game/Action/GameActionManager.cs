@@ -17,7 +17,7 @@ namespace Logic.Action
 			this.actionsStack = new Stack<GameActionBase>();
 			this.doneStack = new Stack<GameActionBase>();
 		}
-		public void pushAction(ACTION_TYPE type, AcitonArg? args = null)
+		public void pushAction(ACTION_TYPE type, AcitonArg args)
 		{
 			GameActionBase action = GameActionPool.getInstance().getAction(this.battle, type, args);
 			this.actionsStack.Push(action);

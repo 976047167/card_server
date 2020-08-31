@@ -132,11 +132,11 @@ namespace Logic
 		}
 		private void useHandCard(UserCommand cmd)
 		{
-			var args = cmd.args as IArgsUseHandCard;
-			if (!args) { return; }
-			BattlePlayer player = this.getPlayer(cmd.uid);
-			if (player != this.currentController) { return; }
-			player.useHandCard(args);
+			// var args = cmd.args as IArgsUseHandCard;
+			// if (!args) { return; }
+			// BattlePlayer player = this.getPlayer(cmd.uid);
+			// if (player != this.currentController) { return; }
+			// player.useHandCard(args);
 		}
 
 		/// <summary>

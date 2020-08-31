@@ -6,15 +6,19 @@ namespace Logic
 		public readonly string uid;
 		public readonly AttributeManager attribute;
 		public readonly PlayerInfo playerInfo;
-		private CardFieldBase deck;
-		private CardFieldBase removed;
-		private CardFieldBase hand;
-		private CardFieldBase dealing;
-		private BuffBase[] buffList;
+		// private CardFieldBase deck;
+		// private CardFieldBase removed;
+		// private CardFieldBase hand;
+		// private CardFieldBase dealing;
+		// private BuffBase[] buffList;
+
 		public BattlePlayer(Battle battle, PlayerInfo info) : base(battle)
 		{
 			this.playerInfo = info;
 			this.uid = info.uid;
+
+		}
+		public void gameStart(){
 
 		}
 		/**
@@ -29,7 +33,7 @@ namespace Logic
 		}
 		public void turnBegin()
 		{
-			System.Console.WriteLine("{1} turn begins",this.uid);
+			System.Console.WriteLine("Player:{1} turn begins!",this.uid);
 			AcitonArg a;
 			a.creator =this.bId;
 			a.target = 0;
