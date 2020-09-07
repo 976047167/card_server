@@ -1,7 +1,7 @@
 namespace Logic.Card
 {
 
-	internal abstract class CardBase : BattleObject
+	internal class CardBase : BattleObject
 	{
 		public string name { get; private set; }
 		public CARD_TYPE type { get; private set; }
@@ -9,7 +9,7 @@ namespace Logic.Card
 		public CardField field { get; private set; }
 		public BattlePlayer controller { get; private set; }
 		public readonly BattlePlayer owner;
-		public ICardData info;
+		public ICardData info{get;private set;}
 		public readonly int cardId;
 		internal CardBase(ICardData data, BattlePlayer owner) : base(owner.battle)
 		{
@@ -17,7 +17,6 @@ namespace Logic.Card
 			this.controller = this.owner;
 			this.cardId = data.cardId;
 			this.initData(data);
-			this.initEffect();
 		}
 		/**
 		 * 加载卡片信息
@@ -25,8 +24,7 @@ namespace Logic.Card
 		 */
 		protected void initData(ICardData info)
 		{
-			this.info = info;
-			this.fee = 2; // 费用
+
 		}
 		internal void setFiled(CardField field)
 		{
@@ -40,7 +38,12 @@ namespace Logic.Card
 			this.field.moveCardTo(this.bId,fieldId);
 
 		}
-		protected abstract void initEffect();
+		private void initEffect(CardEffect[] effects){
+			foreach (var e in effects)
+			{
+
+			}
+		}
 
 	}
 
