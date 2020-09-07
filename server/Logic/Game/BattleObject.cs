@@ -6,7 +6,7 @@ namespace Logic
 	/// <para>场景中所有物体的基类</para>
 	/// <para>衍生类有buff，card，player等</para>
 	/// </summary>
-	abstract class BattleObject
+	internal abstract class BattleObject
 	{
 		public readonly int bId;
 		public readonly Battle battle;

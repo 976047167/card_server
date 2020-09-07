@@ -1,7 +1,7 @@
 namespace Logic
 {
 	using Action;
-	class BattlePlayer : BattleObject
+	internal class BattlePlayer : BattleObject
 	{
 		public readonly string uid;
 		public readonly AttributeManager attribute;
@@ -16,6 +16,7 @@ namespace Logic
 		{
 			this.playerInfo = info;
 			this.uid = info.uid;
+			this.attribute = new AttributeManager();
 
 		}
 		public void gameStart()

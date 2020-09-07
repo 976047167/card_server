@@ -84,7 +84,10 @@ namespace Logic
 		{
 			BattleObject obj;
 			this.bidMap.TryGetValue(bId, out obj);
-			return (T)obj;
+			if(obj is T){
+				return (T)obj;
+			}
+			return null;
 		}
 		public void command(UserCommand cmd)
 		{

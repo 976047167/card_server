@@ -40,4 +40,5 @@ namespace Logic
 		public Derived? derived;
 	}
 
+
 }

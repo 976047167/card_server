@@ -15,7 +15,7 @@ class AttributeManager {
 	 */
 	private Dictionary<int, Decorator> _decoratorMap;
 	private  int _dId= 0;
-	AttributeManager () {
+	public AttributeManager () {
 		this._atrMap = new Dictionary<string, IAttribute>();
 		// this.initAttribute(player.getInfo());
 	}
