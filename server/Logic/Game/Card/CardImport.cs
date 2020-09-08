@@ -19,9 +19,9 @@ namespace Logic.Card
 		public int expPerLevel;
 		public string name;
 		public CARD_TYPE tYPE;
-		public CardEffect[] effects;
+		public EffectData[] effects;
 	}
-	public struct CardEffect{
+	public struct EffectData{
 		ACTION_TYPE a;
 		ACTION_STATE s;
 		TARGET_TYPE t;
