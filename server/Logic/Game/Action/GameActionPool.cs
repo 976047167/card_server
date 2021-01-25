@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Collections;
 using System.Reflection;
@@ -20,6 +21,7 @@ namespace Logic.Action
 		private GameActionPool()
 		{
 			this.actionPools = new Dictionary<int, Stack<GameActionBase>>();
+			this.typeMap = =new Dictionary<int, Type>();
 			Assembly asm = Assembly.GetExecutingAssembly();
 			Type[] types = asm.GetTypes();
 			foreach (var t in types)
